@@ -1,15 +1,13 @@
 //Based off of newquestion.cy.js from react assignment.
 
 describe('New Post Form', () => {
-    it('Ask Question button creates and displays new post in All Questions', () => {
-        cy.visit('http://localhost:3000');
 
-        //We can look into making this log in a command in the support/commands.js file.
-        cy.contains('Log in').click();
-        cy.get('#formUsername').type('testUser1');
-        cy.get('#formPassword').type('badpass1');
-        //Check login is successful:
-        cy.location("pathname").should("include", "/profile");
+    beforeEach(() => {
+        cy.visit('http://localhost:3000');
+        cy.login(0)
+    })
+
+    it('Ask Question button creates and displays new post in All Questions', () => {
 
         cy.contains('Ask Question').click();
         cy.get('#formTitleInput').type('Test Question 1');
