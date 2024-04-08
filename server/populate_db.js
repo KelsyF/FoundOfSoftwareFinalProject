@@ -1,25 +1,9 @@
-//Copied from soa-node-mongo, might need to update
-
-// Start the mongoDB service as a background process before running the script
-// Pass URL of your mongoDB instance as first argument(e.g., mongodb://127.0.0.1:27017/fake_so)
-
-let userArgs = process.argv.slice(2);
-
-if (!userArgs[0].startsWith('mongodb')) {
-    console.log('ERROR: You need to specify a valid mongoDB URL as the first argument');
-    return
-}
 
 //Model format from soa-node-mongo assignment, should update if we change the directory structure
+
 let Tag = require('./models/tags')
 let Answer = require('./models/answers')
 let Question = require('./models/questions')
-
-let mongoose = require('mongoose');
-let mongoDB = userArgs[0];
-mongoose.connect(mongoDBm, {useNewUrlParse: true, useUnifiedTopology: true});
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 function tagCreate(name) {
     let tag = new Tag({ name: name });
@@ -119,13 +103,7 @@ const populate = async () => {
         'elephantCDE',
         new Date('2023-03-10T14:28:01'),
         103);
-    if(db) db.close();
     console.log('done');
 }
 
-populate().catch((err) => {
-    console.log('ERROR: ' + err);
-    if(db) db.close();
-});
-
-console.log('processing ...');
+module.exports = populate;
