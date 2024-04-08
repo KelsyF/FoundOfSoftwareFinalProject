@@ -3,11 +3,13 @@
 describe('New Post Form', () => {
 
     beforeEach(() => {
-        cy.visit('http://localhost:3000');
+        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/fake_so")
         cy.login(0)
     })
 
     it('Ask Question button creates and displays new post in All Questions', () => {
+        cy.visit('http://localhost:3000');
+
         cy.contains('Ask Question').click();
         cy.get('#formTitleInput').type('Test Question 1');
         cy.get('#formTextInput').type('Test question 1 text.');
@@ -25,4 +27,6 @@ describe('New Post Form', () => {
             cy.wrap($el).should('contain', qTitles[index]);
         });
     })
+
+
 })
