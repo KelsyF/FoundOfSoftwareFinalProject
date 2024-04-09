@@ -41,7 +41,6 @@ const populate = async () => {
     let t4 = await tagCreate('shared-preferences');
     let t5 = await tagCreate('storage');
     let t6 = await tagCreate('website');
-    let t7 = await tagCreate('Flutter');
 
     let a1 = await answerCreate('React Router is mostly a wrapper around the history library. history handles interaction with the browser\'s window.history ' +
         'for you with its browser and hash histories. It also provides a memory history which is useful for environments that don\'t have a global history. This is ' +

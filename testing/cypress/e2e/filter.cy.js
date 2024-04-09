@@ -3,12 +3,13 @@
 describe("Filter", () => {
     beforeEach(() => {
         // Seed the database before each test
-        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/fake_so");
+        cy.exec("node ../server/init.js");
+        cy.login(0);
     });
 
-    afterEach(() => {
-        // Clear the database after each test
-        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/fake_so");
+    afterEach( () => {
+        //Clear the database after each test
+        cy.exec("node ../server/destroy.js");
     });
 
     it('Successfully filters based on the Active keyword', () => {
