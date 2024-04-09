@@ -4,13 +4,13 @@ describe('New Question Form', () => {
 
     beforeEach(() => {
         // Seed the database before each test
-        cy.exec("node ../server/init.js")
-        cy.login(0)
+        cy.exec("node ../server/init.js");
+        cy.login(0);
     });
 
     afterEach( () => {
         //Clear the database after each test
-        cy.exec("node ../server/destroy.js")
+        cy.exec("node ../server/destroy.js");
     })
 
     it('Ask Question button creates and displays new post in All Questions', () => {
