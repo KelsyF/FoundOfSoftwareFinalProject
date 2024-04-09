@@ -1,0 +1,1 @@
+//Based off of soa-node-mongo cypress tests repeated from React assignment.
