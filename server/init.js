@@ -1,7 +1,7 @@
 // Setup database with initial test data.
 const mongoose = require("mongoose");
-
 const { MONGO_URL } = require("./config");
+const populateDB = require('./populate_db');
 
 mongoose.connect(MONGO_URL);
 
@@ -10,6 +10,9 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 const init = async () => {
     console.log('insert test data into the database')
+
+    await populateDB();
+
     if (db) db.close();
 
     console.log("done");
