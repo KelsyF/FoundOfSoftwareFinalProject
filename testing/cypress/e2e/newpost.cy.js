@@ -11,7 +11,7 @@ describe('New Question Form', () => {
     afterEach( () => {
         //Clear the database after each test
         cy.exec("node ../server/destroy.js");
-    })
+    });
 
     it('Ask Question button creates and displays new post in All Questions', () => {
         cy.visit('http://localhost:3000');
@@ -93,7 +93,7 @@ describe('New Question Form', () => {
             '10 views',
         ];
         cy.get('.postStats').each(($el, index, $list) => {
-            cy.wrap($el).should("contain". answers[index]);
+            cy.wrap($el).should("contain", answers[index]);
             cy.wrap($el).should("contain", views[index]);
         });
 
