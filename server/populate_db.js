@@ -11,9 +11,9 @@ function tagCreate(name) {
 }
 
 function answerCreate(text, ans_by, ans_date_time) {
-    let answerdetail = { test: text };
-    if (ans_by != false) answerdetail.ans_by = ans_by;
-    if (ans_date_time != false) answerdetail.ans_date_time = ans_date_time;
+    let answerDetail = { test: text };
+    if (ans_by != false) answerDetail.ans_by = ans_by;
+    if (ans_date_time != false) answerDetail.ans_date_time = ans_date_time;
 
     let answer = new Answer(answerdetail);
     return answer.save();
@@ -55,7 +55,7 @@ const populate = async () => {
     let a3 = await answerCreate('Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background.',
         'abaya',
         new Date('2023-11-18T09:24:00'));
-    let a4 = await answerCreate('YourPreference yourPrefrence = YourPreference.getInstance(context); yourPreference.saveData(YOUR_KEY,YOUR_VALUE);',
+    let a4 = await answerCreate('YourPreference yourPreference = YourPreference.getInstance(context); yourPreference.saveData(YOUR_KEY,YOUR_VALUE);',
         'alia',
         new Date('2023-11-12T03:30:00'));
     let a5 = await answerCreate('I just found all the above examples just too confusing, so I wrote my own. ',
