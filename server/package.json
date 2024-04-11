@@ -10,15 +10,18 @@
     "license": "ISC",
     "dependencies": {
         "bcrypt": "^5.1.1",
-        "cors": "*",
-        "express": "*",
+        "cors": "^2.8.5",
+        "express": "^4.19.2",
         "express-session": "*",
         "jest": "^29.7.0",
         "jsonwebtoken": "*",
-        "mongoose": "*",
+        "mongoose": "^8.2.2",
         "mysql": "*"
     },
     "devDependencies": {
-        "eslint": "^8.54.0"
+        "eslint": "^8.54.0",
+        "mockingoose": "^2.16.2",
+        "nodemon": "^3.1.0",
+        "supertest": "^6.3.4"
     }
 }

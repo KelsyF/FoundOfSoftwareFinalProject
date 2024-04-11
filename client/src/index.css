@@ -1,3 +1,8 @@
+/* Add CSS */
+
+/* Add global CSS here */
+/* Add CSS stylesheet */
+
 * {
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -9,8 +14,4 @@ html {
 body,
 #root {
     height: 100%;
-}
-
-body {
-    margin: 0;
 }

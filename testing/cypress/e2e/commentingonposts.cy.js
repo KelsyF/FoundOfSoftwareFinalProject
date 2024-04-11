@@ -9,7 +9,7 @@ describe('New Comment Page', () => {
 
     afterEach( () => {
         //Clear the database after each test
-        cy.exec("node ../server/destroy.js");
+        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/fake_so");
     })
 
     it('Created new comment should be displayed at the top of the answers page', () => {
