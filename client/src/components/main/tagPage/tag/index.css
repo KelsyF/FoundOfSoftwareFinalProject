@@ -12,3 +12,8 @@
 .tagName {
     color: cornflowerblue;
 }
+
+.tagQcnt {
+    color: black;
+    place-self: center;
+}

@@ -56,10 +56,12 @@ const NewQuestion = ({ handleQuestions }) => {
             }
         }
 
+
         if (!usrn) {
             setUsrnErr("Username cannot be empty");
             isValid = false;
         }
+
 
         if (!isValid) {
             return;

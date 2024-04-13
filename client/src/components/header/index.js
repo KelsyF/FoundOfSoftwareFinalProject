@@ -1,7 +1,11 @@
 import "./index.css";
 import { useState } from "react";
 
-const Header = ({ search, setQuesitonPage }) => {
+const Header = ({
+    search,
+    setQuesitonPage,
+    //handleNewUser,
+}) => {
     const [val, setVal] = useState(search);
     return (
         <div id="header" className="header">
@@ -22,6 +26,15 @@ const Header = ({ search, setQuesitonPage }) => {
                     }
                 }}
             />
+            <button
+                className="login"
+                onClick={() => {
+                    //handleNewUser();
+                    console.log("USER CREATION STARTING");
+                }}
+                >
+                    Login
+            </button>
         </div>
     );
 };

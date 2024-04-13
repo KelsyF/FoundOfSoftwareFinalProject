@@ -11,3 +11,8 @@
     font-size: 32px;
     font-weight: 800;
 }
+
+.login {
+    background: #ffffff;
+    border: #000000 1px solid;
+}

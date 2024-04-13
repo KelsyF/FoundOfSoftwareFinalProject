@@ -68,9 +68,9 @@ describe('Home Page 1', () => {
     })
 
     it('successfully shows all question authors and date time', () => {
-        const authors = ['saltyPeter', 'JoJi John'];
-        const date = ['Jan 01', 'Dec 17'];
-        const times = ['21:06', '03:24'];
+        const authors = ['elephantCDE', 'monkeyABC', 'saltyPeter', 'Joji John'];
+        const date = ['Mar 10', 'Feb 18', 'Jan 10', 'Jan 20'];
+        const times = ['14:28', '01:02', '11:24', '03:00'];
         cy.visit('http://localhost:3000');
         cy.get('.lastActivity').each(($el, index, $list) => {
             cy.wrap($el).should('contain', authors[index]);

@@ -4,20 +4,19 @@ describe('New Question Form', () => {
 
     beforeEach(() => {
         // Seed the database before each test
-        cy.exec("node ../server/init.js");
-        cy.login(0);
+        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
-    afterEach( () => {
-        //Clear the database after each test
-        cy.exec("node ../server/destroy.js");
+    afterEach(() => {
+        // Clear the database after each test
+        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
     it('Ask Question button creates and displays new post in All Questions', () => {
         cy.visit('http://localhost:3000');
 
         // First added question
-        cy.contains('Ask Question').click();
+        cy.contains('Ask a Question').click();
         cy.get("#formTitleInput").type("Test Question A");
         cy.get("#formTextInput").type("Test Question A Text");
         cy.get("#formTagInput").type("javascript");

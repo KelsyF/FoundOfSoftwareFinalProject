@@ -44,7 +44,6 @@ router.get('/getQuestion', async (req, res) => {
 
 
 // To get Questions by id
-// To get Questions by id
 router.get('/getQuestionById/:id', async (req, res) => {
     const { id } = req.params;
 

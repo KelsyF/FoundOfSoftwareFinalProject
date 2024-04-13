@@ -9,7 +9,7 @@ const Tag = ({ t, clickTag }) => {
             }}
         >
             <div className="tagName">{t.name}</div>
-            <div>{t.qcnt} questions</div>
+            <div className="tagQcnt">{t.qcnt} questions</div>
         </div>
     );
 };
