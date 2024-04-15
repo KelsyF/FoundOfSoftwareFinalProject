@@ -1,40 +1,43 @@
+import React, { useState } from "react";
 import "./index.css";
-import { useState } from "react";
+import { useUser } from "../context/UserContext"; // Correct the import path as necessary
 
 const Header = ({
     search,
-    setQuesitonPage,
-    //handleNewUser,
+    setQuestionPage,
+    handleLogin,
+    handleRegister  // These props handle navigation and other actions
 }) => {
     const [val, setVal] = useState(search);
+    const { user, logout } = useUser(); // Use the context for user management
+
     return (
         <div id="header" className="header">
-            <div></div>
             <div className="title">Fake Stack Overflow</div>
             <input
                 id="searchBar"
                 placeholder="Search ..."
                 type="text"
                 value={val}
-                onChange={(e) => {
-                    setVal(e.target.value);
-                }}
+                onChange={(e) => setVal(e.target.value)}
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         e.preventDefault();
-                        setQuesitonPage(e.target.value, "Search Results");
+                        setQuestionPage(val, "Search Results"); // Use the search term to update the question page
                     }
                 }}
             />
-            <button
-                className="login"
-                onClick={() => {
-                    //handleNewUser();
-                    console.log("USER CREATION STARTING");
-                }}
-                >
-                    Login
-            </button>
+            {user ? (
+                <>
+                    <span>Welcome, {user.username}!</span>
+                    <button onClick={logout}>Logout</button>
+                </>
+            ) : (
+                <>
+                    <button onClick={handleLogin}>Login</button>
+                    <button onClick={handleRegister}>Register</button>
+                </>
+            )}
         </div>
     );
 };

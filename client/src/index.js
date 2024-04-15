@@ -1,7 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client'; // Update the import path to include /client
+import ReactDOM from 'react-dom/client';
 import './index.css';
+import { UserProvider } from './components/context/UserContext.js'; // Ensure the path is correct
 import FakeStackOverflow from './components/fakestackoverflow.js';
 
-const root = ReactDOM.createRoot(document.getElementById('root')); // Create a root container instance
-root.render(<FakeStackOverflow />); // Use the root.render method
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+    <UserProvider>
+        <FakeStackOverflow />
+    </UserProvider>
+);

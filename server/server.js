@@ -20,10 +20,24 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 const app = express();
 
 // CORS Configuration
+// Server.js
 app.use(cors({
-    credentials: true,
-    origin: [CLIENT_URL],
+    origin: [CLIENT_URL], // Only allow your client to connect
+    credentials: true, // Allow credentials
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }));
+
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using https
+}));
+
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -38,11 +52,13 @@ const questionRouter = require("./controller/question");
 const tagRouter = require("./controller/tag");
 // Assume you have an answer controller similar to the tag controller
 const answerRouter = require("./controller/answer");
+const userRouter = require("./controller/user");
 
 // Use routers
 app.use("/question", questionRouter);
 app.use("/tag", tagRouter);
 app.use("/answer", answerRouter);
+app.use("/user", userRouter);
 
 // Start the server
 const server = app.listen(port, () => {

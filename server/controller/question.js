@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Question = require("../models/questions");
+const User = require('../models/user'); // Adjust the path according to your project structure
+
 const { addTag, getQuestionsByOrder, filterQuestionsBySearch } = require('../utils/question');
 
 const router = express.Router();
@@ -80,44 +82,43 @@ router.get('/getQuestionById/:id', async (req, res) => {
 
 
 router.post('/addQuestion', async (req, res) => {
+    const { title, text, tags = [], asked_by: username } = req.body;
+    console.log("Received request to add question:", req.body);  // Log the entire request body to see what is being sent to the server
+
     try {
-        const { title, text, tags = [], asked_by } = req.body;
+        console.log("Looking up user by username:", username);  // Confirm username being used for user lookup
+        const user = await User.findOne({ username: username });
+        if (!user) {
+            console.log("User not found for username:", username);  // Log if user lookup fails
+            return res.status(404).json({ message: "User not found" });
+        }
 
-        // Assuming addTag returns a tag object similar to what your tests expect
-        const tagsWithIds = await Promise.all(tags.map(async (tag) => {
-            // addTag should return an object with _id and name for each tag
-            return await addTag(tag);
-        }));
+        console.log("User found:", user._id);  // Log the user's ID found
+        console.log("Processing tags:", tags);  // Log tags input for debugging
+        const tagsWithIds = await Promise.all(tags.map(tag => addTag(tag)));
 
+        console.log("Tags processed and IDs received:", tagsWithIds);  // Log the results of tag processing
         const newQuestion = {
             title,
             text,
             tags: tagsWithIds,
-            asked_by,
+            asked_by: user._id,
             ask_date_time: new Date(),
-            // Including a mock answer or an empty array as per your test/mock setup
-            // If you have an actual answer to include, adjust here accordingly
             answers: []
         };
 
-        // Simulate saving to database by calling a mock or actual database method
-        // If using Mongoose, Question.create(newQuestion) would save the document and return the saved document including its _id
-        const savedQuestion = await Question.create(newQuestion); // This should return a question object including _id
+        console.log("Attempting to create question:", newQuestion);  // Log the question object before attempting to save
+        const savedQuestion = await Question.create(newQuestion);
+        console.log("Question created successfully:", savedQuestion);  // Log the saved question object
 
-        // Ensure the response matches the structure expected by your test
-        // If necessary, adjust the object below to include any missing fields or format
-        res.status(200).json({
-            _id: savedQuestion._id,
-            title: savedQuestion.title,
-            text: savedQuestion.text,
-            tags: savedQuestion.tags, // Ensure this matches the expected structure in your test
-            // Assuming your test expects the answers field to be present
-            answers: savedQuestion.answers
-        });
+        res.status(200).json(savedQuestion);
     } catch (error) {
+        console.error("Error in addQuestion endpoint:", error);  // Log any errors that occur
         res.status(500).json({ message: "Error adding question", error: error.message });
     }
 });
+
+
 
 
 module.exports = router;
