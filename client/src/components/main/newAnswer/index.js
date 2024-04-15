@@ -1,59 +1,54 @@
 import "./index.css";
 import { useState } from "react";
 import Form from "../baseComponents/form";
-import Input from "../baseComponents/input";
+//import Input from "../baseComponents/input";
 import Textarea from "../baseComponents/textarea";
 import { validateHyperlink } from "../../../tool";
 import { addAnswer } from "../../../services/answerService";
 
+// Assuming `userContext` provides the current user's ID and not just their username
+import { useUser } from '../../context/UserContext'; // Correct the import path as necessary
+
 const NewAnswer = ({ qid, handleAnswer }) => {
-    const [usrn, setUsrn] = useState("");
+    const { user } = useUser(); // Assuming this includes user.username
     const [text, setText] = useState("");
-    const [usrnErr, setUsrnErr] = useState("");
     const [textErr, setTextErr] = useState("");
+
     const postAnswer = async () => {
         let isValid = true;
-
-        if (!usrn) {
-            setUsrnErr("Username cannot be empty");
-            isValid = false;
-        }
-
+    
         if (!text) {
             setTextErr("Answer text cannot be empty");
             isValid = false;
         }
-
-        // Hyperlink validation
+    
         if (!validateHyperlink(text)) {
             setTextErr("Invalid hyperlink format.");
             isValid = false;
         }
-
+    
         if (!isValid) {
             return;
         }
-
-        const answer = {
+    
+        // Correct the structure here
+        const answerDetails = {
             text: text,
-            ans_by: usrn,
+            ans_by: user.username, // Assuming user.username is the username of the logged-in user
             ans_date_time: new Date(),
         };
-
-        const res = await addAnswer(qid, answer);
+    
+        // Send answerDetails directly within an 'ans' object
+        const res = await addAnswer(qid, { ans: answerDetails });  // This should align with backend expectations
         if (res && res._id) {
             handleAnswer(qid);
         }
     };
+    
+    
+
     return (
         <Form>
-            <Input
-                title={"Username"}
-                id={"answerUsernameInput"}
-                val={usrn}
-                setState={setUsrn}
-                err={usrnErr}
-            />
             <Textarea
                 title={"Answer Text"}
                 id={"answerTextInput"}
@@ -62,12 +57,7 @@ const NewAnswer = ({ qid, handleAnswer }) => {
                 err={textErr}
             />
             <div className="btn_indicator_container">
-                <button
-                    className="form_postBtn"
-                    onClick={() => {
-                        postAnswer();
-                    }}
-                >
+                <button className="form_postBtn" onClick={postAnswer}>
                     Post Answer
                 </button>
                 <div className="mandatory_indicator">
@@ -79,3 +69,5 @@ const NewAnswer = ({ qid, handleAnswer }) => {
 };
 
 export default NewAnswer;
+
+

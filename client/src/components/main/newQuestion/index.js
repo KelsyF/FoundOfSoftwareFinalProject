@@ -4,21 +4,25 @@ import Input from "../baseComponents/input";
 import Textarea from "../baseComponents/textarea";
 import "./index.css";
 import { validateHyperlink } from "../../../tool";
-
 import { addQuestion } from "../../../services/questionService";
+import { useUser } from '../../context/UserContext'; // Ensure the path is correct
 
 const NewQuestion = ({ handleQuestions }) => {
+    const { user } = useUser();  // Use the user context
     const [title, setTitle] = useState("");
     const [text, setText] = useState("");
     const [tag, setTag] = useState("");
-    const [usrn, setUsrn] = useState("");
 
     const [titleErr, setTitleErr] = useState("");
     const [textErr, setTextErr] = useState("");
     const [tagErr, setTagErr] = useState("");
-    const [usrnErr, setUsrnErr] = useState("");
 
     const postQuestion = async () => {
+        if (!user) {
+            alert("Please log in to post a question.");
+            return;
+        }
+    
         let isValid = true;
         if (!title) {
             setTitleErr("Title cannot be empty");
@@ -27,19 +31,16 @@ const NewQuestion = ({ handleQuestions }) => {
             setTitleErr("Title cannot be more than 100 characters");
             isValid = false;
         }
-
+    
         if (!text) {
             setTextErr("Question text cannot be empty");
             isValid = false;
-        }
-
-        // Hyperlink validation
-        if (!validateHyperlink(text)) {
+        } else if (!validateHyperlink(text)) {
             setTextErr("Invalid hyperlink format.");
             isValid = false;
         }
-
-        let tags = tag.split(" ").filter((tag) => tag.trim() !== "");
+    
+        let tags = tag.split(" ").filter(tag => tag.trim() !== "");
         if (tags.length === 0) {
             setTagErr("Should have at least 1 tag");
             isValid = false;
@@ -47,39 +48,25 @@ const NewQuestion = ({ handleQuestions }) => {
             setTagErr("Cannot have more than 5 tags");
             isValid = false;
         }
-
-        for (let tag of tags) {
-            if (tag.length > 20) {
-                setTagErr("New tag length cannot be more than 20");
-                isValid = false;
-                break;
-            }
-        }
-
-
-        if (!usrn) {
-            setUsrnErr("Username cannot be empty");
-            isValid = false;
-        }
-
-
+    
         if (!isValid) {
             return;
         }
-
+    
         const question = {
             title: title,
             text: text,
             tags: tags,
-            asked_by: usrn,
+            asked_by: user.username,  // Use logged-in username
             ask_date_time: new Date(),
         };
-
+    
         const res = await addQuestion(question);
         if (res && res._id) {
-            handleQuestions();
+            handleQuestions();  // Redirect or refresh the page as necessary
         }
     };
+    
 
     return (
         <Form>
@@ -107,20 +94,8 @@ const NewQuestion = ({ handleQuestions }) => {
                 setState={setTag}
                 err={tagErr}
             />
-            <Input
-                title={"Username"}
-                id={"formUsernameInput"}
-                val={usrn}
-                setState={setUsrn}
-                err={usrnErr}
-            />
             <div className="btn_indicator_container">
-                <button
-                    className="form_postBtn"
-                    onClick={() => {
-                        postQuestion();
-                    }}
-                >
+                <button className="form_postBtn" onClick={postQuestion}>
                     Post Question
                 </button>
                 <div className="mandatory_indicator">

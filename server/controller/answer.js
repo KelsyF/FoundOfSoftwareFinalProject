@@ -1,44 +1,52 @@
 const express = require("express");
-const Answer = require("../models/answers"); // Assuming this is the correct path
-const Question = require("../models/questions"); // Assuming this is the correct path
+const Answer = require("../models/answers");
+const Question = require("../models/questions");
+const User = require('../models/user');
 
 const router = express.Router();
 
 router.post('/addAnswer', async (req, res) => {
-    try {
-        console.log("Starting to add an answer...", req.body);
+    console.log("Received answer data:", req.body);
 
-        const { ans, qid } = req.body;
-        if (!ans || !qid) {
-            console.error("Missing answer details or question ID", { ans, qid });
-            return res.status(400).json({ msg: 'Bad request: Missing required fields' });
+    const { qid } = req.body;
+    const ans = req.body.ans.ans; // Correctly accessing the nested 'ans' object
+    if (!ans || !qid) {
+        console.error("Missing answer details, username or question ID", { ans, qid });
+        return res.status(400).json({ msg: 'Bad request: Missing required fields' });
+    }
+
+    try {
+        console.log("Looking up user by username:", ans.ans_by);
+        const user = await User.findOne({ username: ans.ans_by });
+        if (!user) {
+            console.log("User not found for username:", ans.ans_by);
+            return res.status(404).json({ message: "User not found" });
         }
 
-        // Use only the fields provided in the request for ans, without automatically adding ans_date_time
-        const answerToCreate = { ...ans };
+        console.log("User found, user ID:", user._id);
+        const answerToCreate = {
+            text: ans.text,
+            ans_by: user._id,
+            ans_date_time: new Date(ans.ans_date_time)  // Use the provided ans_date_time
+        };
 
-        // Use Answer.create to create the answer with the dynamically constructed object
+        console.log("Creating answer with:", answerToCreate);
         const savedAnswer = await Answer.create(answerToCreate);
+        console.log("Answer saved successfully:", savedAnswer);
 
-        console.log("Answer saved successfully", savedAnswer);
-
-        // Update the question with the new answer's ID
-        await Question.findOneAndUpdate(
-            { _id: qid },
-            { $push: { answers: { $each: [savedAnswer._id], $position: 0 } } },
+        console.log("Updating question ID", qid, "with new answer ID", savedAnswer._id);
+        await Question.findByIdAndUpdate(
+            qid,
+            { $push: { answers: savedAnswer._id } },
             { new: true }
         );
 
         console.log("Question updated successfully with new answer");
-
-        // Match the expected status code and return the saved answer
         res.status(200).json(savedAnswer);
     } catch (error) {
         console.error('Error adding an answer:', error);
         res.status(500).json({ msg: 'Internal server error', error: error.message });
     }
 });
-
-
 
 module.exports = router;
