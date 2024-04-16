@@ -1,9 +1,20 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const getUser = () => {
+        const userString = localStorage.getItem('user');
+        const userToken = JSON.parse(userString);
+        return userToken?.user
+    }
+
+    const [user, setUser] = useState(getUser());
+
+    useEffect(() => {
+        const user = getUser();
+        setUser(user);
+    }, []);
 
     const login = (username) => {
         setUser({ username });

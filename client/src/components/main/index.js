@@ -7,8 +7,9 @@ import AnswerPage from "./answerPage";
 import NewQuestion from "./newQuestion";
 import NewAnswer from "./newAnswer";
 import Login from "./loginPage"
+import Register from "./addUser"
 
-const Main = ({ search = "", title, setQuestionPage, handleLogin }) => {
+const Main = ({ search = "", title, setQuestionPage }) => {
     const [page, setPage] = useState("home");
     const [questionOrder, setQuestionOrder] = useState("newest");
     const [qid, setQid] = useState("");
@@ -41,9 +42,13 @@ const Main = ({ search = "", title, setQuestionPage, handleLogin }) => {
         setPage("newQuestion");
     };
 
-    //const handleLogin = () => {
-    //    setPage("login");
-   // };
+    const handleLogin = () => {
+        setPage("home");
+    };
+
+    const handleRegister = () => {
+        setPage("home");
+    }
 
     const handleNewAnswer = () => {
         setPage("newAnswer");
@@ -104,6 +109,11 @@ const Main = ({ search = "", title, setQuestionPage, handleLogin }) => {
             selected = "";
             //content = <Login qid={qid} />;
             content = <Login qid={qid} handleLogin={handleLogin} />;
+            break;
+        }
+        case "register": {
+            selected = "";
+            content = <Register handleRegister={handleRegister} />;
             break;
         }
         

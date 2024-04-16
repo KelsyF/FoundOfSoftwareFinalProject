@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 
+
 const router = express.Router();
 
 // user.js
@@ -21,10 +22,10 @@ router.post('/addUser', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const user = await User.findOne({ username, password });
-    if (user) {
+    const user = await User.findOne({ username });
+    if (user && user.password === password) {
         req.session.user = user; // Set user details in session
-        res.json({ success: true, message: "Logged in successfully" });
+        res.json({ success: true, message: "Logged in successfully", user: user });
     } else {
         res.status(401).json({ success: false, message: "Invalid credentials" });
     }

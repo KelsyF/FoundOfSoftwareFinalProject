@@ -71,9 +71,7 @@ const RegisterPage = ({ handleRegister }) => {
             <div className="btn_indicator_container">
                 <button
                     className="form_postBtn"
-                    onClick={() => {
-                        register();
-                    }}
+                    onClick={register}
                 >
                     Register
                 </button>

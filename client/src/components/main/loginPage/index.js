@@ -33,13 +33,13 @@ const LoginPage = ({ handleLogin }) => {
             return;
         }
 
-        const { success, message } = await loginUser(username, password);
+        const { success, message } = await loginUser(username, password, login);
         if (!success) {
-            setLoginErr(message);
+            setLoginErr(message || "Login failed");
             return;
         }
 
-        login(username);  // Simulate login
+
         handleLogin();    // Navigate to home page after login
     };
 
