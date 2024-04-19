@@ -36,7 +36,8 @@ const Header = ({
                         setQuestionPage("", "Login", "login");
                     }}
                     >Login</button>
-                    <button onClick={() => {setQuestionPage("", "Register", "register");
+                    <button onClick={() => {
+                        setQuestionPage("", "Register", "register");
                     }}
                     >Register</button>
                 </>

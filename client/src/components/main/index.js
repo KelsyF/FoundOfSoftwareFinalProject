@@ -6,7 +6,7 @@ import TagPage from "./tagPage";
 import AnswerPage from "./answerPage";
 import NewQuestion from "./newQuestion";
 import NewAnswer from "./newAnswer";
-import LoginPage from "./loginPage"
+import Login from "./loginPage"
 import Register from "./addUser"
 import UserProfile from "./userProfile";  // Adjust the path as necessary
 
@@ -119,7 +119,7 @@ const Main = ({ search = "", title, setQuestionPage, initialPage }) => {
         case "login": {
             selected = "";
             //content = <Login qid={qid} />;
-            content = <LoginPage qid={qid} handleLogin={handleLogin} />;
+            content = <Login handleLogin={handleLogin} />;
             break;
         }
         case "register": {

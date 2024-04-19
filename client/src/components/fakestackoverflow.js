@@ -28,7 +28,7 @@ export default function FakeStackOverflow() {
                 }}
                 initialPage={"home"}
             />
-            
+
             )}
             {currentPage === "login" && (
                 <Main
