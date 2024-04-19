@@ -11,8 +11,8 @@ import Register from "./addUser"
 import UserProfile from "./userProfile";  // Adjust the path as necessary
 
 
-const Main = ({ search = "", title, setQuestionPage }) => {
-    const [page, setPage] = useState("home");
+const Main = ({ search = "", title, setQuestionPage, initialPage }) => {
+    const [page, setPage] = useState(initialPage);
     const [questionOrder, setQuestionOrder] = useState("newest");
     const [qid, setQid] = useState("");
     const [username, setUsername] = useState("");
@@ -49,10 +49,12 @@ const Main = ({ search = "", title, setQuestionPage }) => {
     };
 
     const handleLogin = () => {
+        setQuestionPage();
         setPage("home");
     };
 
     const handleRegister = () => {
+        setQuestionPage();
         setPage("home");
     }
 

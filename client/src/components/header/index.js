@@ -5,8 +5,6 @@ import { useUser } from "../context/UserContext"; // Correct the import path as 
 const Header = ({
     search,
     setQuestionPage,
-    handleLogin,
-    handleRegister  // These props handle navigation and other actions
 }) => {
     const [val, setVal] = useState(search);
     const { user, logout } = useUser(); // Use the context for user management
@@ -23,7 +21,7 @@ const Header = ({
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         e.preventDefault();
-                        setQuestionPage(val, "Search Results"); // Use the search term to update the question page
+                        setQuestionPage(val, "Search Results", "main"); // Use the search term to update the question page
                     }
                 }}
             />
@@ -34,8 +32,13 @@ const Header = ({
                 </>
             ) : (
                 <>
-                    <button onClick={() => {handleLogin();}}>Login</button>
-                    <button onClick={() => {handleRegister();}}>Register</button>
+                    <button onClick={() => {
+                        setQuestionPage("", "Login", "login");
+                    }}
+                    >Login</button>
+                    <button onClick={() => {setQuestionPage("", "Register", "register");
+                    }}
+                    >Register</button>
                 </>
             )}
         </div>
