@@ -41,6 +41,12 @@
     font-size: 0.9em;
 }
 
+.register_error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
 .btn_indicator_container {
     margin-top: 20px;
     display: flex;

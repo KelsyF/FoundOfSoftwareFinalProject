@@ -4,12 +4,16 @@ const USER_API_URL = `${REACT_APP_API_URL}/user`;
 
 // To add user
 const addUser = async (username, password) => {
-    const data = {username, password};
+    const data = { username, password };
     try {
         const res = await api.post(`${USER_API_URL}/addUser`, data);
-        return { success: true, data: res.data };
+        if (res.data.success) {
+            return { success: true, message: res.data.message };
+        } else {
+            return { success: false, message: res.data.message || "User registration failed" };
+        }
     } catch (error) {
-        return { success: false, message: error.response.data.message || "User registration failed" }
+        return { success: false, message: "Username already in use" };
     }
 };
 

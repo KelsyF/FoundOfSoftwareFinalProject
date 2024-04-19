@@ -14,12 +14,15 @@ router.post('/addUser', async (req, res) => {
     if (!username || !password) {
         return res.status(400).json({msg: 'Bad request: Missing required fields'});
     }
-
+    const user = await User.findOne( { username } );
+    if ( user ) {
+        return res.json( {success: false, message: "Username already in use"});
+    }
     try {
         const savedUser = await User.create({ username, password });
-        res.status(200).json({ success: true, user: savedUser });
+        res.status(200).json({success: true, user: savedUser});
     } catch (error) {
-        res.status(500).json({ msg: 'Internal server error', error: error.message });
+        res.status(500).json({msg: 'Internal server error', error: error.message});
     }
 });
 

@@ -36,11 +36,9 @@ const LoginPage = ({ handleLogin }) => {
 
         const { success, message } = await loginUser(username, password, login);
         if (!success) {
-            setLoginErr(message || "Login failed");
+            setLoginErr(message || "Login failed"); // Update error field so user knows of failure
             return;
         }
-
-
         handleLogin();    // Navigate to home page after login
     };
 
@@ -61,7 +59,7 @@ const LoginPage = ({ handleLogin }) => {
                 setState={setPassword}
                 err={passwordErr}
             />
-            <div className="login_error">{loginErr}</div>
+            <div className="login_error">{"\n" + loginErr + "\n"}</div>
             <div className="btn_indicator_container">
                 <button className="form_postBtn" onClick={processLogin}>
                     Login
