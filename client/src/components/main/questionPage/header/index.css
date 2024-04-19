@@ -1,0 +1,86 @@
+/* General Styles for Question Header */
+.space_between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+
+}
+
+.bold_title {
+    font-weight: bold;
+    color: #333;
+}
+
+.bluebtn {
+    padding: 10px 20px;
+    background-color: cornflowerblue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.bluebtn:hover {
+    background-color: #0056b3;
+}
+
+.right_padding {
+    padding-right: 20px;
+}
+
+#question_count {
+    color: #666;
+    font-size: 1.1em;
+}
+
+.btns {
+    display: flex;
+    gap: 10px;
+}
+
+.btns button {
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #333;
+    border-radius: 8px;
+
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btns button:hover {
+    background-color: #f0f0f0;
+
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .space_between,
+    .right_padding {
+        padding: 10px;
+    }
+
+    .btns button {
+        padding: 6px 12px;
+    }
+}
+
+#question_count {
+    color: #333; /* Darker color for better readability */
+    font-size: 1.2em; /* Slightly larger text for emphasis */
+    font-weight: bold; /* Make it bold to stand out more */
+    background-color: #fff; /* Background color to highlight the count */
+    padding: 8px 16px; /* Padding for better spacing */
+    border-radius: 8px; /* Rounded corners to match other buttons */
+
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions for interactions */
+}
+
+
+

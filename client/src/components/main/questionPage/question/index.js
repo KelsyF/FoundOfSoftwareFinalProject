@@ -1,7 +1,7 @@
 import { getMetaData } from "../../../../tool";
 import "./index.css";
 
-const Question = ({ q, clickTag, handleAnswer }) => {
+const Question = ({ q, clickTag, handleAnswer, handleUsername }) => {
     return (
         <div
             className="question right_padding"
@@ -32,8 +32,12 @@ const Question = ({ q, clickTag, handleAnswer }) => {
                     })}
                 </div>
             </div>
-            <div className="lastActivity">
-            <div className="question_author">{q.asked_by.username}</div>
+            <div className="lastActivity" onClick={(e) => {
+                        e.stopPropagation();
+                        handleUsername(q.asked_by.username);
+                    }}>
+                <div className="question_author"> {q.asked_by.username}
+                </div>
                 <div>&nbsp;</div>
                 <div className="question_meta">
                     asked {getMetaData(new Date(q.ask_date_time))}

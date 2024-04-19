@@ -1,6 +1,18 @@
+/* General Styles for Form */
 .form {
-    background-color: #f4f4f4;
+    background-color: #f9f9f9; /* Light grey background, similar to UserProfile */
     padding: 20px;
-    width: 60%; /* Adjust as per requirement */
-    margin: 20px auto; /* Centers the form on the page */
+    width: 60%; /* Adjustable width based on your layout needs */
+    margin: 20px auto; /* Centering the form in the middle of the page */
+    border-radius: 8px; /* Rounded corners as used in UserProfile */
+    font-family: Arial, sans-serif; /* Consistent font for the whole UI */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .form {
+        width: 90%; /* Increasing width on smaller screens for better accessibility */
+        padding: 10px; /* Adjust padding to be smaller on mobile to save space */
+        margin: 10px auto; /* Smaller margin to align with the reduced padding */
+    }
 }
