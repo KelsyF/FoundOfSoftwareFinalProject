@@ -1,18 +1,60 @@
 .header {
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    height: 10%;
+    justify-content: space-evenly; /* Maintains spacing between elements */
+    padding: 10px; /* Reduced padding */
+    height: 60px; /* Maintains a fixed height */
     width: 100%;
-    background: #dddddd;
+    background-color: #f9f9f9; /* Light grey background */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Slightly less pronounced shadow */
+    border-radius: 8px; /* Rounded corners for consistency */
 }
 
 .title {
-    font-size: 32px;
-    font-weight: 800;
+    font-size: 30px; /* Slightly reduced to save space */
+    font-weight: bold;
+    color: #333;
+    margin-right: 20px; /* Added right margin to separate from search bar */
 }
 
-.login {
-    background: #ffffff;
-    border: #000000 1px solid;
+input[type="text"] {
+    padding: 8px; /* Slightly reduced padding */
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); /* Lighter shadow for inset effect */
+    width: 30%; /* Reduced width to accommodate in smaller screens */
+    margin-right: 10px; /* Consistent spacing */
+}
+
+button {
+    padding: 8px 12px; /* Optimized padding for buttons */
+    background-color: cornflowerblue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column; /* Vertical stacking for smaller screens */
+        padding: 10px;
+        height: auto; /* Allow the header to expand vertically */
+    }
+
+    input[type="text"] {
+        width: 100%; /* Full width on small screens */
+        margin: 10px 0; /* Adjust margin to accommodate stacked layout */
+    }
+
+    .title, button {
+        width: 100%; /* Full width for title and buttons in stacked layout */
+        text-align: center; /* Center-align the text for aesthetics */
+        margin-bottom: 10px; /* Spacing between elements */
+    }
 }

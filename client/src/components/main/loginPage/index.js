@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "./index.css";
 import Form from "../baseComponents/form";
 import Input from "../baseComponents/input";
 import { useUser } from '../../context/UserContext'; // Correct the import path

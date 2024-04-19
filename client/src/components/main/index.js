@@ -6,7 +6,7 @@ import TagPage from "./tagPage";
 import AnswerPage from "./answerPage";
 import NewQuestion from "./newQuestion";
 import NewAnswer from "./newAnswer";
-import Login from "./loginPage"
+import LoginPage from "./loginPage"
 import Register from "./addUser"
 import UserProfile from "./userProfile";  // Adjust the path as necessary
 
@@ -16,7 +16,6 @@ const Main = ({ search = "", title, setQuestionPage }) => {
     const [questionOrder, setQuestionOrder] = useState("newest");
     const [qid, setQid] = useState("");
     const [username, setUsername] = useState("");
-    //const [uid , setUid] = useState("");
 
     let selected = "";
     let content = null;
@@ -118,7 +117,7 @@ const Main = ({ search = "", title, setQuestionPage }) => {
         case "login": {
             selected = "";
             //content = <Login qid={qid} />;
-            content = <Login qid={qid} handleLogin={handleLogin} />;
+            content = <LoginPage qid={qid} handleLogin={handleLogin} />;
             break;
         }
         case "register": {

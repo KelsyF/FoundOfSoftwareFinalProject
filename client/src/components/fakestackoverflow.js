@@ -33,15 +33,17 @@ export default function FakeStackOverflow() {
             />
             {currentPage === "main" && (
                 <Main
-                    title={mainTitle}
-                    search={search}
-                    setQuestionPage={(val, title) => {
-                        setSearch(val);
-                        setMainTitle(title);
-                        setCurrentPage("main");
-                    }}
-                    handleLogin={handleLoginSuccess}
-                />
+                title={mainTitle}
+                search={search}
+                setQuestionPage={(val, title) => {
+                    setSearch(val);
+                    setMainTitle(title);
+                    setCurrentPage("main");
+                }}
+                currentPage={currentPage} // Pass the currentPage state here
+                handleLogin={handleLoginSuccess}
+            />
+            
             )}
             {currentPage === "login" && (
                 <Login handleLogin={handleLoginSuccess} />

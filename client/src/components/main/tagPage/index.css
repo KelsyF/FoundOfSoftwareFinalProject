@@ -1,5 +1,71 @@
+/* General Styles for Tag Page */
 .tag_list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 80px 20px;
+    grid-gap: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+
+}
+
+.tag {
+    background-color: #fff;
+    border-radius: 8px;
+
+    padding: 10px;
+
+    cursor: pointer;
+}
+
+.tag:hover {
+    background-color: #f0f0f0;
+
+}
+
+.space_between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+
+    border-radius: 8px;
+}
+
+.bold_title {
+    font-weight: bold;
+    color: #333;
+}
+
+.bluebtn {
+    padding: 10px 20px;
+    background-color: cornflowerblue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.bluebtn:hover {
+    background-color: #0056b3;
+}
+
+.right_padding {
+    padding-right: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .tag_list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .space_between,
+    .right_padding {
+        padding: 10px;
+    }
 }

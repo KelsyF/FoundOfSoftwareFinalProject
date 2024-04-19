@@ -34,12 +34,11 @@ const Header = ({
                 </>
             ) : (
                 <>
-                    <button onClick={handleLogin}>Login</button>
-                    <button onClick={handleRegister}>Register</button>
+                    <button onClick={() => {handleLogin();}}>Login</button>
+                    <button onClick={() => {handleRegister();}}>Register</button>
                 </>
             )}
         </div>
     );
 };
-
 export default Header;
