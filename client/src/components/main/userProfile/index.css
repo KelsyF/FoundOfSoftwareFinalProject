@@ -1,0 +1,74 @@
+/* General Styles for User Profile */
+.user-profile {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #f9f9f9;
+}
+
+.user-profile h1 {
+    color: #333;
+    border-bottom: 2px solid #e1e1e1;
+    padding-bottom: 10px;
+}
+
+.user-profile h2 {
+    color: #666;
+    margin-top: 20px;
+}
+
+.user-profile ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-profile li {
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.user-profile li:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.user-profile p {
+    color: #333;
+    margin: 5px 0;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+/* Specific styles for elements within list items */
+.user-profile li h3 {
+    color: cornflowerblue;
+}
+
+.user-profile .question_title {
+    font-size: 1.2em;
+    color: #0056b3;
+}
+
+.user-profile .question_meta,
+.user-profile .question_text {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .user-profile {
+        margin: 10px;
+        padding: 10px;
+    }
+}

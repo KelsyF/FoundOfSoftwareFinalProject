@@ -7,7 +7,7 @@ import QuestionBody from "./questionBody";
 import { getQuestionById } from "../../../services/questionService";
 
 // Component for the Answers page
-const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
+const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, handleUsername }) => {
     const [question, setQuestion] = useState({});
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +31,7 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
                 text={question && question.text}
                 askby={question && question.asked_by}
                 meta={question && getMetaData(new Date(question.ask_date_time))}
+                handleUsername = {handleUsername}
             />
             {question &&
                 question.answers &&
@@ -40,6 +41,7 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
                         text={a.text}
                         ansBy={a.ans_by}
                         meta={getMetaData(new Date(a.ans_date_time))}
+                        handleUsername = {handleUsername}
                     />
                 ))}
             <button

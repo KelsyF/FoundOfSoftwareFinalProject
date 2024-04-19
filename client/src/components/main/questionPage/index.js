@@ -13,6 +13,7 @@ const QuestionPage = ({
     clickTag,
     handleAnswer,
     handleNewQuestion,
+    handleUsername,
 }) => {
     const [qlist, setQlist] = useState([]);
     useEffect(() => {
@@ -34,11 +35,13 @@ const QuestionPage = ({
             <div id="question_list" className="question_list">
                 {qlist.map((q, idx) => (
                     <Question
-                        q={q}
-                        key={idx}
-                        clickTag={clickTag}
-                        handleAnswer={handleAnswer}
-                    />
+                    q={q}
+                    key={idx}
+                    clickTag={clickTag}
+                    handleAnswer={handleAnswer}
+                    handleUsername={handleUsername}  // Make sure this is consistent
+                />
+                
                 ))}
             </div>
             {title_text === "Search Results" && !qlist.length && (

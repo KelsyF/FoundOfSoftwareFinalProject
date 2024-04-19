@@ -8,11 +8,14 @@ import NewQuestion from "./newQuestion";
 import NewAnswer from "./newAnswer";
 import Login from "./loginPage"
 import Register from "./addUser"
+import UserProfile from "./userProfile";  // Adjust the path as necessary
+
 
 const Main = ({ search = "", title, setQuestionPage }) => {
     const [page, setPage] = useState("home");
     const [questionOrder, setQuestionOrder] = useState("newest");
     const [qid, setQid] = useState("");
+    const [username, setUsername] = useState("");
     //const [uid , setUid] = useState("");
 
     let selected = "";
@@ -23,6 +26,10 @@ const Main = ({ search = "", title, setQuestionPage }) => {
         setQuestionPage(); 
     };
     
+    const handleUsername = (username) => {
+        setUsername(username);
+        setPage("userprofile");
+    };
 
     const handleTags = () => {
         setPage("tag");
@@ -54,6 +61,7 @@ const Main = ({ search = "", title, setQuestionPage }) => {
         setPage("newAnswer");
     };
 
+
     const getQuestionPage = (order = "newest", search = "") => {
         return (
             <QuestionPage
@@ -64,6 +72,7 @@ const Main = ({ search = "", title, setQuestionPage }) => {
                 clickTag={clickTag}
                 handleAnswer={handleAnswer}
                 handleNewQuestion={handleNewQuestion}
+                handleUsername = {handleUsername}
             />
         );
     };
@@ -91,6 +100,7 @@ const Main = ({ search = "", title, setQuestionPage }) => {
                     qid={qid}
                     handleNewQuestion={handleNewQuestion}
                     handleNewAnswer={handleNewAnswer}
+                    handleUsername = {handleUsername}
                 />
             );
             break;
@@ -116,6 +126,14 @@ const Main = ({ search = "", title, setQuestionPage }) => {
             content = <Register handleRegister={handleRegister} />;
             break;
         }
+
+
+        case "userprofile": {
+            selected = "";
+            content = <UserProfile username={username} handleAnswer={handleAnswer} />;
+            break;
+        }
+        
         
         default:
             selected = "q";

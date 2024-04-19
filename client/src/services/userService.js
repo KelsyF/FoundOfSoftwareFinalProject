@@ -4,12 +4,12 @@ const USER_API_URL = `${REACT_APP_API_URL}/user`;
 
 // To add user
 const addUser = async (username, password) => {
-        const data = {username, password};
+    const data = {username, password};
     try {
         const res = await api.post(`${USER_API_URL}/addUser`, data);
         return { success: true, data: res.data };
     } catch (error) {
-        return { success: false, message: error.response.data.message || "User registration failed"}
+        return { success: false, message: error.response.data.message || "User registration failed" }
     }
 };
 
@@ -20,7 +20,7 @@ const loginUser = async (username, password, login) => {
         const res = await api.post(`${USER_API_URL}/login`, data);
         if (res.data.success) {
             login(username);
-            return { success: true, message: res.data.message, user: res.data.user};
+            return { success: true, message: res.data.message, user: res.data.user };
         } else {
             return { success: false, message: res.data.message || "Login failed" };
         }
@@ -29,4 +29,25 @@ const loginUser = async (username, password, login) => {
     }
 };
 
-export { addUser, loginUser };
+// Fetch all posts by a user
+const fetchUserPosts = async (username) => {
+    try {
+        const res = await api.get(`${USER_API_URL}/username/${username}/posts`);
+        return { success: true, posts: res.data.posts };
+    } catch (error) {
+        return { success: false, message: error.response.data.message || "Failed to fetch posts" };
+    }
+};
+
+// Fetch all answers by a user
+const fetchUserAnswers = async (username) => {
+    try {
+        const res = await api.get(`${USER_API_URL}/username/${username}/answers`);
+        return { success: true, answers: res.data.answers };
+    } catch (error) {
+        return { success: false, message: error.response.data.message || "Failed to fetch answers" };
+    }
+};
+
+
+export { addUser, loginUser, fetchUserPosts, fetchUserAnswers };
