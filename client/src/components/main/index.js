@@ -100,6 +100,7 @@ const Main = ({ search = "", title, setQuestionPage }) => {
                     handleNewQuestion={handleNewQuestion}
                     handleNewAnswer={handleNewAnswer}
                     handleUsername = {handleUsername}
+                    handleQuestions = {handleQuestions}
                 />
             );
             break;

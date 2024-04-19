@@ -35,39 +35,50 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/username/:username/posts', async (req, res) => {
+    console.log("Fetching posts for user:", req.params.username); // Debugging user input
     try {
         const user = await User.findOne({ username: req.params.username });
-        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+        if (!user) {
+            console.log("No user found with username:", req.params.username); // Debugging when no user is found
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
 
         const posts = await Post.find({ asked_by: user._id }).populate('tags', 'name');
+        console.log(`Found ${posts.length} posts for user ID ${user._id}`); // Debugging number of posts found
+
         const postDetails = posts.map(post => ({
-            id: post._id,  // Ensure ID is sent
+            id: post._id,
             title: post.title,
             text: post.text,
             ask_date_time: post.ask_date_time,
             views: post.views,
             tags: post.tags.map(tag => tag.name)
         }));
+
+        console.log("Post details prepared for response:", postDetails); // Debugging the final prepared posts array
         res.json({ success: true, posts: postDetails });
     } catch (error) {
+        console.log("Error in fetching posts:", error); // Debugging error details
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
 
+
 router.get('/username/:username/answers', async (req, res) => {
+    console.log("Fetching answers for user:", req.params.username); // Debugging user input
     try {
         const user = await User.findOne({ username: req.params.username });
         if (!user) {
-            //logger.warn(`User not found for username: ${req.params.username}`);
+            console.log("No user found with username:", req.params.username); // Debugging when no user is found
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        // Find all answers by this user
         const answersByUser = await Answer.find({ ans_by: user._id });
+        console.log(`Found ${answersByUser.length} answers by user ID ${user._id}`); // Debugging number of answers found
+
         const answerIds = answersByUser.map(answer => answer._id);
 
-        // Find all questions that have any of these answers
         const questionsWithUserAnswers = await Post.find({
             answers: { $in: answerIds }
         }).populate({
@@ -76,7 +87,6 @@ router.get('/username/:username/answers', async (req, res) => {
             populate: { path: 'ans_by' }
         });
 
-        // Format the response to include both question and answer details
         const formattedAnswers = questionsWithUserAnswers.map(question => {
             return question.answers.map(answer => ({
                 questionId: question._id,
@@ -87,12 +97,14 @@ router.get('/username/:username/answers', async (req, res) => {
             }));
         }).flat();
 
+        console.log("Formatted answers ready for response:", formattedAnswers); // Debugging final answers format
         res.json({ success: true, answers: formattedAnswers });
     } catch (error) {
-        //logger.error('Error fetching user answers:', error);
+        console.log("Error in fetching answers:", error); // Debugging error details
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
 
 
 

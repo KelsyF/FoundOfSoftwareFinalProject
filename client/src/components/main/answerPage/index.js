@@ -1,54 +1,70 @@
-import { useEffect, useState } from "react";
-import { getMetaData } from "../../../tool";
-import Answer from "./answer";
-import AnswerHeader from "./header";
-import "./index.css";
+import React, { useEffect, useState } from "react";
+import Answer from "./answer"; // Make sure this path is correct
+import AnswerHeader from "./header"; // Adjust paths as necessary
 import QuestionBody from "./questionBody";
-import { getQuestionById } from "../../../services/questionService";
+import { getMetaData } from "../../../tool"; // Adjust paths as necessary
+import { getQuestionById } from "../../../services/questionService"; // Adjust paths and imports as necessary
+import { deleteAnswer } from "../../../services/answerService"; // Adjust paths and imports as necessary
 
-// Component for the Answers page
-const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, handleUsername }) => {
+const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, handleUsername, handleQuestions }) => {
     const [question, setQuestion] = useState({});
+
     useEffect(() => {
         const fetchData = async () => {
-            let res = await getQuestionById(qid);
-            setQuestion(res || {});
+            try {
+                const res = await getQuestionById(qid);
+                if (res) {
+                    setQuestion(res);
+                }
+            } catch (error) {
+                console.error("Error fetching question data:", error);
+            }
         };
-        fetchData().catch((e) => console.log(e));
+        fetchData();
     }, [qid]);
+
+    const handleDeleteAnswer = async (answerId) => {
+        try {
+            await deleteAnswer(answerId);
+            // Refresh the question to update the list of answers
+            const updatedQuestion = await getQuestionById(qid);
+            setQuestion(updatedQuestion);
+            console.log("Answer deleted successfully");
+        } catch (error) {
+            console.error("Failed to delete answer:", error);
+        }
+    };
 
     return (
         <>
             <AnswerHeader
-                ansCount={
-                    question && question.answers && question.answers.length
-                }
-                title={question && question.title}
+                ansCount={question.answers ? question.answers.length : 0}
+                title={question.title || "Loading..."}
                 handleNewQuestion={handleNewQuestion}
             />
             <QuestionBody
-                views={question && question.views}
-                text={question && question.text}
-                askby={question && question.asked_by}
-                meta={question && getMetaData(new Date(question.ask_date_time))}
-                handleUsername = {handleUsername}
+                qid={question._id}
+                views={question.views}
+                text={question.text}
+                askby={question.asked_by}
+                meta={getMetaData(new Date(question.ask_date_time))}
+                handleUsername={handleUsername}
+                onDeletionSuccess={handleQuestions}
             />
-            {question &&
-                question.answers &&
-                question.answers.map((a, idx) => (
-                    <Answer
-                        key={idx}
-                        text={a.text}
-                        ansBy={a.ans_by}
-                        meta={getMetaData(new Date(a.ans_date_time))}
-                        handleUsername = {handleUsername}
-                    />
-                ))}
+            {question.answers && question.answers.map((answer, idx) => (
+                <Answer
+                    key={idx}
+                    text={answer.text}
+                    ansBy={answer.ans_by}
+                    meta={getMetaData(new Date(answer.ans_date_time))}
+                    handleUsername={handleUsername}
+                    answerId={answer._id}
+                    onDelete={handleDeleteAnswer}
+                />
+            ))}
             <button
                 className="bluebtn ansButton"
-                onClick={() => {
-                    handleNewAnswer();
-                }}
+                onClick={handleNewAnswer}
             >
                 Answer Question
             </button>

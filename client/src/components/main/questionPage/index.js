@@ -16,14 +16,20 @@ const QuestionPage = ({
     handleUsername,
 }) => {
     const [qlist, setQlist] = useState([]);
+    
     useEffect(() => {
-        const fetchData = async () => {
-            let res = await getQuestionsByFilter(order, search);
-            setQlist(res || []);
-        };
-
-        fetchData().catch((e) => console.log(e));
+        fetchData(); // Call it here to load data initially
     }, [order, search]);
+
+    const fetchData = async () => {
+        let res = await getQuestionsByFilter(order, search);
+        setQlist(res || []);
+    };
+
+    const refreshQuestions = () => {
+        fetchData().catch((e) => console.log("Error fetching questions:", e));
+    };
+
     return (
         <>
             <QuestionHeader
@@ -33,15 +39,15 @@ const QuestionPage = ({
                 handleNewQuestion={handleNewQuestion}
             />
             <div id="question_list" className="question_list">
-                {qlist.map((q, idx) => (
+            {qlist.map((q, idx) => (
                     <Question
-                    q={q}
-                    key={idx}
-                    clickTag={clickTag}
-                    handleAnswer={handleAnswer}
-                    handleUsername={handleUsername}  // Make sure this is consistent
-                />
-                
+                        q={q}
+                        key={idx}
+                        clickTag={clickTag}
+                        handleAnswer={handleAnswer}
+                        handleUsername={handleUsername}
+                        refreshQuestions={refreshQuestions}  // Passing the refresh function
+                    />
                 ))}
             </div>
             {title_text === "Search Results" && !qlist.length && (
