@@ -28,8 +28,8 @@ export default function FakeStackOverflow() {
                 }}
                 initialPage={"home"}
             />
-
             )}
+
             {currentPage === "login" && (
                 <Main
                     title={mainTitle}
@@ -42,6 +42,7 @@ export default function FakeStackOverflow() {
                     initialPage={"login"}
                 />
             )}
+
             {currentPage === "register" && (
                 <Main
                     title={mainTitle}
@@ -52,6 +53,19 @@ export default function FakeStackOverflow() {
                         setCurrentPage("main");
                     }}
                     initialPage={"register"}
+                />
+            )}
+
+            {currentPage === "userprofile" && (
+                <Main
+                    title={mainTitle}
+                    search={search}
+                    setQuestionPage={(val, title) => {
+                        setSearch(val);
+                        setMainTitle(title);
+                        setCurrentPage("main");
+                    }}
+                    initialPage={"userprofile"}
                 />
             )}
         </>

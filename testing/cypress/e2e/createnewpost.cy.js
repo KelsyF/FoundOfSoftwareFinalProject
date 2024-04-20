@@ -20,11 +20,6 @@ describe('New Question Form', () => {
         cy.get("#formTitleInput").type("Test Question A");
         cy.get("#formTextInput").type("Test Question A Text");
         cy.get("#formTagInput").type("javascript");
-
-        // How are we handling username now that we have a logged in profile?
-        // If the login function in beforeEach works, will we even need to grab the username
-        // since we'll grab the username in the question creation and won't have to input it?
-        cy.get('.username')
         cy.contains('Post Question').click();
 
         // Second added question
@@ -32,9 +27,6 @@ describe('New Question Form', () => {
         cy.get("#formTitleInput").type("Test Question B");
         cy.get("#formTextInput").type("Test Question B Text");
         cy.get("#formTagInput").type("javascript");
-
-        // See line 25
-        cy.get('.username')
         cy.contains('Post Question').click();
 
         // Third added question
@@ -42,9 +34,6 @@ describe('New Question Form', () => {
         cy.get("#formTitleInput").type("Test Question C");
         cy.get("#formTextInput").type("Test Question C Text");
         cy.get("#formTagInput").type("javascript");
-
-        // See line 25
-        cy.get('.username')
         cy.contains('Post Question').click();
 
         // Checks questions were posted and display in most recently added order.

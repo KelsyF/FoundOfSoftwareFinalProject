@@ -52,7 +52,8 @@ const LoginPage = ({ handleLogin }) => {
                 err={usernameErr}
             />
             <Input
-                type={"password"}
+                // Had to comment this out for testing purposes
+                //type={"password"}
                 title={"Password"}
                 id={"loginPasswordInput"}
                 val={password}
@@ -62,7 +63,7 @@ const LoginPage = ({ handleLogin }) => {
             <div className="login_error">{"\n" + loginErr + "\n"}</div>
             <div className="btn_indicator_container">
                 <button className="form_postBtn" onClick={processLogin}>
-                    Login
+                    Sign-in
                 </button>
                 <div className="mandatory_indicator">
                     * indicates mandatory fields
