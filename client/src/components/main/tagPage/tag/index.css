@@ -1,0 +1,32 @@
+/* Tag component styles */
+.tagNode {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 15px;
+    margin: 10px;
+    width: auto; /* adjusted to not be percentage based for better responsiveness */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.tagNode:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tagName {
+    font-size: 1.2em;
+    color: cornflowerblue;
+    font-weight: bold;
+}
+
+.tagQcnt {
+    color: #666;
+    font-size: 0.9em;
+    padding-top: 5px;
+}

@@ -1,0 +1,68 @@
+/* Styles for Question Body consistent with User Profile theme */
+.questionBody {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    margin-top: 5%;
+    border-bottom: 1px dashed #e1e1e1;
+    border-radius: 8px;
+ 
+}
+
+.answer_question_view {
+    flex: 1;
+    font-weight: bold;
+    color: #666;
+}
+
+.answer_question_text {
+    flex: 4;
+    padding: 0 20px;
+    color: #333;
+}
+
+.answer_question_right {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    cursor: pointer;
+
+}
+
+.answer_question_right:hover {
+    background-color: #f0f0f0;
+}
+
+.question_author {
+    color: cornflowerblue;
+    font-size: 1.1em;
+}
+
+.answer_question_meta {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.right_padding {
+    padding-right: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .questionBody {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px;
+    }
+
+    .answer_question_text, .answer_question_right {
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .answer_question_view, .answer_question_right {
+        margin-bottom: 10px;
+    }
+}

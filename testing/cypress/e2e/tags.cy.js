@@ -1,15 +1,15 @@
 //Based off of soa-node-mongo cypress tests repeated from React assignment.
 
 describe("Tag page", () => {
+
     beforeEach(() => {
         // Seed the database before each test
-        cy.exec("node ../server/init.js");
-        cy.login(0);
+        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
-    afterEach( () => {
-        //Clear the database after each test
-        cy.exec("node ../server/destroy.js");
+    afterEach(() => {
+        // Clear the database after each test
+        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
     it('Check if all tags exist', () => {
@@ -25,15 +25,23 @@ describe("Tag page", () => {
         cy.contains("website", { matchCase: false });
     });
 
-    it('Checks if the correct questions are populating within tags', () => {
+    it('Checks if the correct number of questions are populating within tags', () => {
         cy.visit('http://localhost:3000');
 
         // Check that the question numbers are correct in the page
         cy.contains("Tags").click();
-        cy.contains("7 Tags");
-        cy.contains("1 question");
-        cy.contains("2 question");
-        cy.contains("0 question");
+        cy.contains("6 Tags");
+        const tag_qNums = [
+            "1 question",
+            "2 questions",
+            "2 questions",
+            "2 questions",
+            "2 questions",
+            "1 questions",
+        ];
+        cy.get(".tagQcnt").each(($el, index, $list) => {
+            cy.wrap($el).should("contain", tag_qNums[index]);
+        });
     });
 
     it('Navigate to question in React tag', () => {

@@ -1,0 +1,62 @@
+/* General Styles for Answer Header */
+#answersHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+
+}
+
+.bold_title {
+    font-weight: bold;
+    color: #333;
+}
+
+.answer_question_title {
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #333; /* Ensuring text color consistency */
+}
+
+.bluebtn {
+    padding: 10px 20px;
+    background-color: cornflowerblue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.bluebtn:hover {
+    background-color: #0056b3;
+}
+
+.right_padding {
+    padding-right: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #answersHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .bold_title,
+    .answer_question_title,
+    .bluebtn {
+        width: 100%; /* Ensuring full width on smaller screens */
+        margin-bottom: 10px; /* Spacing between items */
+    }
+
+    .bluebtn {
+        align-self: center; /* Centering the button */
+    }
+}

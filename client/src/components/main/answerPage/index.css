@@ -1,0 +1,63 @@
+/* General Styles for Answer Page */
+.answer_question_meta {
+    color: #666; /* More consistent with the subdued tones in UserProfile */
+    font-size: 0.9em;
+}
+
+.ansButton {
+    padding: 10px 20px;
+    background-color: cornflowerblue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    margin: 20px 0; /* More consistent spacing */
+}
+
+.ansButton:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for Answer elements */
+.answer {
+    background-color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+
+}
+
+.answer:hover {
+    background-color: #f0f0f0;
+}
+
+/* Styles for headers and question body */
+.header, .question_body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+
+    background-color: #f9f9f9;
+}
+
+.header h1, .question_body h1 {
+    color: #333;
+    border-bottom: 2px solid #e1e1e1;
+    padding-bottom: 10px;
+}
+
+.question_body p {
+    color: #333;
+    margin: 5px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header, .question_body {
+        margin: 10px;
+        padding: 10px;
+    }
+}

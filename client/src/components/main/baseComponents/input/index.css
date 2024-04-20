@@ -1,0 +1,46 @@
+/* General Styles for Input Fields */
+.input_title {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333; /* Darker text for better readability, similar to UserProfile titles */
+}
+
+.input_hint {
+    font-size: 14px;
+    color: #666; /* Lighter grey for hints, maintaining legibility and style coherence */
+    margin-bottom: 5px;
+    font-style: italic;
+    margin-left: 10px;
+}
+
+.input_input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #ccc; /* Slightly thicker border to align with UserProfile aesthetics */
+    border-radius: 8px; /* Rounded corners as used in UserProfile */
+    background-color: #fff; /* Ensuring input fields are clearly distinguishable */
+    transition: border-color 0.3s; /* Smooth transition for focus states */
+}
+
+.input_input:focus {
+    border-color: cornflowerblue; /* Focus state with a color similar to UserProfile highlights */
+}
+
+.input_error {
+    color: red; /* Bright red for errors to catch user's attention */
+    margin-bottom: 20px;
+    font-weight: bold; /* Making error texts bold to stand out more */
+}
+
+/* Responsive adjustments, if any, can be added here to align with the responsive behavior of UserProfile */
+@media (max-width: 768px) {
+    .input_input,
+    .input_title,
+    .input_hint,
+    .input_error {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}

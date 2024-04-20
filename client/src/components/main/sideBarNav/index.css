@@ -1,0 +1,39 @@
+/* General Styles for Side Bar Navigation */
+.sideBarNav {
+    display: flex;
+    flex-direction: column;
+    width: 15%; /* Adjust based on layout requirements */
+    border-right: 2px solid #e1e1e1; /* Solid line for cleaner appearance */
+    padding: 20px 0; /* Uniform padding */
+    align-items: center;
+    background-color: #f9f9f9; /* Background color to match UserProfile */
+
+    border-radius: 8px; /* Rounded corners for consistency */
+}
+
+.menu_button {
+    height: 40px;
+    width: 80%;
+    margin-top: 20px;
+    border-radius: 8px; /* More pronounced rounded corners */
+    text-align: center;
+    line-height: 40px;
+    color: #333; /* Darker text for better contrast */
+    background-color: #fff; /* Start with a white background */
+
+    cursor: pointer; /* Cursor indication for clickable items */
+}
+
+.menu_button:hover {
+    background-color: #f0f0f0; /* Light grey on hover for feedback */
+
+}
+
+.menu_button:first-child {
+    margin-top: 0; /* No top margin for the first button */
+}
+
+.menu_selected {
+    background-color: cornflowerblue; /* Selected item uses the theme accent color */
+    color: white; /* White text for readability */
+}

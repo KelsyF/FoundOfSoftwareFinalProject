@@ -1,0 +1,92 @@
+/* General Styles for Question Component */
+.question {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #fff;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.question:hover {
+    background-color: #f0f0f0;
+
+}
+
+.postStats {
+    color: #666;
+    text-align: center;
+    width: 10%;
+    font-size: 0.9em;
+}
+
+.question_mid {
+    width: 60%;
+}
+
+.postTitle {
+    color: cornflowerblue;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.question_tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.question_tag_button {
+    background-color: #0056b3;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.question_tag_button:hover {
+    background-color: #003D79;
+}
+
+.lastActivity {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.question_author {
+    color: #333;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.question_meta {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.right_padding {
+    padding-right: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .question {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .postStats, .question_mid, .lastActivity {
+        width: 100%;
+    }
+
+    .question_tag_button {
+        margin-top: 5px;
+    }
+}

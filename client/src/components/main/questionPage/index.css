@@ -1,0 +1,70 @@
+/* General Styles for Question Page */
+.question_list {
+    padding: 20px;
+    margin: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+
+}
+
+.question_list:last-child {
+    border-bottom: none; /* Remove dashed line to align with UserProfile style */
+}
+
+/* Styles for each Question */
+.question {
+    background-color: #fff;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+
+}
+
+.question:hover {
+    background-color: #f0f0f0;
+
+    cursor: pointer;
+}
+
+/* Buttons and titles */
+.btns {
+    margin-right: 15%; /* Keeping original margin for button alignment */
+    display: flex; /* Adding flex to improve alignment and distribution */
+    justify-content: flex-end;
+}
+
+.bold_title {
+    font-weight: bold;
+    color: #333;
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+
+    border-radius: 8px;
+    text-align: center;
+}
+
+.right_padding {
+    padding-right: 20px;
+}
+
+.bluebtn {
+    padding: 10px 20px;
+    background-color: cornflowerblue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.bluebtn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .question_list, .btns, .bold_title {
+        padding: 10px;
+        margin: 10px;
+    }
+}

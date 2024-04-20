@@ -1,0 +1,17 @@
+.btn {
+    background-color: #fff; /* White background */
+    border: 2px solid #e1e1e1; /* Light grey border for a subtle contrast */
+    color: #333; /* Dark grey text to match UserProfile styling */
+    padding: 10px 20px; /* Padding for better button size */
+    border-radius: 8px; /* Rounded corners */
+    font-family: Arial, sans-serif; /* Consistent font family */
+    font-size: 1em; /* Proper font size for button text */
+    cursor: pointer; /* Cursor pointer to indicate it's clickable */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+}
+
+.btn:hover {
+    background-color: #f0f0f0; /* Light grey background on hover for visual feedback */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Increased shadow for lifted effect on hover */
+}

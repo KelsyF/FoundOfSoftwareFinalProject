@@ -1,0 +1,64 @@
+/* All the CSS related to answers Page, styled similarly to UserProfile */
+.answer {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #fff;
+    border-radius: 8px;
+    
+    border-bottom: 2px solid #e1e1e1; /* subtle and clean instead of dashed */
+}
+
+.answer:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+    
+}
+
+.answerText {
+    width: 75%;
+    color: #333; /* consistent font color as in UserProfile */
+}
+
+.answerAuthor {
+    width: 25%;
+    padding-left: 20px; /* ensures a nice separation without using margin percentage */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.answer_author {
+    font-weight: bold; /* emphasizes the author */
+    color: cornflowerblue; /* aligning the color with the UserProfile style */
+}
+
+.answer_question_meta {
+    font-size: 0.9em;
+    color: #666; /* subtle color for metadata, consistent with UserProfile */
+}
+
+.right_padding {
+    padding-right: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .answer {
+        flex-direction: column;
+        align-items: start;
+        padding: 10px;
+    }
+
+    .answerAuthor {
+        width: 100%;
+        padding-left: 0;
+        margin-top: 10px;
+    }
+
+    .answerText,
+    .answerAuthor {
+        width: 100%; /* full width for better readability on smaller screens */
+    }
+}
