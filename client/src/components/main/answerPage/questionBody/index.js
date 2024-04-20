@@ -32,7 +32,7 @@ const QuestionBody = ({ qid, views, text, askby, meta, handleUsername, onDeletio
                 <div className="question_author">{askby ? askby.username : 'Unknown Author'}</div>
                 <div className="answer_question_meta">asked {meta}</div>
             </div>
-            {user && user.username === "moderator" && (
+            {user && (user.username === "moderator" || user.username === askby?.username) && (
                 <div className="moderatorActionContainer">
                     <button
                         className="moderator_action_button"

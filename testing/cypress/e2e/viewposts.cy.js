@@ -97,12 +97,12 @@ describe('Home Page 1', () => {
 
     it('successfully highlights "Questions" link when on the home page', () => {
         cy.visit('http://localhost:3000');
-        cy.get('.sideBarNav').contains('Questions').should('have.css', 'background-color', 'rgb(204, 204, 204)');
+        cy.get('.sideBarNav').contains('Questions').should('have.css', 'background-color', 'rgb(100, 149, 237)');
     })
 
     it('successfully highlights "Tags" link when on the Tags page', () => {
         cy.visit('http://localhost:3000');
         cy.contains('Tags').click();
-        cy.get('.sideBarNav').contains('Tags').should('have.css', 'background-color', 'rgb(204, 204, 204)');
+        cy.get('.sideBarNav').contains('Tags').should('have.css', 'background-color', 'rgb(100, 149, 237)');
     })
 })

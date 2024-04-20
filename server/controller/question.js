@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Question = require("../models/questions");
 const User = require('../models/user'); // Adjust the path according to your project structure
 
+
 const { addTag, getQuestionsByOrder, filterQuestionsBySearch } = require('../utils/question');
 
 const router = express.Router();
@@ -22,7 +23,7 @@ router.get('/getQuestion', async (req, res) => {
 
         // If there's a search term, filter the fetched questions further
         if (search) {
-            questions = filterQuestionsBySearch(questions, search);
+            questions = await filterQuestionsBySearch(questions, search);
             //console.log("Questions filtered by search term:", search);  // Confirm search filtering operation
         }
 
@@ -51,9 +52,11 @@ router.get('/getQuestionById/:id', async (req, res) => {
 
     try {
        // console.log("1");
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Invalid question ID format" });
-        }
+       if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log("Invalid ID format:", id);
+        return res.status(400).json({ message: "Invalid question ID format" });
+    }
+    
         //console.log("2");
         const question = await Question.findOneAndUpdate(
             { _id: id },

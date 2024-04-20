@@ -1,34 +1,25 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
-// MongoDB Connection URL
-const MONGO_URL = "mongodb://127.0.0.1:27017/final_fake_so";
-// Frontend Client URL
-const CLIENT_URL = "http://localhost:3000";
-// Server Port
-const port = 8000;
+// MongoDB Connection URL and Server Port configuration
+const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/final_fake_so";
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
+const port = process.env.PORT || 8000;
 
 // Connect to MongoDB
-mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((error) => {
-        console.error("Error connecting to MongoDB:", error);
-        process.exit(1); // Exit if unable to connect to the database
-    });
+mongoose.connect(MONGO_URL, { useUnifiedTopology: true });
 
 const app = express();
 
 // CORS Configuration
-// Server.js
 app.use(cors({
     origin: [CLIENT_URL], // Only allow your client to connect
     credentials: true, // Allow credentials
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }));
-
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
 app.use(session({
@@ -37,7 +28,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } // Set to true if using https
 }));
-
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -50,7 +40,6 @@ app.get("/", (req, res) => {
 // Import routers
 const questionRouter = require("./controller/question");
 const tagRouter = require("./controller/tag");
-// Assume you have an answer controller similar to the tag controller
 const answerRouter = require("./controller/answer");
 const userRouter = require("./controller/user");
 
@@ -60,18 +49,30 @@ app.use("/tag", tagRouter);
 app.use("/answer", answerRouter);
 app.use("/user", userRouter);
 
-// Start the server
-const server = app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+// Export the app
+module.exports = app;
 
-// Graceful shutdown
-process.on("SIGINT", () => {
-    server.close(() => {
-        console.log("Server closed");
-        mongoose.disconnect().then(() => console.log("Database connection closed"));
-        process.exit(0);
+// Function to start the server
+function startServer() {
+    const server = app.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}`);
     });
-});
 
-module.exports = server;
+    // Graceful shutdown
+    process.on("SIGINT", () => {
+        server.close(() => {
+            mongoose.disconnect();
+            //process.exit(0);
+        });
+    });
+
+    return server;
+}
+
+// Start the server only if the file is run directly
+if (require.main === module) {
+    startServer();
+}
+
+// Export the startServer function separately
+module.exports.startServer = startServer;

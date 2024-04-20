@@ -224,4 +224,129 @@ describe('question util module', () => {
         expect(result[1]._id.toString()).toEqual('65e9b716ff0e892116b2de01');
         expect(result[2]._id.toString()).toEqual('65e9b716ff0e892116b2de05');
     })
+
+
+
+
 })
+
+describe('getQuestionsByOrder - default order', () => {
+    const sortedQuestions = [
+        { _id: '65e9b716ff0e892116b2de04', ask_date_time: new Date('2023-11-21T09:24:00'), tags: [] },
+        { _id: '65e9b716ff0e892116b2de01', ask_date_time: new Date('2023-11-20T09:24:00'), tags: [] },
+        { _id: '65e9b716ff0e892116b2de05', ask_date_time: new Date('2023-11-19T10:24:00'), tags: [] }
+    ];
+
+    beforeEach(() => {
+        mockingoose(Question).toReturn(sortedQuestions, 'find');
+    });
+
+    test('get questions sorted by newest without specifying order type', async () => {
+        const result = await getQuestionsByOrder();
+
+        // Verify that the result matches the sortedQuestions array in the correct order
+        expect(result).toHaveLength(sortedQuestions.length);
+        expect(result[0]._id.toString()).toEqual(sortedQuestions[0]._id);
+        expect(result[1]._id.toString()).toEqual(sortedQuestions[1]._id);
+        expect(result[2]._id.toString()).toEqual(sortedQuestions[2]._id);
+
+        // Optionally verify that each returned question has its 'tags' field populated
+        result.forEach((question, index) => {
+            expect(question.tags).toBeDefined();
+            expect(Array.isArray(question.tags)).toBeTruthy();
+        });
+    });
+});
+
+describe('getQuestionsByOrder - error handling', () => {
+    beforeEach(() => {
+        // Reset all mocks before each test
+        mockingoose.resetAll();
+        // Clear existing mocks on console.error
+        jest.clearAllMocks();
+    });
+
+    test('should log an error and throw when the database query fails', async () => {
+        // Simulate a database error
+        mockingoose(Question).toReturn(new Error('Database query failed'), 'find');
+
+        // Create a spy on console.error to verify it gets called
+        const consoleSpy = jest.spyOn(console, 'error');
+
+        // Attempt to run the function and expect it to throw an error
+        await expect(getQuestionsByOrder()).rejects.toThrow('Failed to fetch questions by order');
+
+        // Verify that console.error was called with the expected message
+        expect(consoleSpy).toHaveBeenCalledWith('Error fetching questions by order:', expect.any(Error));
+
+        // Clean up spy
+        consoleSpy.mockRestore();
+    });
+});
+
+describe('getQuestionsByOrder - Sorting Logic Tests', () => {
+    const mockQuestions = [
+        {
+            _id: '1',
+            title: 'Question 1',
+            answers: [],
+            ask_date_time: new Date('2023-01-01T09:00:00Z')
+        },
+        {
+            _id: '2',
+            title: 'Question 2',
+            answers: [{
+                ans_date_time: '2023-01-02T09:00:00Z'
+            }],
+            ask_date_time: new Date('2023-01-02T09:00:00Z')
+        },
+        {
+            _id: '3',
+            title: 'Question 3',
+            answers: [{
+                ans_date_time: '2023-01-03T09:00:00Z'
+            }, {
+                ans_date_time: '2023-01-04T09:00:00Z'
+            }],
+            ask_date_time: new Date('2023-01-03T09:00:00Z')
+        }
+    ];
+
+    beforeEach(() => {
+        mockingoose.resetAll();
+    });
+
+    test('should correctly prioritize questions with answers over those without', async () => {
+        mockingoose(Question).toReturn(mockQuestions, 'find');
+
+        const result = await getQuestionsByOrder('active');
+
+        // Verify that questions with answers come before those without
+        expect(result[0]._id).toEqual('3'); // This question has the most recent answers
+        expect(result[1]._id).toEqual('2'); // This question has older answers
+        expect(result[2]._id).toEqual('1'); // This question has no answers
+    });
+
+    test('should sort questions with answers by the date of the most recent answer', async () => {
+        mockingoose(Question).toReturn(mockQuestions.slice(1), 'find'); // Only consider questions 2 and 3
+
+        const result = await getQuestionsByOrder('active');
+
+        // Verify that questions are ordered by the most recent answer's date
+        expect(result[0]._id).toEqual('3'); // Has the latest answer
+        expect(result[1]._id).toEqual('2'); // Has the earlier answer
+    });
+
+    test('should sort unanswered questions by their ask_date_time', async () => {
+        // Mock all questions to have no answers
+        const unansweredQuestions = mockQuestions.map(q => ({ ...q, answers: [] }));
+        mockingoose(Question).toReturn(unansweredQuestions, 'find');
+
+        const result = await getQuestionsByOrder('active');
+
+        // Ensure they are sorted by ask date instead
+        expect(result[0]._id).toEqual('3');
+        expect(result[1]._id).toEqual('2');
+        expect(result[2]._id).toEqual('1');
+    });
+});
