@@ -130,7 +130,7 @@ const Main = ({ search = "", title, setQuestionPage }) => {
 
         case "userprofile": {
             selected = "";
-            content = <UserProfile username={username} handleAnswer={handleAnswer} />;
+            content = <UserProfile username={username} handleAnswer={handleAnswer} handleQuestions = {handleQuestions} />;
             break;
         }
         

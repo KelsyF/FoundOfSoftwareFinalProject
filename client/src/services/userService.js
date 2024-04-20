@@ -49,5 +49,17 @@ const fetchUserAnswers = async (username) => {
     }
 };
 
+// userServices.js
 
-export { addUser, loginUser, fetchUserPosts, fetchUserAnswers };
+// Function to delete user
+const deleteUser = async (username) => {
+    try {
+        const res = await api.delete(`${USER_API_URL}/deleteUser/${username}`);
+        return { success: res.data.success, message: res.data.message };
+    } catch (error) {
+        return { success: false, message: error.response.data.message || "Failed to delete user" };
+    }
+};
+
+
+export { addUser, loginUser, fetchUserPosts, fetchUserAnswers, deleteUser };

@@ -106,6 +106,42 @@ router.get('/username/:username/answers', async (req, res) => {
 });
 
 
+// DELETE a user and all related data
+// DELETE a user and all related data
+router.delete('/deleteUser/:username', async (req, res) => {
+    const { username } = req.params;
+
+    console.log(`Attempting to delete user with username: ${username}`);
+
+    try {
+        // Fetch user by username
+        const user = await User.findOne({ username: username });
+        if (!user) {
+            console.log(`User not found for username: ${username}`);
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        console.log(`User found: ${user._id}. Proceeding to delete posts...`);
+
+        // Delete all questions asked by the user
+        const deleteQuestions = await Post.deleteMany({ asked_by: user._id });
+        console.log(`Deleted ${deleteQuestions.deletedCount} questions`);
+
+        // Delete all answers provided by the user
+        const deleteAnswers = await Answer.deleteMany({ ans_by: user._id });
+        console.log(`Deleted ${deleteAnswers.deletedCount} answers`);
+
+        // Finally, delete the user
+        const deleteUser = await User.deleteOne({ _id: user._id });
+        console.log(`Deleted user: ${deleteUser.deletedCount === 1 ? 'Success' : 'Failed'}`);
+
+        res.status(200).json({ success: true, message: "User and all related data deleted successfully" });
+    } catch (error) {
+        console.error(`Error deleting user: ${error}`);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 
 
 
