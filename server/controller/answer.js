@@ -49,4 +49,54 @@ router.post('/addAnswer', async (req, res) => {
     }
 });
 
+
+
+router.delete('/deleteAnswer/:answerId', async (req, res) => {
+    const { answerId } = req.params;
+    console.log("Attempting to delete answer ID:", answerId);
+
+    try {
+        // Find the question that includes this answer ID
+        const question = await Question.findOne({ answers: { $in: [answerId] } });
+        if (!question) {
+            console.log("No question found containing this answer ID:", answerId);
+            return res.status(404).json({ message: "Question containing answer not found" });
+        }
+        console.log("Found question containing the answer:", question);
+
+        // Find and delete the answer document using deleteOne
+        const deleteResult = await Answer.deleteOne({ _id: answerId });
+        console.log("Delete result for answer:", deleteResult);
+
+        if (deleteResult.deletedCount === 0) {
+            console.log("No answer was deleted, possibly because it was not found:", answerId);
+            return res.status(404).json({ message: "Answer not found" });
+        }
+
+        // Update the question to remove the answer ID from the answers array
+        const updateResult = await Question.findByIdAndUpdate(
+            question._id,
+            { $pull: { answers: answerId } },  // Using answerId to ensure correct reference
+            { new: true }  // Return the updated document
+        );
+        console.log("Question update result:", updateResult);
+
+        if (!updateResult) {
+            console.log("Failed to update the question to remove the answer:", answerId);
+            return res.status(500).json({ message: "Failed to update question" });
+        }
+
+        res.status(200).json({ message: "Answer deleted successfully", details: updateResult });
+    } catch (error) {
+        console.error('Error during answer deletion:', error);
+        res.status(500).json({ message: "Internal server error", error: error.toString() });
+    }
+});
+
+
+
+
+
+
+
 module.exports = router;

@@ -50,11 +50,11 @@ router.get('/getQuestionById/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        console.log("1");
+       // console.log("1");
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: "Invalid question ID format" });
         }
-        console.log("2");
+        //console.log("2");
         const question = await Question.findOneAndUpdate(
             { _id: id },
             { $inc: { views: 1 } },
@@ -66,13 +66,13 @@ router.get('/getQuestionById/:id', async (req, res) => {
                 select: 'username' // Only fetch the username field
             }
         }).populate('asked_by','username');
-        console.log("3");
+        //console.log("3");
 
         if (!question) {
             return res.status(404).json({ message: "Question not found" });
         }
 
-        console.log("Questions fetched and ready to send:", question);
+        //console.log("Questions fetched and ready to send:", question);
 
         res.json(question);
     } catch (error) {
@@ -117,6 +117,34 @@ router.post('/addQuestion', async (req, res) => {
         res.status(500).json({ message: "Error adding question", error: error.message });
     }
 });
+
+// questionController.js or wherever your routes are defined
+
+// Endpoint to delete a question by ID
+router.delete('/deleteQuestion/:id', async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log("Invalid ID format:", id);  // Log if the ID format is invalid
+        return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    try {
+        const result = await Question.deleteOne({ _id: id });
+        if (result.deletedCount === 0) {
+            console.log("No question found with ID:", id);  // Log if no question is found
+            return res.status(404).json({ message: "No question found with that ID" });
+        }
+
+        console.log("Question deleted successfully");  // Log the successful deletion
+        res.status(200).json({ message: "Question deleted successfully" });
+    } catch (error) {
+        console.error("Error during deletion:", error);  // Log the error if deletion fails
+        res.status(500).json({ message: "Error deleting question", error: error.message });
+    }
+});
+
+
 
 
 

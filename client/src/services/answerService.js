@@ -10,4 +10,11 @@ const addAnswer = async (qid, ans) => {
     return res.data;
 };
 
-export { addAnswer };
+// Function to delete an answer
+const deleteAnswer = async (answerId) => {
+    const res = await api.delete(`${ANSWER_API_URL}/deleteAnswer/${answerId}`);
+    return res.data;
+};
+
+
+export { addAnswer, deleteAnswer };

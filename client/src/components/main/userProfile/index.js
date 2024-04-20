@@ -1,8 +1,10 @@
 import "./index.css";
 import React, { useEffect, useState } from 'react';
-import { fetchUserPosts, fetchUserAnswers } from '../../../services/userService'; // Adjust the import path as needed
+import { useUser } from '../../context/UserContext';  // Adjust import paths as needed
+import { fetchUserPosts, fetchUserAnswers, deleteUser } from '../../../services/userService';  // Adjust import paths as needed
 
-const UserProfile = ({ username, handleAnswer }) => {
+const UserProfile = ({ username, handleAnswer, handleQuestions }) => {
+    const { user } = useUser();  // Access the user context to get the currently logged-in user
     const [posts, setPosts] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [error, setError] = useState('');
@@ -22,7 +24,6 @@ const UserProfile = ({ username, handleAnswer }) => {
                     throw new Error(answersRes.message || "Failed to fetch answers");
                 }
                 setAnswers(answersRes.answers);
-
             } catch (err) {
                 setError(err.message);
             }
@@ -35,6 +36,17 @@ const UserProfile = ({ username, handleAnswer }) => {
         }
     }, [username]);
 
+    const handleDeleteUser = async () => {
+        const result = await deleteUser(username);
+        if (result.success) {
+            handleQuestions();
+            //alert('User deleted successfully');
+            // Additional cleanup or redirection logic here
+        } else {
+            //alert(`Error deleting user: ${result.message}`);
+        }
+    };
+
     if (error) {
         return <div className="user-profile"><p className="error">{error}</p></div>;
     }
@@ -42,6 +54,9 @@ const UserProfile = ({ username, handleAnswer }) => {
     return (
         <div className="user-profile">
             <h1>User Profile for {username}</h1>
+            {user && user.username === "moderator" && (
+                <button onClick={handleDeleteUser}>Delete User</button>
+            )}
             <div>
                 <h2>Posts</h2>
                 <ul>
@@ -62,7 +77,7 @@ const UserProfile = ({ username, handleAnswer }) => {
                     {answers.map(answer => (
                         <li key={answer.answerId} onClick={() => handleAnswer(answer.questionId)}>
                             <p>Question Title: {answer.questionTitle}</p>
-                            <p>Question Text : {answer.text}</p>
+                            <p>Question Text: {answer.text}</p>
                             <p>Answered: {new Date(answer.ans_date_time).toLocaleString()}</p>
                         </li>
                     ))}

@@ -102,6 +102,7 @@ const Main = ({ search = "", title, setQuestionPage, initialPage }) => {
                     handleNewQuestion={handleNewQuestion}
                     handleNewAnswer={handleNewAnswer}
                     handleUsername = {handleUsername}
+                    handleQuestions = {handleQuestions}
                 />
             );
             break;
@@ -131,7 +132,7 @@ const Main = ({ search = "", title, setQuestionPage, initialPage }) => {
 
         case "userprofile": {
             selected = "";
-            content = <UserProfile username={username} handleAnswer={handleAnswer} />;
+            content = <UserProfile username={username} handleAnswer={handleAnswer} handleQuestions = {handleQuestions} />;
             break;
         }
         
