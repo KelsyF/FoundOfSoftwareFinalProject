@@ -114,10 +114,35 @@ describe("User Profiles", () => {
         cy.get("#loginPasswordInput").type("p12");
         cy.contains("Sign-in").click();
 
-        // Check to make sure login was successful
-        cy.contains("Welcome, elephantCDE!");
+        // Check to make sure login was successful and navigate to User Profile
+        cy.contains("Welcome, elephantCDE!").click();
 
+        // Check to make sure User Profile is showing correctly
+        cy.contains("User Profile for elephantCDE");
 
+        // Check to make sure posts are showing correctly
+        cy.get(".user-profile li h3").should("contain", "Quick question about storage on android");
+
+        // Logout
+        cy.contains("Logout").click();
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("monkeyABC");
+        cy.get("#loginPasswordInput").type("p11");
+        cy.contains("Sign-in").click();
+
+        // Check to make sure login was successful and navigate to User Profile
+        cy.contains("Welcome, monkeyABC!").click();
+
+        // Check to make sure User Profile is showing correctly
+        cy.contains("User Profile for monkeyABC");
+
+        // Check to make sure posts are showing correctly
+        cy.get(".user-profile li h3").should("contain", "Object storage for a web application");
+
+        // Logout
+        cy.contains("Logout").click();
 
     });
 });

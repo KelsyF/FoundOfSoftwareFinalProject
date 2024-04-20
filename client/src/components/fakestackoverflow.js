@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Header from "./header";
 import Main from "./main";
+import { useUser } from "./context/UserContext";
 
 export default function FakeStackOverflow() {
+    const { user } = useUser();
     const [search, setSearch] = useState("");
     const [mainTitle, setMainTitle] = useState("All Questions");
     const [currentPage, setCurrentPage] = useState("main");
@@ -27,6 +29,7 @@ export default function FakeStackOverflow() {
                     setCurrentPage("main");
                 }}
                 initialPage={"home"}
+                user={null}
             />
             )}
 
@@ -40,6 +43,7 @@ export default function FakeStackOverflow() {
                         setCurrentPage("main");
                     }}
                     initialPage={"login"}
+                    user={null}
                 />
             )}
 
@@ -53,6 +57,7 @@ export default function FakeStackOverflow() {
                         setCurrentPage("main");
                     }}
                     initialPage={"register"}
+                    user={null}
                 />
             )}
 
@@ -66,6 +71,7 @@ export default function FakeStackOverflow() {
                         setCurrentPage("main");
                     }}
                     initialPage={"userprofile"}
+                    user={ user }
                 />
             )}
         </>
