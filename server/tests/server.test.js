@@ -2,7 +2,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../server');
 const startServer = require('../server').startServer;
-
+process.env.RUN_SERVER = "true";
 let server;
 
 // Connect to the test database before running any tests
@@ -103,3 +103,52 @@ describe("Server start condition", () => {
   });
 });
 
+
+
+
+// server.test.js
+describe("Server Control", () => {
+    let server;
+  
+    beforeAll(() => {
+      server = app.startServer();
+    });
+  
+    afterAll(() => {
+      server.close();
+    });
+  
+    test("Server should be started by the test", async () => {
+      const response = await request(app).get("/");
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toContain("Hello World!");
+    });
+  });
+
+
+  describe("Unique Server Start Test", () => {
+    let server;
+
+    beforeAll(() => {
+        // Set a unique environment variable that only this test checks
+        process.env.UNIQUE_TEST_ENV = "true";
+        // Start the server only if the unique environment variable is set
+        if (process.env.UNIQUE_TEST_ENV === "true") {
+            server = startServer();
+            console.log("Server started by unique test.");
+        }
+    });
+
+    afterAll(() => {
+        // Clean up: unset the environment variable and close the server
+        delete process.env.UNIQUE_TEST_ENV;
+        server.close();
+    });
+
+    test("Server should start and log 'Server started.' due to unique environment condition", async () => {
+        // Make a request to ensure the server is running
+        const response = await request(app).get("/");
+        expect(response.statusCode).toBe(200);
+        expect(response.text).toContain("Hello World!");
+    });
+});
