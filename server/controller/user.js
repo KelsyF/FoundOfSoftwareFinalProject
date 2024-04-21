@@ -9,22 +9,24 @@ const router = express.Router();
 
 // user.js
 router.post('/addUser', async (req, res) => {
-    // Adjusted to match schema
     const { username, password } = req.body;
     if (!username || !password) {
-        return res.status(400).json({msg: 'Bad request: Missing required fields'});
+        return res.status(400).json({ success: false, msg: 'Bad request: Missing required fields' });
     }
-    const user = await User.findOne( { username } );
-    if ( user ) {
-        return res.json( {success: false, message: "Username already in use"});
+    const user = await User.findOne({ username });
+    if (user) {
+        return res.status(409).json({ success: false, message: "Username already in use" });  // Use HTTP 409 for conflict
     }
     try {
         const savedUser = await User.create({ username, password });
-        res.status(200).json({success: true, user: savedUser});
+        // Exclude password from the response for security reasons
+        const userToReturn = { username: savedUser.username, _id: savedUser._id };
+        res.status(200).json({ success: true, user: userToReturn });
     } catch (error) {
-        res.status(500).json({msg: 'Internal server error', error: error.message});
+        res.status(500).json({ success: false, msg: 'Internal server error', error: error.message });
     }
 });
+
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -61,7 +63,7 @@ router.get('/username/:username/posts', async (req, res) => {
         console.log("Post details prepared for response:", postDetails); // Debugging the final prepared posts array
         res.json({ success: true, posts: postDetails });
     } catch (error) {
-        console.log("Error in fetching posts:", error); // Debugging error details
+        console.error("Error fetching posts:", error.message);
         res.status(500).json({ success: false, message: error.message });
     }
 });
@@ -103,7 +105,7 @@ router.get('/username/:username/answers', async (req, res) => {
         console.log("Formatted answers ready for response:", formattedAnswers); // Debugging final answers format
         res.json({ success: true, answers: formattedAnswers });
     } catch (error) {
-        console.log("Error in fetching answers:", error); // Debugging error details
+        console.error("Error fetching answers:", error.message);
         res.status(500).json({ success: false, message: error.message });
     }
 });
@@ -136,7 +138,7 @@ router.delete('/deleteUser/:username', async (req, res) => {
 
         // Finally, delete the user
         const deleteUser = await User.deleteOne({ _id: user._id });
-        console.log(`Deleted user: ${deleteUser.deletedCount === 1 ? 'Success' : 'Failed'}`);
+        ////console.log(`Deleted user: ${deleteUser.deletedCount === 1 ? 'Success' : 'Failed'}`);
 
         res.status(200).json({ success: true, message: "User and all related data deleted successfully" });
     } catch (error) {
