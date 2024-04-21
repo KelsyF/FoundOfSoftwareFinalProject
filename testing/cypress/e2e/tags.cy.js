@@ -66,16 +66,23 @@ describe("Tag page", () => {
     it('Create a new question with a new tag and find the question through navigating to that tag page', () => {
         cy.visit('http://localhost:3000');
 
-        // Add a question with new tag
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+
+        // New user writes question with new tag
         cy.contains("Ask a Question").click();
         cy.get("#formTitleInput").type("Test Question A");
         cy.get("#formTextInput").type("Test Question A Text");
         cy.get("#formTagInput").type("test1-tag1");
-
-        // How are we handling username now that we have a logged in profile?
-        // If the login function in beforeEach works, will we even need to grab the username
-        // since we'll grab the username in the question creation and won't have to input it?
-        cy.contains('.username');
         cy.contains("Post Question").click();
 
         // Navigate to Tags page

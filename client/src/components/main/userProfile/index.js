@@ -47,6 +47,10 @@ const UserProfile = ({ username, handleAnswer, handleQuestions }) => {
         }
     };
 
+    const sortPostsByDate = (posts) => {
+        return posts.slice().sort((a, b) => new Date(b.ask_date_time) - new Date(a.ask_date_time));
+    }
+
     if (error) {
         return <div className="user-profile"><p className="error">{error}</p></div>;
     }
@@ -60,7 +64,7 @@ const UserProfile = ({ username, handleAnswer, handleQuestions }) => {
             <div>
                 <h2>Posts</h2>
                 <ul>
-                    {posts.map(post => (
+                    {sortPostsByDate(posts).map(post => (
                         <li key={post.id} onClick={() => handleAnswer(post.id)}>
                             <h3>{post.title}</h3>
                             <p>{post.text}</p>
@@ -76,8 +80,8 @@ const UserProfile = ({ username, handleAnswer, handleQuestions }) => {
                 <ul>
                     {answers.map(answer => (
                         <li key={answer.answerId} onClick={() => handleAnswer(answer.questionId)}>
-                            <p>Question Title: {answer.questionTitle}</p>
-                            <p>Question Text: {answer.text}</p>
+                            <h3>Question Title: {answer.questionTitle}</h3>
+                            <p>Answer Text: {answer.text}</p>
                             <p>Answered: {new Date(answer.ans_date_time).toLocaleString()}</p>
                         </li>
                     ))}
