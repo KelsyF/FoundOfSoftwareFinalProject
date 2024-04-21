@@ -15,6 +15,20 @@ describe('New Question Form', () => {
     it('Ask Question button creates and displays new post in All Questions', () => {
         cy.visit('http://localhost:3000');
 
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
+
+        cy.wait(500);
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+
         // First added question
         cy.contains('Ask a Question').click();
         cy.get("#formTitleInput").type("Test Question A");
@@ -54,18 +68,29 @@ describe('New Question Form', () => {
     it('Ask Question button creates and displays expected Metadata', () => {
         cy.visit('http://localhost:3000');
 
-        cy.contains('Ask Question').click();
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
+
+        cy.wait(500);
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+
+        cy.contains('Ask a Question').click();
         cy.get("#formTitleInput").type("Test Question A");
         cy.get("#formTextInput").type("Test Question A Text");
         cy.get("#formTagInput").type("javascript");
-
-        // See line 25
-        cy.get('.username')
         cy.contains('Post Question').click();
 
         cy.contains('Fake Stack Overflow');
         cy.contains('5 questions');
-        cy.contains('testUser1 asked 0 seconds ago');
+        cy.contains('TestUserA asked 0 seconds ago');
         const answers = [
             '0 answers',
             '1 answers',
@@ -84,62 +109,110 @@ describe('New Question Form', () => {
             cy.wrap($el).should("contain", answers[index]);
             cy.wrap($el).should("contain", views[index]);
         });
+    });
 
-        it('Ask a Question with empty title shows error', () => {
-            cy.visit('http://localhost:3000');
-            cy.contains('Ask a Question').click();
-            cy.get("#formTextInput").type("Test Question A Text");
-            cy.get("#formTagInput").type("javascript");
+    it('Ask a Question with empty title shows error', () => {
+        cy.visit('http://localhost:3000');
 
-            // See line 25
-            cy.get('.username')
-            cy.contains('Post Question').click();
-            cy.contains('Title cannot be empty');
-        });
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
 
-        it('Ask a Question with empty text shows error', () => {
-            cy.visit('http//localhost:3000');
-            cy.contains('Ask Question').click();
-            cy.get("#formTitleInput").type("Test Question A");
-            cy.get("#formTagInput").type("javascript");
+        cy.wait(500);
 
-            // See line 25
-            cy.get('.username')
-            cy.contains('Post Question').click();
-            cy.contains('Question text cannot be empty');
-        });
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
 
-        it('Ask a Question with more than 5 tags shows error', () => {
-            // Add a question with tags
-            cy.contains('Ask Question').click();
-            cy.get("#formTitleInput").type("Test Question A");
-            cy.get("#formTextInput").type("Test Question A Text");
-            cy.get("#formTagInput").type("test1 test2 test3 test4 test5 test6");
+        cy.contains('Ask a Question').click();
+        cy.get("#formTextInput").type("Test Question A Text");
+        cy.get("#formTagInput").type("javascript");
+        cy.contains('Post Question').click();
+        cy.contains('Title cannot be empty');
+    });
 
-            // See line 25
-            cy.get('.username')
-            cy.contains('Post Question').click();
-            cy.contains('Cannot have more than 5 tags')
-        })
+    it('Ask a Question with empty text shows error', () => {
+        cy.visit('http://localhost:3000');
 
-        it('Ask a question with tags, check to see tags exist', () => {
-            cy.visit('http//localhost:3000');
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
 
-            // Add a question with tags
-            cy.contains('Ask Question').click();
-            cy.get("#formTitleInput").type("Test Question A");
-            cy.get("#formTextInput").type("Test Question A Text");
-            cy.get("#formTagInput").type("test1 test2 test3");
+        cy.wait(500);
 
-            // See line 25
-            cy.get('.username')
-            cy.contains('Post Question').click();
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
 
-            // Clicks tags
-            cy.contains("Tags").click();
-            cy.contains('test1');
-            cy.contains('test2');
-            cy.contains('test3');
-        });
+        cy.contains('Ask a Question').click();
+        cy.get("#formTitleInput").type("Test Question A");
+        cy.get("#formTagInput").type("javascript");
+        cy.contains('Post Question').click();
+        cy.contains('Question text cannot be empty');
+    });
+
+    it('Ask a Question with more than 5 tags shows error', () => {
+        cy.visit('http://localhost:3000');
+
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
+
+        cy.wait(500);
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+
+        // Add a question with tags
+        cy.contains('Ask a Question').click();
+        cy.get("#formTitleInput").type("Test Question A");
+        cy.get("#formTextInput").type("Test Question A Text");
+        cy.get("#formTagInput").type("test1 test2 test3 test4 test5 test6");
+        cy.contains('Post Question').click();
+        cy.contains('Cannot have more than 5 tags')
     })
+
+    it('Ask a question with tags, check to see tags exist', () => {
+        cy.visit('http://localhost:3000');
+
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
+
+        cy.wait(500);
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+
+        // Add a question with tags
+        cy.contains('Ask a Question').click();
+        cy.get("#formTitleInput").type("Test Question A");
+        cy.get("#formTextInput").type("Test Question A Text");
+        cy.get("#formTagInput").type("test1 test2 test3");
+        cy.contains('Post Question').click();
+
+        // Clicks tags
+        cy.contains("Tags").click();
+        cy.contains('test1');
+        cy.contains('test2');
+        cy.contains('test3');
+    });
 })
