@@ -24,27 +24,21 @@ jobs:
         npm install
         cd ../server
         npm install
+        cd ../testing
+        npm install
+        npm install cypress
     - name: Start MongoDB
       run: |
         mongosh
-    - name: Run server
-      run: |
-        cd server/
-        node server.js
-    - name: Start client in background
-      run: |
-        cd client/
-        npm run start
-    - name: Wait for servers to start
-      run: Start-Sleep -Seconds 10 
-    - name: Install testing dependencies
-      run: |
-        cd testing
-        npm install
-    - name: Run Cypress Tests
-      run: |
-        cd testing
-        npx cypress run
+    - name: Cypress run
+      uses: cypress-io/github-action@v5
+      with:
+        project: ./testing
+        start: npm run start --prefix client, npm run start --prefix server
+        wait-on: 'http://localhost:3000,http://localhost:8000'
+        browser: chrome
+        timeout: 400
+   
 
   jest-tests:
     needs: cypress-tests  # Jest tests will wait for Cypress tests to complete
