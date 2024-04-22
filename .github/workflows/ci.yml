@@ -11,6 +11,72 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Check if Node.js is installed
+      run: node --version || echo 'Node.js is not installed'
+      id: check_node_installed
+      continue-on-error: true
+
+    - name: Install Node.js and npm
+      if: steps.check_node_installed.outcome == 'failure'
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+
+    - name: Install dependencies in server directory
+      run: npm install
+      working-directory: server/
+
+    - name: Check if mongod is running
+      run: ps aux | grep -v grep | grep mongod || echo 'mongod is not running'
+      id: check_mongod_running
+      continue-on-error: true
+
+    - name: Run mongod if not running
+      if: steps.check_mongod_running.outcome == 'failure'
+      run: mongod --config /opt/homebrew/etc/mongod.conf --fork
+
+    - name: Set DB_URL variable
+      run: echo "DB_URL=mongodb://127.0.0.1:27017/final_fake_so" >> $GITHUB_ENV
+
+    - name: Run remove_db.js
+      env:
+        DB_URL: ${{ env.DB_URL }}
+      run: node remove_db.js $DB_URL
+      working-directory: server/
+
+    - name: Start the node server
+      run: node server.js > server.log 2>&1 &
+      working-directory: server/ 
+
+    - name: Install dependencies in client directory
+      run: npm install 
+      working-directory: client/
+
+    - name: Start the Client
+      run: npm start &
+      working-directory: client/
+
+    - name: Install testing dependencies
+      run: npm install cypress
+      working-directory: testing/
+
+    - name: Run e2e tests
+      run: npx cypress run --spec cypress/e2e/
+      working-directory: testing/
+
+    - name: Kill the node server process
+      run: kill $(lsof -t -i:8000) || true
+
+    - name: Stop the client process
+      run: kill $(lsof -t -i:3000) || true
+
+  jest-tests:
+    needs: cypress-tests
+    runs-on: self-hosted
+    steps:
+    - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Set up Node.js
@@ -22,70 +88,14 @@ jobs:
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
 
-    - name: Install dependencies in client directory
-      run: npm install
-      working-directory: client
-      shell: powershell
-
-    - name: Install dependencies in server directory
-      run: npm install
-      working-directory: server
-      shell: powershell
-
-    - name: Start client in background
-      run: Start-Job -ScriptBlock { npm start }
-      working-directory: client
-      shell: powershell
-      env:
-        GITHUB_WORKSPACE: ${{ github.workspace }}
-
-    - name: Start server in background
-      run: Start-Job -ScriptBlock { node ./server.js }
-      working-directory: server
-      shell: powershell
-      env:
-        GITHUB_WORKSPACE: ${{ github.workspace }}
-
-    - name: Verify client is operational
+    - name: Install server dependencies
       run: |
-        $success = $false
-        $attempts = 0
-        while (-not $success -and $attempts -lt 5) {
-          try {
-            $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing
-            if ($response.StatusCode -eq 200) {
-              Write-Host "Client confirmed up - status code: $($response.StatusCode)"
-              $success = $true
-            }
-            else {
-              Write-Host "Client not up - status code: $($response.StatusCode), retrying..."
-            }
-          } catch {
-            Write-Host "Error contacting client, retrying..."
-          }
-          Start-Sleep -Seconds 5
-          $attempts++
-        }
-        if (-not $success) {
-          Write-Error "Client is not up after several attempts."
-          exit 1
-        }
-      working-directory: client
+        cd server
+        npm install
       shell: powershell
 
-    - name: Install testing dependencies
-      run: npm install
-      working-directory: testing
-      shell: powershell
-
-    - name: Run Cypress Tests
-      run: npx cypress run
-      working-directory: testing
-      shell: powershell
-
-    - name: Clean-up
+    - name: Run Jest Tests
       run: |
-        Stop-Process -Name "node" -Force
-        Stop-Process -Name "npm" -Force
+        cd server
+        npm run test
       shell: powershell
-      if: always()  # Ensure cleanup happens regardless of previous step success
