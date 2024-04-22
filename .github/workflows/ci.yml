@@ -25,17 +25,17 @@ jobs:
         cd ../server
         npm install
     - name: Start MongoDB
-        run: |
-          cd server/
-          node init.js
+      run: |
+        cd server/
+        node init.js
     - name: Run server
-        run: |
-          cd server/
-          node server.js &
+      run: |
+        cd server/
+        node server.js &
     - name: Start client in background
-        run: |
-          cd client/
-          npm run start &
+      run: |
+        cd client/
+        npm run start &
     - name: Wait for servers to start
       run: Start-Sleep -Seconds 10 
     - name: Install testing dependencies
