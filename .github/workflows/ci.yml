@@ -58,6 +58,18 @@ jobs:
       env:
         GITHUB_WORKSPACE: ${{ github.workspace }}
 
+    - name: Verify client is up
+      run: |
+        $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing
+        if ($response.StatusCode -ne 200) {
+          Write-Error "Client is not up - status code: $($response.StatusCode)"
+          exit 1
+        }
+        else {
+          Write-Host "Client confirmed up - status code: $($response.StatusCode)"
+        }
+      shell: powershell
+
     - name: Wait for servers to start
       run: Start-Sleep -Seconds 10  # Additional wait if needed
       shell: powershell
