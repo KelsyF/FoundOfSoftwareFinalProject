@@ -40,20 +40,37 @@ jobs:
           node ./server.js
         }
       shell: powershell
-    - name: Check job statuses
-      run: |
-        Get-Job | Format-Table -AutoSize  # Display all job statuses
-        $jobs = Get-Job
-        foreach ($job in $jobs) {
-          if ($job.State -eq "Running") {
-            Write-Output "Job $($job.Id) is still running."
-          } elseif ($job.State -eq "Failed") {
-            Receive-Job -Job $job  # Output job errors for diagnostics
-            $job | Remove-Job  # Cleanup job
-            exit 1  # Fail the step if a job failed
-          }
-        }
-      shell: powershell
+    - name: Check job statuses and output
+    run: |
+    # Wait briefly to allow background jobs to initialize properly
+    Start-Sleep -Seconds 5
+
+    # Display all job statuses
+    Get-Job | Format-Table -AutoSize
+
+    # Store all jobs in a variable
+    $jobs = Get-Job
+
+    # Iterate through each job to check its status and handle accordingly
+    foreach ($job in $jobs) {
+      # Check if the job is running and output its status
+      if ($job.State -eq "Running") {
+        Write-Output "Job $($job.Id) is still running."
+      }
+      elseif ($job.State -eq "Failed") {
+        # If the job has failed, receive its output for diagnostics
+        Write-Output "Job $($job.Id) has failed with the following output:"
+        Receive-Job -Job $job | Write-Output
+
+        # Remove the job to clean up resources
+        Remove-Job -Job $job
+
+        # Fail the step to stop the workflow as necessary
+        exit 1
+      }
+    }
+  shell: powershell
+
     - name: Wait for servers to start
       run: Start-Sleep -Seconds 10  # Wait 10 seconds to ensure servers are up
       shell: powershell
