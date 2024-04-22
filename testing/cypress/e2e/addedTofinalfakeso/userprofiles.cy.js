@@ -10,7 +10,7 @@ describe("User Profiles", () => {
         cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
-    it('Register multiple accounts, check that they all login in correctly', () => {
+    it('1.1 | Register multiple accounts, check that they all login in correctly', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -87,7 +87,27 @@ describe("User Profiles", () => {
 
     });
 
-    it('Attempt registration of username that is already in use', () => {
+    it('1.2 | Tests login without username throws error', () => {
+        cy.visit('http://localhost:3000');
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+        cy.contains('Username cannot be empty');
+    });
+
+    it('1.3 | Tests login without password throws error', () => {
+        cy.visit('http://localhost:3000');
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserB");
+        cy.contains("Sign-in").click();
+        cy.contains('Password cannot be empty');
+    });
+
+    it('1.4 | Attempt registration of username that is already in use', () => {
         cy.visit('http://localhost:3000');
 
         // Try to register previously created user
@@ -126,7 +146,7 @@ describe("User Profiles", () => {
 
     });
 
-    it('Login accounts with questions, check user page for questions', () => {
+    it('1.5 | Login accounts with questions, check user page for questions', () => {
         cy.visit('http://localhost:3000');
 
         // Login previously created user
@@ -188,7 +208,7 @@ describe("User Profiles", () => {
         cy.contains("Logout").click();
     });
 
-    it('Login accounts with answers, check user page for answers', () => {
+    it('1.6 | Login accounts with answers, check user page for answers', () => {
         cy.visit('http://localhost:3000');
 
         // Login previously created user
@@ -243,7 +263,7 @@ describe("User Profiles", () => {
         });
     });
 
-    it('Login new account, post question and answer, check user profile for them', () => {
+    it('1.7 | Login new account, post question and answer, check user profile for them', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user

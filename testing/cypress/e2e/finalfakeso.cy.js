@@ -2,7 +2,7 @@
 
 // 9 sections. 33 tests total
 
-describe("Cypress Tests repeated from React assignment", () => {
+describe("All tests from separate specs for code coverage purposes", () => {
 
   beforeEach(() => {
     // Seed the database before each test
@@ -91,7 +91,27 @@ describe("Cypress Tests repeated from React assignment", () => {
 
   });
 
-  it('1.2 | Attempt registration of username that is already in use', () => {
+  it('1.2 | Tests login without username throws error', () => {
+    cy.visit('http://localhost:3000');
+
+    // Login previously created user
+    cy.contains("Login").click();
+    cy.get("#loginPasswordInput").type("testuserpasswordA");
+    cy.contains("Sign-in").click();
+    cy.contains('Username cannot be empty');
+  });
+
+  it('1.3 | Tests login without password throws error', () => {
+    cy.visit('http://localhost:3000');
+
+    // Login previously created user
+    cy.contains("Login").click();
+    cy.get("#loginUsernameInput").type("TestUserB");
+    cy.contains("Sign-in").click();
+    cy.contains('Password cannot be empty');
+  });
+
+  it('1.4 | Attempt registration of username that is already in use', () => {
     cy.visit('http://localhost:3000');
 
     // Try to register previously created user
@@ -130,7 +150,7 @@ describe("Cypress Tests repeated from React assignment", () => {
 
   });
 
-  it('1.3 | Login accounts with questions, check user page for questions', () => {
+  it('1.5 | Login accounts with questions, check user page for questions', () => {
     cy.visit('http://localhost:3000');
 
     // Login previously created user
@@ -192,7 +212,7 @@ describe("Cypress Tests repeated from React assignment", () => {
     cy.contains("Logout").click();
   });
 
-  it('1.4 | Login accounts with answers, check user page for answers', () => {
+  it('1.6 | Login accounts with answers, check user page for answers', () => {
     cy.visit('http://localhost:3000');
 
     // Login previously created user
@@ -247,7 +267,7 @@ describe("Cypress Tests repeated from React assignment", () => {
     });
   });
 
-  it('1.5 | Login new account, post question and answer, check user profile for them', () => {
+  it('1.7 | Login new account, post question and answer, check user profile for them', () => {
     cy.visit('http://localhost:3000');
 
     // Register new user
@@ -787,7 +807,6 @@ describe("Cypress Tests repeated from React assignment", () => {
   });
 
   it('4.12 | successfully shows all unanswered questions in model', () => {
-    const qTitles = ['android studio save string shared preference, start activity and load the saved string', 'Programmatically navigate using React router'];
     cy.visit('http://localhost:3000');
     cy.contains('Unanswered').click();
     cy.contains('0 questions');
@@ -960,7 +979,6 @@ describe("Cypress Tests repeated from React assignment", () => {
   });
 
   it('6.7 | Search string with case-insensitive matching', () => {
-    const qTitles = ['android studio save string shared preference, start activity and load the saved string'];
     cy.visit('http://localhost:3000');
     cy.get('#searchBar').type('AnDrOiD{enter}');
     cy.contains('android');
