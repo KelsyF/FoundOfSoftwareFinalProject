@@ -8,7 +8,7 @@ on:
 
 jobs:
   cypress-tests:
-    runs-on: self-hosted  # This job uses the self-hosted runner
+    runs-on: self-hosted
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -26,22 +26,26 @@ jobs:
         cd ../server
         npm install
       shell: powershell
-    - name: Start client in background
+    - name: Start client in background and log output
       run: |
-        Start-Job -ScriptBlock {
+        $clientJob = Start-Job -ScriptBlock {
           cd client
-          npm start
+          npm start 2>&1
         }
+        Start-Sleep -Seconds 10  # Let it start up
+        Receive-Job $clientJob
       shell: powershell
-    - name: Start server in background
+    - name: Start server in background and log output
       run: |
-        Start-Job -ScriptBlock {
+        $serverJob = Start-Job -ScriptBlock {
           cd server
-          node ./server.js
+          node ./server.js 2>&1
         }
+        Start-Sleep -Seconds 10  # Let it start up
+        Receive-Job $serverJob
       shell: powershell
     - name: Wait for servers to start
-      run: Start-Sleep -Seconds 10  # Wait 10 seconds to ensure servers are up
+      run: Start-Sleep -Seconds 10  # Additional wait if needed
       shell: powershell
     - name: Install testing dependencies
       run: |
@@ -55,15 +59,15 @@ jobs:
       shell: powershell
 
   jest-tests:
-    needs: cypress-tests  # Jest tests will wait for Cypress tests to complete
-    runs-on: self-hosted  # Using your own self-hosted runner
+    needs: cypress-tests
+    runs-on: self-hosted
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Ensure this matches the Node.js version you use
+        node-version: '16'
     - name: Set Execution Policy
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
