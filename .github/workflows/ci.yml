@@ -11,66 +11,86 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: Check if Node.js is installed
-      run: node --version || echo 'Node.js is not installed'
-      id: check_node_installed
-      continue-on-error: true
-
-    - name: Install Node.js and npm
-      if: steps.check_node_installed.outcome == 'failure'
-      uses: actions/setup-node@v2
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
       with:
-        node-version: '20'
+        node-version: '16'
 
-    - name: Install dependencies in server directory
-      run: npm install
-      working-directory: server/
+    - name: Set Execution Policy
+      run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+      shell: powershell
 
-    - name: Check if mongod is running
-      run: ps aux | grep -v grep | grep mongod || echo 'mongod is not running'
-      id: check_mongod_running
-      continue-on-error: true
+    - name: Install dependencies for client and server
+      run: |
+        cd client
+        npm install
+        cd ../server
+        npm install
+      shell: powershell
 
-    - name: Run mongod if not running
-      if: steps.check_mongod_running.outcome == 'failure'
-      run: mongod --config /opt/homebrew/etc/mongod.conf --fork
-
-    - name: Set DB_URL variable
-      run: echo "DB_URL=mongodb://127.0.0.1:27017/final_fake_so" >> $GITHUB_ENV
-
-    - name: Run remove_db.js
+    - name: Start client in background and log output
+      run: |
+        $clientJob = Start-Job -ScriptBlock {
+          Set-Location $env:GITHUB_WORKSPACE/client
+          npm start
+        }
+        Start-Sleep -Seconds 10  # Let it start up
+        Receive-Job -Job $clientJob
+      shell: powershell
       env:
-        DB_URL: ${{ env.DB_URL }}
-      run: node remove_db.js $DB_URL
-      working-directory: server/
+        GITHUB_WORKSPACE: ${{ github.workspace }}
 
-    - name: Start the node server
-      run: node server.js > server.log 2>&1 &
-      working-directory: server/ 
+    - name: Start server in background and log output
+      run: |
+        $serverJob = Start-Job -ScriptBlock {
+          Set-Location $env:GITHUB_WORKSPACE/server
+          node ./server.js
+        }
+        Start-Sleep -Seconds 10  # Let it start up
+        Receive-Job -Job $serverJob
+      shell: powershell
+      env:
+        GITHUB_WORKSPACE: ${{ github.workspace }}
 
-    - name: Install dependencies in client directory
-      run: npm install 
-      working-directory: client/
-
-    - name: Start the Client
-      run: npm start &
-      working-directory: client/
+    - name: Verify client is up
+      run: |
+        $success = $false
+        $attempts = 0
+        while (-not $success -and $attempts -lt 5) {
+          try {
+            $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing
+            if ($response.StatusCode -eq 200) {
+              Write-Host "Client confirmed up - status code: $($response.StatusCode)"
+              $success = $true
+            }
+            else {
+              Write-Host "Client not up - status code: $($response.StatusCode), retrying..."
+            }
+          } catch {
+            Write-Host "Error contacting client, retrying..."
+          }
+          Start-Sleep -Seconds 5
+          $attempts++
+        }
+        if (-not $success) {
+          Write-Error "Client is not up after several attempts."
+          exit 1
+        }
+      shell: powershell
 
     - name: Install testing dependencies
-      run: npm install cypress
-      working-directory: testing/
+      run: |
+        cd testing
+        npm install
+      shell: powershell
 
-    - name: Run e2e tests
-      run: npx cypress run --spec cypress/e2e/
-      working-directory: testing/
-
-    - name: Kill the node server process
-      run: kill $(lsof -t -i:8000) || true
-
-    - name: Stop the client process
-      run: kill $(lsof -t -i:3000) || true
+    - name: Run Cypress Tests
+      run: |
+        cd testing
+        npx cypress run
+      shell: powershell
 
   jest-tests:
     needs: cypress-tests
