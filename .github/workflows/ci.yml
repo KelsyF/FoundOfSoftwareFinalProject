@@ -38,7 +38,7 @@ jobs:
         wait-on: 'http://localhost:3000,http://localhost:8000'
         browser: chrome
         timeout: 400
-      working-directory: testing
+        working-directory: testing
    
 
   jest-tests:
