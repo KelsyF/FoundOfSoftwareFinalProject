@@ -7,7 +7,7 @@ on:
       - workflow-test
 
         
-   jobs:
+jobs:
   cypress-tests:
     runs-on: self-hosted  # This job uses the self-hosted runner
     steps:
@@ -33,7 +33,6 @@ on:
     - name: Start MongoDB
       run: |
         mongosh
-      shell: powershell
     - name: Start client in background
       run: |
         Start-Job -ScriptBlock {
