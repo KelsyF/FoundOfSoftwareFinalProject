@@ -26,8 +26,7 @@ jobs:
         npm install
     - name: Start MongoDB
       run: |
-        cd server/
-        node init.js
+        mongosh
     - name: Run server
       run: |
         cd server/
