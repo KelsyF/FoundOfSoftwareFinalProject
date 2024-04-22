@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "start": "node server.js",
         "test": "jest",
         "test:coverage": "jest --coverage",
         "test:Answer": "jest /tests/answerControllertest.test.js",
