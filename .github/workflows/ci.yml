@@ -8,7 +8,7 @@ on:
 
 jobs:
   setup-dependencies:
-    runs-on: self-hosted
+    runs-on: [self-hosted, windows-latest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '16'
       - name: Set Execution Policy
-        run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+        run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
         shell: powershell
       - name: Install server dependencies
         run: |
@@ -37,17 +37,17 @@ jobs:
 
   cypress-tests:
     needs: setup-dependencies
-    runs-on: self-hosted
+    runs-on: [self-hosted, windows-latest]
     steps:
       - name: Start Client
         run: |
           cd client
-          npm start &
+          Start-Process npm -ArgumentList 'start'
         shell: powershell
       - name: Start Server
         run: |
           cd server
-          node ./server.js &
+          Start-Process node -ArgumentList '.\server.js'
         shell: powershell
       - name: Run Cypress Tests
         run: |
@@ -57,7 +57,7 @@ jobs:
 
   jest-tests:
     needs: cypress-tests
-    runs-on: self-hosted
+    runs-on: [self-hosted, windows-latest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -66,7 +66,7 @@ jobs:
         with:
           node-version: '16'
       - name: Set Execution Policy
-        run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+        run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
         shell: powershell
       - name: Install server dependencies
         run: |
