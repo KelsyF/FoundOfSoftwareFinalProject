@@ -1,0 +1,43 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+      - workflow-test
+
+jobs:
+  jest-tests:
+    runs-on: ubuntu-latest  # or use a self-hosted runner if configured
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Specify your Node.js version here
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm install
+    - name: Run Jest Tests
+      run: |
+        cd server
+        npm run test
+
+  cypress-tests:
+    needs: jest-tests  # This ensures Cypress tests run after Jest tests
+    runs-on: ubuntu-latest  # or use a self-hosted runner if configured
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    - name: Install testing dependencies
+      run: |
+        cd testing
+        npm install
+    - name: Run Cypress Tests
+      run: |
+        cd testing
+        npx cypress run
