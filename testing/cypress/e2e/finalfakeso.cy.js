@@ -94,11 +94,12 @@ describe("All tests from separate specs for code coverage purposes", () => {
   it('1.2 | Tests login without username throws error', () => {
     cy.visit('http://localhost:3000');
 
-    // Login previously created user
+    // Try Login with no username 1
     cy.contains("Login").click();
     cy.get("#loginPasswordInput").type("testuserpasswordA");
     cy.contains("Sign-in").click();
     cy.contains('Username cannot be empty');
+
   });
 
   it('1.3 | Tests login without password throws error', () => {
@@ -111,7 +112,17 @@ describe("All tests from separate specs for code coverage purposes", () => {
     cy.contains('Password cannot be empty');
   });
 
-  it('1.4 | Attempt registration of username that is already in use', () => {
+  it('1.4 | Tests login without username and password throws errors', () => {
+    cy.visit('http://localhost:3000');
+
+    // Login previously created user
+    cy.contains("Login").click();
+    cy.contains("Sign-in").click();
+    cy.contains("Username cannot be empty")
+    cy.contains('Password cannot be empty');
+  });
+
+  it('1.5 | Attempt registration of username that is already in use', () => {
     cy.visit('http://localhost:3000');
 
     // Try to register previously created user
@@ -150,7 +161,7 @@ describe("All tests from separate specs for code coverage purposes", () => {
 
   });
 
-  it('1.5 | Login accounts with questions, check user page for questions', () => {
+  it('1.6 | Login accounts with questions, check user page for questions', () => {
     cy.visit('http://localhost:3000');
 
     // Login previously created user
@@ -212,7 +223,7 @@ describe("All tests from separate specs for code coverage purposes", () => {
     cy.contains("Logout").click();
   });
 
-  it('1.6 | Login accounts with answers, check user page for answers', () => {
+  it('1.7 | Login accounts with answers, check user page for answers', () => {
     cy.visit('http://localhost:3000');
 
     // Login previously created user
@@ -267,7 +278,7 @@ describe("All tests from separate specs for code coverage purposes", () => {
     });
   });
 
-  it('1.7 | Login new account, post question and answer, check user profile for them', () => {
+  it('1.8 | Login new account, post question and answer, check user profile for them', () => {
     cy.visit('http://localhost:3000');
 
     // Register new user
@@ -378,6 +389,184 @@ describe("All tests from separate specs for code coverage purposes", () => {
 
     // Logout
     cy.contains("Logout").click();
+  });
+
+  it('1.9 | Check if clicking on username in question post directs to correct user profile page', () => {
+
+    cy.visit('http://localhost:3000');
+
+    // Click on username
+    cy.contains("elephantCDE").click();
+
+    // Check user profile page for accuracy
+    cy.contains("User Profile for elephantCDE");
+
+    cy.get(".user-profile li h3").should("contain", "Quick question about storage on android");
+
+    const questionA = [
+      "I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains",
+      "Asked: 3/10/2023, 2:28:01 PM",
+      "Views: 103",
+      "Tags: android-studio, shared-preferences, storage",
+    ]
+
+    cy.get(".user-profile p").each(($el, index, $list) => {
+      cy.wrap($el).should("contain", questionA[index]);
+    });
+
+    // Return to question page
+    cy.contains("Questions").click();
+
+    // Click on second username
+    cy.contains("monkeyABC").click();
+
+    // Check user profile page for accuracy
+    cy.contains("User Profile for monkeyABC");
+
+    cy.get(".user-profile li h3").should("contain", "Object storage for a web application");
+
+    const questionB = [
+      "I am currently working on a website where, roughly 40 million documents and images should be served to its users. I need suggestions on which method is the most suitable for storing content with subject to these requirements.",
+      "Asked: 2/18/2023, 1:02:15 AM",
+      "Views: 200",
+      "Tags: storage, website",
+    ]
+
+    cy.get(".user-profile p").each(($el, index, $list) => {
+      cy.wrap($el).should("contain", questionB[index]);
+    });
+
+    // Return to question page
+    cy.contains("Questions").click();
+
+    // Click on second username
+    cy.contains("saltyPeter").click();
+
+    // Check user profile page for accuracy
+    cy.contains("User Profile for saltyPeter");
+
+    cy.get(".user-profile li h3").should("contain", "android studio save string shared preference, start activity and load the saved string");
+
+    const questionC = [
+      "I am using bottom navigation view but am using custom navigation, so my fragments are not recreated every time i switch to a different view. I just hide/show my fragments depending on the icon selected. The problem i am facing is that whenever a config change happens (dark/light theme), my app crashes. I have 2 fragments in this activity and the below code is what i am using to refrain them from being recreated.",
+      "Asked: 1/10/2023, 11:24:30 AM",
+      "Views: 121",
+      "Tags: android-studio, shared-preferences, javascript",
+    ]
+
+    cy.get(".user-profile p").each(($el, index, $list) => {
+      cy.wrap($el).should("contain", questionC[index]);
+    });
+
+    // Return to question page
+    cy.contains("Questions").click();
+
+    // Click on second username
+    cy.contains("Joji John").click();
+
+    // Check user profile page for accuracy
+    cy.contains("User Profile for Joji John");
+
+    cy.get(".user-profile li h3").should("contain", "Programmatically navigate using React router");
+
+    const questionD = [
+      "the alert shows the proper index for the li clicked, and when I alert the variable within the last function Im calling, moveToNextImage(stepClicked), the same value shows but the animation isnt happening. This works many other ways, but Im trying to pass the index value of the list item clicked to use for the math to calculate.",
+      "Asked: 1/20/2022, 3:00:00 AM",
+      "Views: 10",
+      "Tags: react, javascript",
+    ]
+
+    cy.get(".user-profile p").each(($el, index, $list) => {
+      cy.wrap($el).should("contain", questionD[index]);
+    });
+  });
+
+  it('1.10 | Check if clicking on question post in user profile takes user to correct question post', () => {
+
+    cy.visit('http://localhost:3000');
+
+    // Click on username
+    cy.contains("elephantCDE").click();
+
+    // Check user profile page for accuracy
+    cy.contains("User Profile for elephantCDE");
+
+    // Check clicking on post display takes user to actual question post page
+    cy.contains("Quick question about storage on android").click();
+
+    cy.contains("1 answers");
+    cy.contains("Quick question about storage on android");
+    // Check contains correct question
+    cy.contains("104 views");
+    cy.contains("I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains");
+    cy.contains("elephantCDE");
+    // Check contains correct answer
+    cy.contains("Store data in a SQLLite database.");
+    cy.contains("ihba001");
+
+    // Return to questions page
+    cy.contains("Questions").click();
+
+    // Click on username
+    cy.contains("saltyPeter").click();
+
+    // Check user profile page for accuracy
+    cy.contains("User Profile for saltyPeter");
+
+    // Check clicking on post display takes user to actual question post page
+    cy.contains("android studio save string shared preference, start activity and load the saved string").click();
+
+    cy.contains("3 answers");
+    cy.contains("android studio save string shared preference, start activity and load the saved string");
+    cy.contains("122 views");
+    // Check contains question
+    cy.contains("I am using bottom navigation view but am using custom navigation, so my fragments are not recreated every time i switch to a different view. I just hide/show my fragments depending on the icon selected. The problem i am facing is that whenever a config change happens (dark/light theme), my app crashes. I have 2 fragments in this activity and the below code is what i am using to refrain them from being recreated.");
+    cy.contains("saltyPeter");
+    // Check contains 1st answer
+    cy.contains("Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background.");
+    cy.contains("abaya");
+    // Check contains 2nd answer
+    cy.contains("YourPreference yourPrefrence = YourPreference.getInstance(context); yourPreference.saveData(YOUR_KEY,YOUR_VALUE);");
+    cy.contains("alia");
+    // Check contains 3rd answer
+    cy.contains("I just found all the above examples just too confusing, so I wrote my own. ");
+    cy.contains("sana");
+  });
+
+  it('1.11 | Check if clicking on username in answer post directs to correct user profile page', () => {
+
+    cy.visit('http://localhost:3000');
+
+    // Navigate to question page
+    cy.contains("Object storage for a web application").click();
+
+    // Click on username in answer metadata
+    cy.contains("mackson3332").click();
+
+    // Check user profile is correct
+    cy.contains("User Profile for mackson3332");
+    cy.contains("Question Title: Object storage for a web application");
+    cy.contains("Answer Text: Using GridFS to chunk and store content.");
+    cy.contains("Answered: 2/22/2023, 5:19:00 PM");
+
+    // Check if clicking on answer takes user back to question post
+    cy.contains("Question Title: Object storage for a web application").click();
+    cy.contains("Object storage for a web application");
+    cy.contains("monkeyABC");
+
+    //Click on 2nd answer's username in metadata
+    cy.contains("abhi3241").click();
+
+    // Check user profile is correct
+    cy.contains("User Profile for abhi3241");
+    cy.contains("Question Title: Object storage for a web application");
+    cy.contains("Answer Text: Storing content as BLOBs in databases.");
+    cy.contains("Answered: 2/19/2023, 6:20:59 PM");
+
+    // Check if clicking on answer takes user back to question post
+    cy.contains("Question Title: Object storage for a web application").click();
+    cy.contains("Object storage for a web application");
+    cy.contains("monkeyABC");
   });
 
   it('2.1 | Ask Question button creates and displays new post in All Questions', () => {
@@ -503,7 +692,32 @@ describe("All tests from separate specs for code coverage purposes", () => {
     cy.contains('Title cannot be empty');
   });
 
-  it('2.4 | Ask a Question with empty text shows error', () => {
+  it('2.4 | Ask a Question with title longer than 100 characters shows error', () => {
+    cy.visit('http://localhost:3000');
+
+    // Register new user
+    cy.contains("Register").click();
+    cy.get("#registerUsernameInput").type("TestUserA");
+    cy.get("#registerPasswordInput").type("testuserpasswordA");
+    cy.contains("Sign-up").click();
+
+    cy.wait(500);
+
+    // Login previously created user
+    cy.contains("Login").click();
+    cy.get("#loginUsernameInput").type("TestUserA");
+    cy.get("#loginPasswordInput").type("testuserpasswordA");
+    cy.contains("Sign-in").click();
+
+    cy.contains('Ask a Question').click();
+    cy.get("#formTitleInput").type("I have this huge question but I want to put all of it in the title just in case someone doesn't actually want to read the text of the question so I'm going to put it all here and it'll be fine");
+    cy.get("#formTextInput").type("Test Question A Text");
+    cy.get("#formTagInput").type("javascript");
+    cy.contains('Post Question').click();
+    cy.contains('Title cannot be more than 100 characters');
+  });
+
+  it('2.5 | Ask a Question with empty text shows error', () => {
     cy.visit('http://localhost:3000');
 
     // Register new user
@@ -527,7 +741,7 @@ describe("All tests from separate specs for code coverage purposes", () => {
     cy.contains('Question text cannot be empty');
   });
 
-  it('2.5 | Ask a Question with more than 5 tags shows error', () => {
+  it('2.6 | Ask a Question with more than 5 tags shows error', () => {
     cy.visit('http://localhost:3000');
 
     // Register new user
@@ -553,7 +767,7 @@ describe("All tests from separate specs for code coverage purposes", () => {
     cy.contains('Cannot have more than 5 tags')
   });
 
-  it('2.6 | Ask a question with tags, check to see tags exist', () => {
+  it('2.7 | Ask a question with tags, check to see tags exist', () => {
     cy.visit('http://localhost:3000');
 
     // Register new user
@@ -582,6 +796,17 @@ describe("All tests from separate specs for code coverage purposes", () => {
     cy.contains('test1');
     cy.contains('test2');
     cy.contains('test3');
+  });
+
+  it('2.8 | Attempt to ask a question without login, check alert box is thrown', () => {
+
+    cy.visit('http://localhost:3000');
+
+    cy.contains("Ask a Question").click();
+    cy.contains("Post Question").click();
+    cy.on('window:alert', (str) => {
+      expect(str).to.equal("Please log in to post a question.")
+    });
   });
 
   it('3.1 | Created new comment should be displayed at the top of the answers page', () => {
@@ -727,6 +952,17 @@ describe("All tests from separate specs for code coverage purposes", () => {
         });
     cy.contains("TestUserB");
     cy.contains("0 seconds ago");
+  });
+
+  it('3.6 | Attempt to answer a question without login, check alert box is thrown', () => {
+
+    cy.visit('http://localhost:3000');
+
+    cy.contains("Quick question about storage on android").click();
+    cy.contains("Answer Question").click();
+    cy.on('window:alert', (str) => {
+      expect(str).to.equal("Please log in to answer a question.")
+    });
   });
 
   it('4.1 | successfully shows All Questions string', () => {

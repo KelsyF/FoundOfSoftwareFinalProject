@@ -1,6 +1,6 @@
 //Based off of soa-node-mongo cypress tests repeated from React assignment.
 
-describe('New Question Form', () => {
+describe('2 | New Question Form', () => {
 
     beforeEach(() => {
         // Seed the database before each test
@@ -12,7 +12,7 @@ describe('New Question Form', () => {
         cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
-    it('Ask Question button creates and displays new post in All Questions', () => {
+    it('2.1 | Ask Question button creates and displays new post in All Questions', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -63,9 +63,9 @@ describe('New Question Form', () => {
         cy.get(".postTitle").each(($el, index, $list) => {
             cy.wrap($el).should("contain", qTitles[index]);
         });
-    })
+    });
 
-    it('Ask Question button creates and displays expected Metadata', () => {
+    it('2.2 | Ask Question button creates and displays expected Metadata', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -111,7 +111,7 @@ describe('New Question Form', () => {
         });
     });
 
-    it('Ask a Question with empty title shows error', () => {
+    it('2.3 | Ask a Question with empty title shows error', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -135,7 +135,32 @@ describe('New Question Form', () => {
         cy.contains('Title cannot be empty');
     });
 
-    it('Ask a Question with empty text shows error', () => {
+    it('2.4 | Ask a Question with title longer than 100 characters shows error', () => {
+        cy.visit('http://localhost:3000');
+
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
+
+        cy.wait(500);
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+
+        cy.contains('Ask a Question').click();
+        cy.get("#formTitleInput").type("I have this huge question but I want to put all of it in the title just in case someone doesn't actually want to read the text of the question so I'm going to put it all here and it'll be fine");
+        cy.get("#formTextInput").type("Test Question A Text");
+        cy.get("#formTagInput").type("javascript");
+        cy.contains('Post Question').click();
+        cy.contains('Title cannot be more than 100 characters');
+    });
+
+    it('2.5 | Ask a Question with empty text shows error', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -159,7 +184,7 @@ describe('New Question Form', () => {
         cy.contains('Question text cannot be empty');
     });
 
-    it('Ask a Question with more than 5 tags shows error', () => {
+    it('2.6 | Ask a Question with more than 5 tags shows error', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -183,9 +208,9 @@ describe('New Question Form', () => {
         cy.get("#formTagInput").type("test1 test2 test3 test4 test5 test6");
         cy.contains('Post Question').click();
         cy.contains('Cannot have more than 5 tags')
-    })
+    });
 
-    it('Ask a question with tags, check to see tags exist', () => {
+    it('2.7 | Ask a question with tags, check to see tags exist', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -215,4 +240,15 @@ describe('New Question Form', () => {
         cy.contains('test2');
         cy.contains('test3');
     });
-})
+
+    it('2.8 | Attempt to ask a question without login, check alert box is thrown', () => {
+
+        cy.visit('http://localhost:3000');
+
+        cy.contains("Ask a Question").click();
+        cy.contains("Post Question").click();
+        cy.on('window:alert', (str) => {
+            expect(str).to.equal("Please log in to post a question.")
+        });
+    });
+});

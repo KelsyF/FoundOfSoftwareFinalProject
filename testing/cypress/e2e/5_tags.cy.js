@@ -1,6 +1,6 @@
 //Based off of soa-node-mongo cypress tests repeated from React assignment.
 
-describe("Tag page", () => {
+describe("5 | Tag page", () => {
 
     beforeEach(() => {
         // Seed the database before each test
@@ -12,7 +12,7 @@ describe("Tag page", () => {
         cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
-    it('Check if all tags exist', () => {
+    it('5.1 | Check if all tags exist', () => {
         cy.visit('http://localhost:3000');
 
         // Check the tags that should have been seeded exist in the page
@@ -25,7 +25,7 @@ describe("Tag page", () => {
         cy.contains("website", { matchCase: false });
     });
 
-    it('Checks if the correct number of questions are populating within tags', () => {
+    it('5.2 | Checks if the correct number of questions are populating within tags', () => {
         cy.visit('http://localhost:3000');
 
         // Check that the question numbers are correct in the page
@@ -44,7 +44,7 @@ describe("Tag page", () => {
         });
     });
 
-    it('Navigate to question in React tag', () => {
+    it('5.3 | Navigate to question in React tag', () => {
         cy.visit('http://localhost:3000');
 
         // Check the correct question is within the React tag
@@ -53,7 +53,7 @@ describe("Tag page", () => {
         cy.contains("Programmatically navigate using React router");
     });
 
-    it('Navigate to questions in Storage tag', () => {
+    it('5.4 | Navigate to questions in Storage tag', () => {
         cy.visit('http://localhost:3000');
 
         // Check the correct questions are within the Storage tag
@@ -63,7 +63,7 @@ describe("Tag page", () => {
         cy.contains("Object storage for a web application");
     });
 
-    it('Create a new question with a new tag and find the question through navigating to that tag page', () => {
+    it('5.5 | Create a new question with a new tag and find the question through navigating to that tag page', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -71,6 +71,8 @@ describe("Tag page", () => {
         cy.get("#registerUsernameInput").type("TestUserA");
         cy.get("#registerPasswordInput").type("testuserpasswordA");
         cy.contains("Sign-up").click();
+
+        cy.wait(500);
 
         // Login previously created user
         cy.contains("Login").click();
@@ -93,8 +95,8 @@ describe("Tag page", () => {
         cy.contains('Test Question A');
     });
 
-    it('Clicks on a tag and verifies it is displayed', () => {
-       const tagName = 'javascript';
+    it('5.6 | Clicks on a tag and verifies it is displayed', () => {
+        const tagName = 'javascript';
 
         cy.visit('http://localhost:3000');
         cy.contains('Tags').click();
@@ -105,7 +107,7 @@ describe("Tag page", () => {
         });
     });
 
-    it('Clicks on a tag in the homepage and verifies the questions displayed are actually related to the tag', () => {
+    it('5.7 | Clicks on a tag in the homepage and verifies the questions displayed are actually related to the tag', () => {
         const tagName = 'storage';
 
         cy.visit('http://localhost:3000');
