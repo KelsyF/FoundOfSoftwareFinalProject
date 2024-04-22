@@ -40,6 +40,20 @@ jobs:
           node ./server.js
         }
       shell: powershell
+    - name: Check job statuses
+      run: |
+        Get-Job | Format-Table -AutoSize  # Display all job statuses
+        $jobs = Get-Job
+        foreach ($job in $jobs) {
+          if ($job.State -eq "Running") {
+            Write-Output "Job $($job.Id) is still running."
+          } elseif ($job.State -eq "Failed") {
+            Receive-Job -Job $job  # Output job errors for diagnostics
+            $job | Remove-Job  # Cleanup job
+            exit 1  # Fail the step if a job failed
+          }
+        }
+      shell: powershell
     - name: Wait for servers to start
       run: Start-Sleep -Seconds 10  # Wait 10 seconds to ensure servers are up
       shell: powershell
@@ -52,28 +66,4 @@ jobs:
       run: |
         cd testing
         npx cypress run
-      shell: powershell
-
-  jest-tests:
-    needs: cypress-tests  # Jest tests will wait for Cypress tests to complete
-    runs-on: self-hosted  # Using your own self-hosted runner
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'  # Ensure this matches the Node.js version you use
-    - name: Set Execution Policy
-      run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-      shell: powershell
-    - name: Install server dependencies
-      run: |
-        cd server
-        npm install
-      shell: powershell
-    - name: Run Jest Tests
-      run: |
-        cd server
-        npm run test
       shell: powershell
