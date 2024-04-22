@@ -50,6 +50,12 @@ jobs:
       shell: powershell
     - name: Run Cypress Tests
       run: |
+        cd client
+        npm start
+        cd ..
+        cd server
+        node .\server.js
+        cd ..
         cd testing
         npx cypress run
       shell: powershell
