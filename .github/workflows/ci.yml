@@ -30,11 +30,11 @@ jobs:
     - name: Run server
       run: |
         cd server/
-        node server.js &
+        node server.js
     - name: Start client in background
       run: |
         cd client/
-        npm run start &
+        npm run start
     - name: Wait for servers to start
       run: Start-Sleep -Seconds 10 
     - name: Install testing dependencies
