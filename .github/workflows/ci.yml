@@ -33,6 +33,7 @@ jobs:
     - name: Start MongoDB
       run: |
         mongosh
+      shell: powershell
     - name: Start client in background
       run: |
         Start-Job -ScriptBlock {
