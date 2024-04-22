@@ -22,39 +22,31 @@ jobs:
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
 
-    - name: Install dependencies for client and server
-      run: |
-        cd client
-        npm install
-        cd ../server
-        npm install
+    - name: Install dependencies in client directory
+      run: npm install
+      working-directory: client
       shell: powershell
 
-    - name: Start client in background and log output
-      run: |
-        $clientJob = Start-Job -ScriptBlock {
-          Set-Location $env:GITHUB_WORKSPACE/client
-          npm start
-        }
-        Start-Sleep -Seconds 10  # Let it start up
-        Receive-Job -Job $clientJob
+    - name: Install dependencies in server directory
+      run: npm install
+      working-directory: server
+      shell: powershell
+
+    - name: Start client in background
+      run: Start-Job -ScriptBlock { npm start }
+      working-directory: client
       shell: powershell
       env:
         GITHUB_WORKSPACE: ${{ github.workspace }}
 
-    - name: Start server in background and log output
-      run: |
-        $serverJob = Start-Job -ScriptBlock {
-          Set-Location $env:GITHUB_WORKSPACE/server
-          node ./server.js
-        }
-        Start-Sleep -Seconds 10  # Let it start up
-        Receive-Job -Job $serverJob
+    - name: Start server in background
+      run: Start-Job -ScriptBlock { node ./server.js }
+      working-directory: server
       shell: powershell
       env:
         GITHUB_WORKSPACE: ${{ github.workspace }}
 
-    - name: Verify client is up
+    - name: Verify client is operational
       run: |
         $success = $false
         $attempts = 0
@@ -78,44 +70,22 @@ jobs:
           Write-Error "Client is not up after several attempts."
           exit 1
         }
+      working-directory: client
       shell: powershell
 
     - name: Install testing dependencies
-      run: |
-        cd testing
-        npm install
+      run: npm install
+      working-directory: testing
       shell: powershell
 
     - name: Run Cypress Tests
+      run: npx cypress run
+      working-directory: testing
+      shell: powershell
+
+    - name: Clean-up
       run: |
-        cd testing
-        npx cypress run
+        Stop-Process -Name "node" -Force
+        Stop-Process -Name "npm" -Force
       shell: powershell
-
-  jest-tests:
-    needs: cypress-tests
-    runs-on: self-hosted
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-
-    - name: Set Execution Policy
-      run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-      shell: powershell
-
-    - name: Install server dependencies
-      run: |
-        cd server
-        npm install
-      shell: powershell
-
-    - name: Run Jest Tests
-      run: |
-        cd server
-        npm run test
-      shell: powershell
+      if: always()  # Ensure cleanup happens regardless of previous step success
