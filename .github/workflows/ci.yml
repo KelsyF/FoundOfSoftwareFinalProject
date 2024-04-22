@@ -8,36 +8,48 @@ on:
 
 jobs:
   jest-tests:
-    runs-on: self-hosted  # Changed from ubuntu-latest to self-hosted
+    runs-on: self-hosted  # Using your own self-hosted runner
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '16'  # Ensure this matches the Node.js version you use
+    - name: Set Execution Policy
+      run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+      shell: powershell
     - name: Install server dependencies
       run: |
         cd server
         npm install
+      shell: powershell
     - name: Run Jest Tests
       run: |
         cd server
         npm run test
+      shell: powershell
 
   cypress-tests:
-    needs: jest-tests  # Ensures Cypress tests run after Jest tests
-    runs-on: self-hosted  # Changed from ubuntu-latest to self-hosted
+    needs: jest-tests  # Cypress tests will wait for Jest tests to complete
+    runs-on: self-hosted  # This job also uses the self-hosted runner
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16'
+    - name: Set Execution Policy
+      run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+      shell: powershell
     - name: Install testing dependencies
       run: |
         cd testing
         npm install
+      shell: powershell
     - name: Run Cypress Tests
       run: |
         cd testing
         npx cypress run
+      shell: powershell
