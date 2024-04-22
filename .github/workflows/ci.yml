@@ -6,39 +6,6 @@ on:
       - main
       - workflow-test
 
-jobs:
-  cypress-tests:
-    runs-on: self-hosted  # This job uses the self-hosted runner
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-    - name: Set Execution Policy
-      run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-    - name: Install dependencies for client and server
-      run: |
-        cd client
-        npm install
-        cd ../server
-        npm install
-        cd ../testing
-        npm install
-        npm install cypress
-    - name: Start MongoDB
-      run: |
-        mongosh
-    - name: Cypress run
-      uses: cypress-io/github-action@v5
-      with:
-        project: ./testing
-        start: npm run start --prefix client, npm run start --prefix server
-        wait-on: 'http://localhost:3000,http://localhost:8000'
-        browser: chrome
-        timeout: 400
-        working-directory: ./
         
    jobs:
   cypress-tests:
