@@ -12,13 +12,16 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16'
+
     - name: Set Execution Policy
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
+
     - name: Install dependencies for client and server
       run: |
         cd client
@@ -26,32 +29,45 @@ jobs:
         cd ../server
         npm install
       shell: powershell
+
     - name: Start client in background and log output
       run: |
+        Write-Host "Current working directory: $(Get-Location)"
         $clientJob = Start-Job -ScriptBlock {
+          Set-Location $env:GITHUB_WORKSPACE
           cd client
           npm start 2>&1
         }
         Start-Sleep -Seconds 10  # Let it start up
         Receive-Job $clientJob
       shell: powershell
+      env:
+        GITHUB_WORKSPACE: ${{ github.workspace }}
+
     - name: Start server in background and log output
       run: |
+        Write-Host "Current working directory: $(Get-Location)"
         $serverJob = Start-Job -ScriptBlock {
+          Set-Location $env:GITHUB_WORKSPACE
           cd server
           node ./server.js 2>&1
         }
         Start-Sleep -Seconds 10  # Let it start up
         Receive-Job $serverJob
       shell: powershell
+      env:
+        GITHUB_WORKSPACE: ${{ github.workspace }}
+
     - name: Wait for servers to start
       run: Start-Sleep -Seconds 10  # Additional wait if needed
       shell: powershell
+
     - name: Install testing dependencies
       run: |
         cd testing
         npm install
       shell: powershell
+
     - name: Run Cypress Tests
       run: |
         cd testing
@@ -64,18 +80,22 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16'
+
     - name: Set Execution Policy
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
+
     - name: Install server dependencies
       run: |
         cd server
         npm install
       shell: powershell
+
     - name: Run Jest Tests
       run: |
         cd server
