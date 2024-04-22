@@ -15,18 +15,18 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '16'  # Ensure this matches the Node.js version you use
     - name: Set Execution Policy
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
     - name: Install server dependencies
       run: |
-        cd ${{ github.workspace }}/server
+        cd server
         npm install
       shell: powershell
     - name: Run Jest Tests
       run: |
-        cd ${{ github.workspace }}/server
+        cd server
         npm run test
       shell: powershell
 
@@ -45,30 +45,34 @@ jobs:
       shell: powershell
     - name: Install client dependencies
       run: |
-        cd ${{ github.workspace }}/client
-        npm install
-      shell: powershell
-    - name: Install server dependencies
-      run: |
-        cd ${{ github.workspace }}/server
+        cd client
         npm install
       shell: powershell
     - name: Start client
       run: |
-        cd ${{ github.workspace }}/client
+        cd client
         npm start &
+      shell: powershell
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm install
       shell: powershell
     - name: Start server
       run: |
-        cd ${{ github.workspace }}/server
-        node server.js &
+        cd server
+        node ./server.js &
       shell: powershell
     - name: Wait for servers to start
-      run: sleep 10  # Adjust time as necessary to ensure servers are ready
-      shell: bash
-    - name: Install testing dependencies and run Cypress
+      run: Start-Sleep -s 10  # Wait 10 seconds to ensure servers are up
+      shell: powershell
+    - name: Install testing dependencies
       run: |
-        cd ${{ github.workspace }}/testing
+        cd testing
         npm install
+      shell: powershell
+    - name: Run Cypress Tests
+      run: |
+        cd testing
         npx cypress run
       shell: powershell
