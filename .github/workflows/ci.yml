@@ -8,17 +8,20 @@ on:
 
 jobs:
   cypress-tests:
-    runs-on: self-hosted  # This job uses the self-hosted runner
+    runs-on: self-hosted
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16'
+
     - name: Set Execution Policy
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
+
     - name: Install dependencies for client and server
       run: |
         cd client
@@ -26,28 +29,63 @@ jobs:
         cd ../server
         npm install
       shell: powershell
-    - name: Start client in background
+
+    - name: Start client in background and log output
       run: |
-        Start-Job -ScriptBlock {
-          cd client
+        $clientJob = Start-Job -ScriptBlock {
+          Set-Location $env:GITHUB_WORKSPACE/client
           npm start
         }
+        Start-Sleep -Seconds 10  # Let it start up
+        Receive-Job -Job $clientJob
       shell: powershell
-    - name: Start server in background
+      env:
+        GITHUB_WORKSPACE: ${{ github.workspace }}
+
+    - name: Start server in background and log output
       run: |
-        Start-Job -ScriptBlock {
-          cd server
+        $serverJob = Start-Job -ScriptBlock {
+          Set-Location $env:GITHUB_WORKSPACE/server
           node ./server.js
         }
+        Start-Sleep -Seconds 10  # Let it start up
+        Receive-Job -Job $serverJob
       shell: powershell
-    - name: Wait for servers to start
-      run: Start-Sleep -Seconds 10  # Wait 10 seconds to ensure servers are up
+      env:
+        GITHUB_WORKSPACE: ${{ github.workspace }}
+
+    - name: Verify client is up
+      run: |
+        $success = $false
+        $attempts = 0
+        while (-not $success -and $attempts -lt 5) {
+          try {
+            $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing
+            if ($response.StatusCode -eq 200) {
+              Write-Host "Client confirmed up - status code: $($response.StatusCode)"
+              $success = $true
+            }
+            else {
+              Write-Host "Client not up - status code: $($response.StatusCode), retrying..."
+            }
+          } catch {
+            Write-Host "Error contacting client, retrying..."
+          }
+          Start-Sleep -Seconds 5
+          $attempts++
+        }
+        if (-not $success) {
+          Write-Error "Client is not up after several attempts."
+          exit 1
+        }
       shell: powershell
+
     - name: Install testing dependencies
       run: |
         cd testing
         npm install
       shell: powershell
+
     - name: Run Cypress Tests
       run: |
         cd testing
@@ -55,23 +93,27 @@ jobs:
       shell: powershell
 
   jest-tests:
-    needs: cypress-tests  # Jest tests will wait for Cypress tests to complete
-    runs-on: self-hosted  # Using your own self-hosted runner
+    needs: cypress-tests
+    runs-on: self-hosted
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Ensure this matches the Node.js version you use
+        node-version: '16'
+
     - name: Set Execution Policy
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
       shell: powershell
+
     - name: Install server dependencies
       run: |
         cd server
         npm install
       shell: powershell
+
     - name: Run Jest Tests
       run: |
         cd server
