@@ -21,12 +21,12 @@ jobs:
       shell: powershell
     - name: Install server dependencies
       run: |
-        cd server
+        cd ${{ github.workspace }}/server
         npm install
       shell: powershell
     - name: Run Jest Tests
       run: |
-        cd server
+        cd ${{ github.workspace }}/server
         npm run test
       shell: powershell
 
@@ -45,22 +45,22 @@ jobs:
       shell: powershell
     - name: Install client dependencies
       run: |
-        cd client
+        cd ${{ github.workspace }}/client
         npm install
       shell: powershell
     - name: Install server dependencies
       run: |
-        cd ../server
+        cd ${{ github.workspace }}/server
         npm install
       shell: powershell
     - name: Start client
       run: |
-        cd ../client
+        cd ${{ github.workspace }}/client
         npm start &
       shell: powershell
     - name: Start server
       run: |
-        cd ../server
+        cd ${{ github.workspace }}/server
         node server.js &
       shell: powershell
     - name: Wait for servers to start
@@ -68,7 +68,7 @@ jobs:
       shell: bash
     - name: Install testing dependencies and run Cypress
       run: |
-        cd ../testing
+        cd ${{ github.workspace }}/testing
         npm install
         npx cypress run
       shell: powershell
