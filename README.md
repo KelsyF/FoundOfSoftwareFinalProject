@@ -29,12 +29,16 @@ jest coverage tool:
 ## How to run Docker to Self-Run
 
 1. Docker
+
 In the .\server\config.js & .\server\server.js ensure that:
+
 const MONGO_URL = "mongodb://mongodb:27017/final_fake_so";
 //const MONGO_URL = "mongodb://localhost:27017/final_fake_so";
 
 2. Self-Run
+
 In the .\server\config.js & .\server\server.js ensure that:
+
 //const MONGO_URL = "mongodb://mongodb:27017/final_fake_so";
 const MONGO_URL = "mongodb://localhost:27017/final_fake_so";
 
