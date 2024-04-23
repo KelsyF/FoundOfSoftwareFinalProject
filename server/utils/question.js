@@ -1,20 +1,15 @@
 const Tag = require("../models/tags");
 const Question = require("../models/questions");
-const User = require('../models/user'); // Adjust the path according to the actual location
 
 
 const addTag = async (tname) => {
     let tag = await Tag.findOne({ name: tname });
     if (!tag) {
-        // Instead of directly saving the new tag,
-        // create the tag instance and then explicitly return the saved instance's ID
         const newTag = new Tag({ name: tname });
         const savedTag = await newTag.save();
         
-        // Return the ID of the saved tag wrapped in an array
         return [savedTag._id];
     }
-    // For an existing tag, just return the tag's ID wrapped in an array
     return [tag._id];
 };
 
@@ -25,33 +20,32 @@ const getQuestionsByOrder = async (order) => {
     try {
         let questions = await Question.find().populate('tags', 'name').populate('asked_by','username').populate('answers');
         if (order === 'newest') {
-            // Explicitly sort the filtered questions by ask_date_time in descending order.
+
             return questions.sort((a, b) => b.ask_date_time - a.ask_date_time);
         } else if (order === 'active') {
             questions.sort((a, b) => {
-                // Check for the presence of answers and determine the last answer date
+
                 let aLastAnswerDate = a.answers.length > 0 ? new Date(Math.max(...a.answers.map(answer => new Date(answer.ans_date_time)))) : null;
                 let bLastAnswerDate = b.answers.length > 0 ? new Date(Math.max(...b.answers.map(answer => new Date(answer.ans_date_time)))) : null;
 
-                // Prioritize questions with answers over those without
+
                 if (aLastAnswerDate && !bLastAnswerDate) return -1;
                 if (!aLastAnswerDate && bLastAnswerDate) return 1;
 
-                // If both questions have answers, sort by the latest answer date
+
                 if (aLastAnswerDate && bLastAnswerDate) {
                     const dateComparison = bLastAnswerDate - aLastAnswerDate;
                     if (dateComparison !== 0) return dateComparison;
                 }
 
-                // If both questions have answers with the same date or both are unanswered, sort by ask_date_time
                 return b.ask_date_time.getTime() - a.ask_date_time.getTime();
             });
 
             return questions;
         } else if (order === 'unanswered') {
-            // Filter out questions with answers.
+
             questions = questions.filter(q => q.answers.length === 0);
-            // Explicitly sort the filtered questions by ask_date_time in descending order.
+
             return questions.sort((a, b) => b.ask_date_time - a.ask_date_time);
             
         } else {

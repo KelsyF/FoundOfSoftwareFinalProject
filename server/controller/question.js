@@ -27,11 +27,6 @@ router.get('/getQuestion', async (req, res) => {
             //console.log("Questions filtered by search term:", search);  // Confirm search filtering operation
         }
 
-        // Loop through each question to log or process them before sending the response
-        questions.forEach(question => {
-           // console.log("Question ID:",  question._id, "Title:", question.title, "Author:", question.asked_by, "Tags:", question.tags.map(tag => tag.name));
-            // Additional processing can be done here if necessary
-        });
         
 
         //console.log("Questions fetched and ready to send:", questions.length, "questions found.");  // Log the number of questions to be sent

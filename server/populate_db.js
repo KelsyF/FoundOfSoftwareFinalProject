@@ -45,7 +45,7 @@ function answerCreate(text, ans_by, ans_date_time) {
 }
 
 function questionCreate(title, text, tags, answers, asked_by, ask_date_time, views) {
-  qstndetail = {
+  let qstndetail = {
     title: title,
     text: text,
     tags: tags,

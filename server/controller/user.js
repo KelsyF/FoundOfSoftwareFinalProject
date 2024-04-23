@@ -2,7 +2,6 @@ const express = require("express");
 const User = require("../models/user");  // Assuming this is your user model path
 const Post = require("../models/questions");  // Assuming post model exists
 const Answer = require("../models/answers");  // Assuming answer model exists
-const Tag = require("../models/tags");  // Assuming tag model exists
 
 
 const router = express.Router();
@@ -137,7 +136,7 @@ router.delete('/deleteUser/:username', async (req, res) => {
         console.log(`Deleted ${deleteAnswers.deletedCount} answers`);
 
         // Finally, delete the user
-        const deleteUser = await User.deleteOne({ _id: user._id });
+        await User.deleteOne({ _id: user._id });
         ////console.log(`Deleted user: ${deleteUser.deletedCount === 1 ? 'Success' : 'Failed'}`);
 
         res.status(200).json({ success: true, message: "User and all related data deleted successfully" });
