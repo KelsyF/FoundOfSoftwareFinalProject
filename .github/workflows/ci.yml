@@ -30,7 +30,6 @@ jobs:
     - name: Cypress run
       uses: cypress-io/github-action@v5
       with:
-        project: testing
         working-directory: testing # Set this to point to the correct subdirectory
         start: npm run start --prefix ../client & npm run start --prefix ../server
         wait-on: 'http://localhost:3000,http://localhost:8000'
