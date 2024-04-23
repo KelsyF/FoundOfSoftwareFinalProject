@@ -27,6 +27,13 @@ jest coverage tool:
 1. cd .\server\
 2. npm run test:coverage
 
+## Moderation Notes
+In order to sign into the moderator account 
+username: moderator
+password: M1
+
+This is will not be used in final production, this is set for graders ease of use.
+
 ## How to run Docker to Self-Run
 
 1. Docker
