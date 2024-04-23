@@ -1,0 +1,18 @@
+{
+  "name": "final-project-noah-frank",
+  "version": "1.0.0",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/37vDen4S)\r # Final Team Project for CS5500",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm:server\" \"npm:client\"",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
+    "test": "cd testing && npm test"
+  },  
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

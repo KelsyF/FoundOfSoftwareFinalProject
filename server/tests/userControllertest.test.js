@@ -1,4 +1,3 @@
-// Unit tests for UserController in user.js
 const supertest = require("supertest");
 const mongoose = require("mongoose");
 
@@ -24,11 +23,11 @@ describe("UserController Operations", () => {
 
     beforeEach(() => {
         jest.spyOn(console, 'log').mockImplementation(() => {});
-        jest.spyOn(console, 'error').mockImplementation(() => {});  // Mock console.error
+        jest.spyOn(console, 'error').mockImplementation(() => {});  
     });
     
     afterEach(() => {
-        console.error.mockRestore();  // Restore original console.error after each test
+        console.error.mockRestore();  
         jest.clearAllMocks();
     });
     
@@ -69,9 +68,7 @@ describe("UserController Operations", () => {
 
         it("should return a 500 internal server error if the server encounters an exception", async () => {
             const userData = { username: "newuser", password: "securepassword" };
-            // Mock `findOne` to simulate no existing user
             User.findOne.mockResolvedValue(null);
-            // Mock `create` to simulate an internal server error, e.g., database failure
             User.create.mockRejectedValue(new Error("Simulated database failure"));
     
             const response = await app.post("/user/addUser").send(userData);
@@ -82,7 +79,6 @@ describe("UserController Operations", () => {
                 msg: 'Internal server error', 
                 error: "Simulated database failure"
             });
-            // Check if the mock was called with the expected parameters
             expect(User.findOne).toHaveBeenCalledWith({ username: "newuser" });
             expect(User.create).toHaveBeenCalledWith({ username: "newuser", password: "securepassword" });
         });
@@ -114,7 +110,7 @@ describe("UserController Operations", () => {
     describe("GET /username/:username/posts", () => {
         it("should return 404 if no user is found for the given username", async () => {
             const username = "nonexistentUser";
-            User.findOne.mockResolvedValue(null);  // Mocking User.findOne to return null for the test
+            User.findOne.mockResolvedValue(null);  
     
             const response = await app.get(`/user/username/${username}/posts`);
     
@@ -135,13 +131,10 @@ describe("UserController Operations", () => {
                 tags: [{ _id: "tag123", name: "Node.js" }]
             }];
         
-            // Mocking User.findOne to resolve with the mock user
             User.findOne.mockResolvedValue(mockUser);
         
-            // Mocking Post.find to simulate a chained populate call
             const populateMock = jest.fn().mockResolvedValue(mockPosts);
-            Post.find.mockReturnValue({ populate: populateMock });  // Return an object that includes a populate method which is also a mock
-        
+            Post.find.mockReturnValue({ populate: populateMock });  
             const response = await app.get(`/user/username/${username}/posts`);
         
             expect(response.status).toBe(200);
@@ -149,15 +142,15 @@ describe("UserController Operations", () => {
             expect(response.body.posts).toHaveLength(1);
             expect(response.body.posts[0]).toHaveProperty("title", "Sample Post");
             expect(response.body.posts[0].tags).toEqual(["Node.js"]);
-            expect(populateMock).toHaveBeenCalledWith('tags', 'name');  // Ensure populate was called correctly
+            expect(populateMock).toHaveBeenCalledWith('tags', 'name'); 
         });
         
     
         it("should handle errors during fetching posts", async () => {
             const username = "userWithError";
-            User.findOne.mockResolvedValue({ _id: "user456" });  // User found
+            User.findOne.mockResolvedValue({ _id: "user456" });  
             Post.find.mockImplementation(() => {
-                throw new Error("Simulated database error");  // Force an error
+                throw new Error("Simulated database error");  
             });
     
             const response = await app.get(`/user/username/${username}/posts`);
@@ -174,7 +167,7 @@ describe("UserController Operations", () => {
     describe("GET /username/:username/answers", () => {
         it("should return 404 if no user is found for the given username when fetching answers", async () => {
             const username = "nonexistentUser";
-            User.findOne.mockResolvedValue(null);  // No user found
+            User.findOne.mockResolvedValue(null);  
         
             const response = await app.get(`/user/username/${username}/answers`);
         
@@ -195,7 +188,7 @@ describe("UserController Operations", () => {
             User.findOne.mockResolvedValue(mockUser);
             Answer.find.mockResolvedValue(mockAnswers);
             Post.find.mockReturnValue({
-                populate: jest.fn().mockResolvedValue(mockPosts)  // Ensure chaining works correctly
+                populate: jest.fn().mockResolvedValue(mockPosts)  
             });
     
             const response = await app.get(`/user/username/${username}/answers`);
@@ -214,9 +207,9 @@ describe("UserController Operations", () => {
         
         it("should handle errors during fetching answers", async () => {
             const username = "userWithError";
-            User.findOne.mockResolvedValue({ _id: "user123" });  // Assume user is found
+            User.findOne.mockResolvedValue({ _id: "user123" });  
             Answer.find.mockImplementation(() => {
-                throw new Error("Simulated database error");  // Force an error
+                throw new Error("Simulated database error");  
             });
     
             const response = await app.get(`/user/username/${username}/answers`);
@@ -259,9 +252,9 @@ describe("UserController Operations", () => {
         it("should handle errors during user deletion", async () => {
             const username = "userWithDeletionError";
             const mockUser = { _id: "user123", username: username };
-            User.findOne.mockResolvedValue(mockUser);  // Simulate user found
+            User.findOne.mockResolvedValue(mockUser);  
             User.deleteOne.mockImplementation(() => {
-                throw new Error("Simulated deletion error");  // Force an error during deletion
+                throw new Error("Simulated deletion error");  
             });
     
             const response = await app.delete(`/user/deleteUser/${username}`);

@@ -10,6 +10,7 @@
 //
 //
 // -- This is a parent command --
+// Cypress.Commands.add('login', (email, password) => { ... })
 Cypress.Commands.add('login', (index) => {
     cy.fixture("login-data.json").then((loginData) => {
         cy.contains('Log in').click();
@@ -18,7 +19,6 @@ Cypress.Commands.add('login', (index) => {
         cy.get('#login').click();
     })
 })
-
 //
 //
 // -- This is a child command --
