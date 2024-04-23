@@ -19,7 +19,9 @@ describe("7 | Filter", () => {
             "Quick question about storage on android",
             "Object storage for a web application",
         ];
-
+        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
+        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/final_fake_so");
+        
         cy.visit("http://localhost:3000");
         cy.contains('Active').click();
         cy.get('.postTitle').each(($el, index, $list) => {

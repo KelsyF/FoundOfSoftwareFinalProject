@@ -16,6 +16,8 @@ describe('6 | Searches', () => {
 
     it('6.1 | Search string in question text', () => {
         const qTitles = ['android studio save string shared preference, start activity and load the saved string'];
+        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
+        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/final_fake_so");
         cy.visit('http://localhost:3000');
         cy.get('#searchBar').type('navigation{enter}');
         cy.get('.postTitle').each(($el, index, $list) => {

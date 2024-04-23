@@ -13,7 +13,10 @@ describe('2 | New Question Form', () => {
     });
 
     it('2.1 | Ask Question button creates and displays new post in All Questions', () => {
+        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
+        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/final_fake_so");
         cy.visit('http://localhost:3000');
+
 
         // Register new user
         cy.contains("Register").click();

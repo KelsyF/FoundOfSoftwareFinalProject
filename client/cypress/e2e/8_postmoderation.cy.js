@@ -14,6 +14,9 @@ describe("8 | Post Moderation", () => {
     it('8.1 | Register moderator, check delete post on homepage works', () => {
         cy.visit('http://localhost:3000');
 
+        cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
+        cy.exec("node ../server/populate_db.js mongodb://127.0.0.1:27017/final_fake_so");
+        
         // Register moderator
         cy.contains("Register").click();
         cy.get("#registerUsernameInput").type("moderator");
