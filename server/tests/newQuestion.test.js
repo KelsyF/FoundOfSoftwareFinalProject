@@ -1,19 +1,15 @@
-// New unit tests for functions in controller/question.js
-
 const supertest = require("supertest");
 const { default: mongoose } = require("mongoose");
 const Question = require('../models/questions');
 const User = require('../models/user');
 const { addTag, getQuestionsByOrder, filterQuestionsBySearch } = require('../utils/question');
 
-// Mocking the models and utilities
 jest.mock("../models/questions");
 jest.mock("../models/user");
 jest.mock('../utils/question');
 
 let server;
 
-// Sample data for tests
 const tag1 = { _id: '507f191e810c19729de860ea', name: 'tag1' };
 const tag2 = { _id: '65e9a5c2b26199dbcc3e6dc8', name: 'tag2' };
 
@@ -46,7 +42,6 @@ let consoleLogSpy;
 beforeEach(() => {
   jest.resetAllMocks();
     server = require("../server");
-    // Setup spies for both console.error and console.log
     consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     getQuestionsByOrder.mockResolvedValue(mockQuestions);  // Re-establish expected behavior
@@ -54,10 +49,7 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
-    // Close the server if it is being used in this manner
-    // if (server && server.close) server.close();
     await mongoose.disconnect();
-    // Restore the original console functions after each test
     consoleSpy.mockRestore();
     consoleLogSpy.mockRestore();
 });
@@ -75,7 +67,7 @@ describe('POST /addQuestion - Field Validations', () => {
       const expectedQuestion = {
           ...requestBody,
           tags: [],
-          answers: [], // Assuming answers default to empty array as well
+          answers: [], 
           views: 0,
           _id: 'newId',
           asked_by: user1._id
@@ -126,7 +118,7 @@ describe('POST /addQuestion - Field Validations', () => {
 describe('GET /getQuestion - Provided Search Only', () => {
     it('should fetch questions with default order and provided search term', async () => {
         const search = 'query';
-        getQuestionsByOrder.mockResolvedValueOnce(mockQuestions); // Assume order affects output
+        getQuestionsByOrder.mockResolvedValueOnce(mockQuestions); 
         filterQuestionsBySearch.mockReturnValueOnce(mockQuestions.filter(q => q.title.includes(search)));
 
         const response = await supertest(server).get('/question/getQuestion').query({ search });
@@ -142,14 +134,14 @@ describe('GET /getQuestion - Provided Search Only', () => {
 describe('GET /getQuestion - Provided Order Only', () => {
   it('should correctly handle a provided order parameter without search', async () => {
       const order = 'oldest';
-      getQuestionsByOrder.mockResolvedValueOnce(mockQuestions); // Mock specific order logic if needed
+      getQuestionsByOrder.mockResolvedValueOnce(mockQuestions); 
 
       const response = await supertest(server).get('/question/getQuestion').query({ order });
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockQuestions);
       expect(getQuestionsByOrder).toHaveBeenCalledWith(order.toLowerCase());
-      expect(filterQuestionsBySearch).not.toHaveBeenCalled(); // Ensure no search filtering applied
+      expect(filterQuestionsBySearch).not.toHaveBeenCalled(); 
   });
 });
 
@@ -165,10 +157,10 @@ describe('GET /getQuestion - No Search', () => {
         expect(response.status).toBe(200);
         expect(response.body).toEqual(mockQuestions);
         expect(getQuestionsByOrder).toHaveBeenCalledWith(order.toLowerCase());
-        expect(filterQuestionsBySearch).not.toHaveBeenCalled(); // Verifies that no filtering was done
+        expect(filterQuestionsBySearch).not.toHaveBeenCalled(); 
       } catch (error) {
         console.error("Error during test execution:", error);
-        expect(error).toBeNull(); // This will force the test to fail here if there's an exception
+        expect(error).toBeNull(); 
       }
   });
 });
@@ -196,7 +188,7 @@ describe('GET /getQuestion - Different Orders', () => {
   const orders = ['newest', 'oldest', 'popular'];
   orders.forEach(order => {
       it(`should handle order type: ${order}`, async () => {
-          getQuestionsByOrder.mockResolvedValueOnce(mockQuestions); // adjust logic inside getQuestionsByOrder if it affects output based on order
+          getQuestionsByOrder.mockResolvedValueOnce(mockQuestions); 
 
           const response = await supertest(server).get('/question/getQuestion').query({ order });
 
@@ -211,8 +203,8 @@ describe('GET /getQuestion - Different Orders', () => {
 describe('DELETE /deleteQuestion/:id', () => {
 
   it('should handle errors during deletion and respond with status 500', async () => {
-      const validId = "507f1f77bcf86cd799439011"; // Use a string that looks like a valid MongoDB ObjectId
-      // Mock the deleteOne method to simulate a failure
+      const validId = "507f1f77bcf86cd799439011"; 
+
       Question.deleteOne.mockRejectedValue(new Error("Database Error"));
 
       const response = await supertest(server).delete(`/question/deleteQuestion/${validId}`);
@@ -226,7 +218,7 @@ describe('DELETE /deleteQuestion/:id', () => {
 describe('DELETE /deleteQuestion/:id', () => {
 
   it('should respond with status 400 for invalid ID format', async () => {
-      const invalidId = "invalid-id"; // An example of an invalid MongoDB ObjectId
+      const invalidId = "invalid-id"; 
 
       const response = await supertest(server).delete(`/question/deleteQuestion/${invalidId}`);
 
@@ -244,8 +236,6 @@ describe('API ID Validation', () => {
     expect(response.body).toEqual({
         message: "Invalid question ID format"
     });
-    // Remove or comment out the next line if logging is not required
-    // expect(consoleLogSpy).toHaveBeenCalledWith("Invalid ID format:", invalidId);
 });
 
 });
@@ -253,7 +243,7 @@ describe('API ID Validation', () => {
 
 describe('GET /getQuestionById/:id', () => {
   it('should return an error if the provided ID format is invalid', async () => {
-      // Set an invalid ID for testing
+
       const invalidId = "123";
 
       const response = await supertest(server).get(`/question/getQuestionById/${invalidId}`);
@@ -268,13 +258,13 @@ describe('GET /getQuestionById/:id', () => {
 
 describe('GET /getQuestionById/:id', () => {
   it('should return a 404 error if no question is found for the given ID', async () => {
-      // Setup a valid but non-existing ID
+
       const nonExistingId = "507f1f77bcf86cd799439011";
 
-      // Mock the findOneAndUpdate method to simulate no question found
+
       Question.findOneAndUpdate.mockImplementation(() => ({
           populate: jest.fn().mockImplementation(() => ({
-              populate: jest.fn().mockResolvedValueOnce(null)  // Returns null to simulate no question found
+              populate: jest.fn().mockResolvedValueOnce(null)  
           }))
       }));
 
@@ -291,7 +281,7 @@ describe('GET /getQuestion Error Handling', () => {
   it('should handle errors when fetching questions fails', async () => {
       const query = { order: 'newest', search: 'test' };
 
-      // Simulate a database or internal server error
+
       getQuestionsByOrder.mockRejectedValueOnce(new Error("Database fetch error"));
 
       const response = await supertest(server).get('/question/getQuestion').query(query);
@@ -299,9 +289,9 @@ describe('GET /getQuestion Error Handling', () => {
       expect(response.status).toBe(500);
       expect(response.body).toEqual({
           message: "Error fetching questions",
-          error: "Database fetch error" // Adjust based on the actual error message handling in your controller
+          error: "Database fetch error" 
       });
-      expect(console.error).toHaveBeenCalledWith("Error fetching questions:", expect.any(Error)); // This checks if console.error was called correctly
+      expect(console.error).toHaveBeenCalledWith("Error fetching questions:", expect.any(Error));
   });
 });
 
@@ -328,7 +318,7 @@ describe('Question Controller Tests', () => {
           const expectedQuestion = {
               ...mockQuestions[1],
               views: mockQuestions[1].views + 1,
-              answers: [], // Populate this if necessary
+              answers: [], 
               asked_by: user1
           };
   
@@ -362,14 +352,14 @@ describe('Question Controller Tests', () => {
 
         const expectedQuestion = {
             ...requestBody,
-            _id: 'newId', // Simulated new MongoDB ID
+            _id: 'newId', 
             views: 0,
             answers: [],
             asked_by: user1._id,
             tags: [
                 { _id: '507f191e810c19729de860ea', name: 'tag1' },
                 { _id: '65e9a5c2b26199dbcc3e6dc8', name: 'tag2' }
-            ] // Adjusting the expected structure to match the actual API behavior
+            ] 
         };
 
         User.findOne.mockResolvedValueOnce(user1);
@@ -428,7 +418,7 @@ describe('Question Controller Tests', () => {
         const response = await supertest(server).get(`/question/getQuestionById/${questionId}`);
     
         expect(response.status).toBe(500);
-        expect(response.body).toEqual({ message: "Error fetching question", error: "Error: Database Error" }); // Adjust the error message to match API behavior
+        expect(response.body).toEqual({ message: "Error fetching question", error: "Error: Database Error" }); 
     });
     
   });
@@ -463,7 +453,7 @@ describe('POST /addQuestion', () => {
           tags: ['tag1']
       };
 
-      User.findOne.mockResolvedValueOnce(null); // Simulating user not found
+      User.findOne.mockResolvedValueOnce(null); 
 
       const response = await supertest(server).post('/question/addQuestion').send(requestBody);
 
@@ -474,14 +464,14 @@ describe('POST /addQuestion', () => {
 
 describe('DELETE /deleteQuestion/:id', () => {
   it('should handle deletion of a non-existent question', async () => {
-      // Using a valid format MongoDB ObjectId that does not actually exist
+      
       const questionId = '507f1f77bcf86cd799439011';
 
       Question.deleteOne.mockResolvedValue({ deletedCount: 0 });
 
       const response = await supertest(server).delete(`/question/deleteQuestion/${questionId}`);
 
-      expect(response.status).toBe(404); // Confirm that your API is meant to return 404 here
+      expect(response.status).toBe(404); 
       expect(response.body).toEqual({ message: "No question found with that ID" });
   });
 });

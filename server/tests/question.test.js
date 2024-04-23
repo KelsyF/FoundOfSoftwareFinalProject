@@ -1,4 +1,4 @@
-// Unit tests for utils/question.js
+
 const mockingoose = require('mockingoose');
 const Tag = require("../models/tags");
 const Question = require("../models/questions");
@@ -86,7 +86,6 @@ describe('question util module', () => {
         mockingoose.resetAll();
     });
 
-    // addTag
     test('addTag return tag id if the tag already exists', async () => {
         mockingoose(Tag).toReturn(_tag1, 'findOne');
 
@@ -103,7 +102,6 @@ describe('question util module', () => {
     });
     
 
-    // filterQuestionsBySearch
     test('filter question empty string', () => {
         const result = filterQuestionsBySearch(_questions, '');
 
@@ -140,7 +138,6 @@ describe('question util module', () => {
         expect(result[1]._id).toEqual('65e9b5a995b6c7045a30d823');
     });
 
-    // getQuestionsByOrder
     test('get active questions, newest questions sorted by most recently answered 1', async () => {
         mockingoose(Question).toReturn(_questions.slice(0, 3), 'find');
 
@@ -244,13 +241,11 @@ describe('getQuestionsByOrder - default order', () => {
     test('get questions sorted by newest without specifying order type', async () => {
         const result = await getQuestionsByOrder();
 
-        // Verify that the result matches the sortedQuestions array in the correct order
         expect(result).toHaveLength(sortedQuestions.length);
         expect(result[0]._id.toString()).toEqual(sortedQuestions[0]._id);
         expect(result[1]._id.toString()).toEqual(sortedQuestions[1]._id);
         expect(result[2]._id.toString()).toEqual(sortedQuestions[2]._id);
 
-        // Optionally verify that each returned question has its 'tags' field populated
         result.forEach((question, index) => {
             expect(question.tags).toBeDefined();
             expect(Array.isArray(question.tags)).toBeTruthy();
@@ -260,26 +255,21 @@ describe('getQuestionsByOrder - default order', () => {
 
 describe('getQuestionsByOrder - error handling', () => {
     beforeEach(() => {
-        // Reset all mocks before each test
         mockingoose.resetAll();
-        // Clear existing mocks on console.error
         jest.clearAllMocks();
     });
 
     test('should log an error and throw when the database query fails', async () => {
-        // Simulate a database error
+
         mockingoose(Question).toReturn(new Error('Database query failed'), 'find');
 
-        // Create a spy on console.error to verify it gets called
+
         const consoleSpy = jest.spyOn(console, 'error');
 
-        // Attempt to run the function and expect it to throw an error
         await expect(getQuestionsByOrder()).rejects.toThrow('Failed to fetch questions by order');
 
-        // Verify that console.error was called with the expected message
         expect(consoleSpy).toHaveBeenCalledWith('Error fetching questions by order:', expect.any(Error));
 
-        // Clean up spy
         consoleSpy.mockRestore();
     });
 });
