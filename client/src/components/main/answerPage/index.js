@@ -35,6 +35,11 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, handleUsername, h
         }
     };
 
+    // Sort answers by date time (newest to oldest)
+    const sortAnswersByDateTime = (answers) => {
+        return answers.slice().sort((a, b) => new Date(b.ans_date_time) - new Date(a.ans_date_time));
+    }
+
     return (
         <>
             <AnswerHeader
@@ -51,7 +56,7 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, handleUsername, h
                 handleUsername={handleUsername}
                 onDeletionSuccess={handleQuestions}
             />
-            {question.answers && question.answers.map((answer, idx) => (
+            {question.answers && sortAnswersByDateTime(question.answers).map((answer, idx) => (
                 <Answer
                     key={idx}
                     text={answer.text}

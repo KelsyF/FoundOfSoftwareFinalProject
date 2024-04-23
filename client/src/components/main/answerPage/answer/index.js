@@ -28,7 +28,7 @@ const Answer = ({ text, ansBy, meta, handleUsername, answerId, onDelete }) => {
                 <div className="answer_author">{ansBy.username}</div>
                 <div className="answer_question_meta">{meta}</div>
             </div>
-            {user && user.username === "moderator" && (
+            {user && (user.username === "moderator" || user.username === ansBy?.username) && (
                 <div className="moderatorActionContainer">
                     <button
                         className="moderator_action_button"

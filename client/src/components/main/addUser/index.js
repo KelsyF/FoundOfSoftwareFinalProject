@@ -64,7 +64,7 @@ const RegisterPage = ({ handleRegister }) => {
                     className="form_postBtn"
                     onClick={register}
                 >
-                    Register
+                    Sign-up
                 </button>
                 <div className="mandatory_indicator">
                     * indicates mandatory fields

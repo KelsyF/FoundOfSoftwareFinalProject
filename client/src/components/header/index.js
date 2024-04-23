@@ -9,6 +9,11 @@ const Header = ({
     const [val, setVal] = useState(search);
     const { user, logout } = useUser(); // Use the context for user management
 
+    const handleLogout = () => {
+        logout();
+        setQuestionPage("", "All Questions", "main");
+    }
+
     return (
         <div id="header" className="header">
             <div className="title">Fake Stack Overflow</div>
@@ -27,8 +32,11 @@ const Header = ({
             />
             {user ? (
                 <>
-                    <span>Welcome, {user.username}!</span>
-                    <button onClick={logout}>Logout</button>
+                    <span onClick={() => {
+                        setQuestionPage("", "", "userprofile");
+                    }}
+                    >Welcome, {user.username}!</span>
+                    <button onClick={handleLogout}>Logout</button>
                 </>
             ) : (
                 <>

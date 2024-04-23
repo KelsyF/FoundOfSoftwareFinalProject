@@ -51,16 +51,17 @@ const Question = ({ q, clickTag, handleAnswer, handleUsername, refreshQuestions 
                     asked {getMetaData(new Date(q.ask_date_time))}
                 </div>
             </div>
-            {user && user.username === "moderator" && (
-                <div className="moderatorActionContainer">
-                    <button
-                        className="moderator_action_button"
-                        onClick={(e) => handleDelete(q._id, e)}
-                    >
-                        Delete
-                    </button>
-                </div>
-            )}
+            {user && (user.username === "moderator" || user.username === q.asked_by.username) && (
+    <div className="moderatorActionContainer">
+        <button
+            className="moderator_action_button"
+            onClick={(e) => handleDelete(q._id, e)}
+        >
+            Delete
+        </button>
+    </div>
+)}
+
         </div>
     );
 };

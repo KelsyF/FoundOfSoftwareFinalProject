@@ -11,11 +11,11 @@ import Register from "./addUser"
 import UserProfile from "./userProfile";  // Adjust the path as necessary
 
 
-const Main = ({ search = "", title, setQuestionPage, initialPage }) => {
+const Main = ({ search = "", title, setQuestionPage, initialPage, user }) => {
     const [page, setPage] = useState(initialPage);
     const [questionOrder, setQuestionOrder] = useState("newest");
     const [qid, setQid] = useState("");
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState(user ? user.username : "");
 
     let selected = "";
     let content = null;

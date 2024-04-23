@@ -4,7 +4,20 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "jest"
+        "test": "jest",
+        "test:coverage": "jest --coverage",
+        "test:Answer": "jest /tests/answerControllertest.test.js",
+        "test:Answer-coverage": "jest --coverage /tests/answerControllertest.test.js",
+        "test:newQuestion": "jest /tests/newQuestion.test.js",
+        "test:newQuestion-coverage": "jest --coverage /tests/newQuestion.test.js",
+        "test:question": "jest /tests/question.test.js",
+        "test:question-coverage": "jest --coverage /tests/question.test.js",
+        "test:server": "jest /tests/server.test.js",
+        "test:server-coverage": "jest --coverage /tests/server.test.js",
+        "test:tags": "jest /tests/tags.test.js",
+        "test:tags-coverage": "jest --coverage /tests/tags.test.js",
+        "test:user": "jest /tests/userControllertest.test.js",
+        "test:user-coverage": "jest --coverage /tests/userControllertest.test.js"
     },
     "author": "",
     "license": "ISC",
@@ -14,13 +27,13 @@
         "cors": "^2.8.5",
         "express": "^4.19.2",
         "express-session": "*",
-        "jest": "^29.7.0",
         "jsonwebtoken": "*",
         "mongoose": "^8.2.2",
         "mysql": "*"
     },
     "devDependencies": {
         "eslint": "^8.54.0",
+        "jest": "^29.7.0",
         "mockingoose": "^2.16.2",
         "nodemon": "^3.1.0",
         "supertest": "^6.3.4"

@@ -1,6 +1,6 @@
 //Based off of soa-node-mongo cypress tests repeated from React assignment.
 
-describe("Tag page", () => {
+describe("5 | Tag page", () => {
 
     beforeEach(() => {
         // Seed the database before each test
@@ -12,7 +12,7 @@ describe("Tag page", () => {
         cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
-    it('Check if all tags exist', () => {
+    it('5.1 | Check if all tags exist', () => {
         cy.visit('http://localhost:3000');
 
         // Check the tags that should have been seeded exist in the page
@@ -25,7 +25,7 @@ describe("Tag page", () => {
         cy.contains("website", { matchCase: false });
     });
 
-    it('Checks if the correct number of questions are populating within tags', () => {
+    it('5.2 | Checks if the correct number of questions are populating within tags', () => {
         cy.visit('http://localhost:3000');
 
         // Check that the question numbers are correct in the page
@@ -44,7 +44,7 @@ describe("Tag page", () => {
         });
     });
 
-    it('Navigate to question in React tag', () => {
+    it('5.3 | Navigate to question in React tag', () => {
         cy.visit('http://localhost:3000');
 
         // Check the correct question is within the React tag
@@ -53,7 +53,7 @@ describe("Tag page", () => {
         cy.contains("Programmatically navigate using React router");
     });
 
-    it('Navigate to questions in Storage tag', () => {
+    it('5.4 | Navigate to questions in Storage tag', () => {
         cy.visit('http://localhost:3000');
 
         // Check the correct questions are within the Storage tag
@@ -63,19 +63,28 @@ describe("Tag page", () => {
         cy.contains("Object storage for a web application");
     });
 
-    it('Create a new question with a new tag and find the question through navigating to that tag page', () => {
+    it('5.5 | Create a new question with a new tag and find the question through navigating to that tag page', () => {
         cy.visit('http://localhost:3000');
 
-        // Add a question with new tag
+        // Register new user
+        cy.contains("Register").click();
+        cy.get("#registerUsernameInput").type("TestUserA");
+        cy.get("#registerPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-up").click();
+
+        cy.wait(500);
+
+        // Login previously created user
+        cy.contains("Login").click();
+        cy.get("#loginUsernameInput").type("TestUserA");
+        cy.get("#loginPasswordInput").type("testuserpasswordA");
+        cy.contains("Sign-in").click();
+
+        // New user writes question with new tag
         cy.contains("Ask a Question").click();
         cy.get("#formTitleInput").type("Test Question A");
         cy.get("#formTextInput").type("Test Question A Text");
         cy.get("#formTagInput").type("test1-tag1");
-
-        // How are we handling username now that we have a logged in profile?
-        // If the login function in beforeEach works, will we even need to grab the username
-        // since we'll grab the username in the question creation and won't have to input it?
-        cy.contains('.username');
         cy.contains("Post Question").click();
 
         // Navigate to Tags page
@@ -86,8 +95,8 @@ describe("Tag page", () => {
         cy.contains('Test Question A');
     });
 
-    it('Clicks on a tag and verifies it is displayed', () => {
-       const tagName = 'javascript';
+    it('5.6 | Clicks on a tag and verifies it is displayed', () => {
+        const tagName = 'javascript';
 
         cy.visit('http://localhost:3000');
         cy.contains('Tags').click();
@@ -98,7 +107,7 @@ describe("Tag page", () => {
         });
     });
 
-    it('Clicks on a tag in the homepage and verifies the questions displayed are actually related to the tag', () => {
+    it('5.7 | Clicks on a tag in the homepage and verifies the questions displayed are actually related to the tag', () => {
         const tagName = 'storage';
 
         cy.visit('http://localhost:3000');

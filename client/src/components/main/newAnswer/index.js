@@ -15,6 +15,11 @@ const NewAnswer = ({ qid, handleAnswer }) => {
     const [textErr, setTextErr] = useState("");
 
     const postAnswer = async () => {
+        if (!user) {
+            alert("Please log in to answer a question.");
+            return;
+        }
+
         let isValid = true;
     
         if (!text) {

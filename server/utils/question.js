@@ -23,14 +23,11 @@ const addTag = async (tname) => {
 
 const getQuestionsByOrder = async (order) => {
     try {
+        let questions = await Question.find().populate('tags', 'name').populate('asked_by','username').populate('answers');
         if (order === 'newest') {
-            //return await Question.find().sort({ ask_date_time: -1 }).populate('tags', 'name');
-            let questions = await Question.find().populate('tags', 'name').populate('asked_by','username');
             // Explicitly sort the filtered questions by ask_date_time in descending order.
             return questions.sort((a, b) => b.ask_date_time - a.ask_date_time);
         } else if (order === 'active') {
-            let questions = await Question.find().populate('tags', 'name').populate('answers');
-
             questions.sort((a, b) => {
                 // Check for the presence of answers and determine the last answer date
                 let aLastAnswerDate = a.answers.length > 0 ? new Date(Math.max(...a.answers.map(answer => new Date(answer.ans_date_time)))) : null;
@@ -52,7 +49,6 @@ const getQuestionsByOrder = async (order) => {
 
             return questions;
         } else if (order === 'unanswered') {
-            let questions = await Question.find().populate('tags', 'name');
             // Filter out questions with answers.
             questions = questions.filter(q => q.answers.length === 0);
             // Explicitly sort the filtered questions by ask_date_time in descending order.
