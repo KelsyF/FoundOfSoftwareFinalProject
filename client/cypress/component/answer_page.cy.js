@@ -1,10 +1,7 @@
-import Header from '../../../client/src/components/main/answerPage/header';
-import QuestionBody from '../../../client/src/components/main/answerPage/questionBody'
-import Answer from '../../../client/src/components/main/answerPage/answer';
-import AnswerPage from '../../../client/src/components/main/answerPage'
-import Question from '../../../server/models/questions';
-import AnswerObj from '../../../server/models/answers';
-import User from '/../server/models/user';
+import Header from '../../src/components/main/answerPage/header';
+import QuestionBody from '../../src/components/main/answerPage/questionBody'
+import Answer from '../../src/components/main/answerPage/answer';
+import AnswerPage from '../../src/components/main/answerPage'
 
 // Answer Page - Header Tests
 it('Answer Header component shows question title, answer count and onclick function', () => {
