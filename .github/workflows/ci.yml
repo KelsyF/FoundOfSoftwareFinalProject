@@ -32,7 +32,7 @@ jobs:
       with:
         working-directory: testing # Set this to point to the correct subdirectory
         start: npm run start --prefix ../client & npm run start --prefix ../server
-        wait-on: 'http://localhost:3000,http://localhost:8000'
+        #wait-on: 'http://localhost:3000,http://localhost:8000'
         browser: chrome
 
         
