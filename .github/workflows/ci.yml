@@ -28,8 +28,7 @@ jobs:
         npm install
         npm install cypress
     - name: Start MongoDB
-      run: |
-        mongosh
+      run: mongod --dbpath C:\data\db --logpath C:\data\log\mongod.log --logappend
     - name: Cypress run
       uses: cypress-io/github-action@v5
       with:
