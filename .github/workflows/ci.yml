@@ -27,6 +27,8 @@ jobs:
         cd ../testing
         npm install
         npm install cypress
+    - name: Print PATH
+      run: echo $env:PATH
     - name: Start MongoDB
       run: 'C:\Program Files\MongoDB\Server\7.0\bin\mongod' --dbpath C:\data\db --logpath C:\data\log\mongod.log --logappend
     - name: Cypress run
