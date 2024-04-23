@@ -24,15 +24,15 @@ jobs:
         npm install concurrently --save-dev
         cd client
         npm install
+        npm install cypress
         cd ../server
         npm install
         cd ../testing
         npm install
-        npm install cypress
     - name: Cypress run
       uses: cypress-io/github-action@v5
       with:
-        working-directory: testing # Set this to point to the correct subdirectory
+        working-directory: client # Set this to point to the correct subdirectory
         start: npm run start --prefix ../
         wait-on: 'http://localhost:3000,http://localhost:8000'
         browser: chrome
