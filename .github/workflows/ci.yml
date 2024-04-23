@@ -7,7 +7,39 @@ on:
       - workflow-test
 
 jobs:
-  cypress-tests:
+  cypress-component-tests:
+    runs-on: self-hosted  # This job uses the self-hosted runner
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    - name: Set Execution Policy
+      run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+    - name: Install dependencies for client and server
+      run: |
+        npm install
+        npm install concurrently --save-dev
+        cd client
+        npm install
+        npm install cypress
+        cd ../server
+        npm install
+        cd ../testing
+        npm install
+    - name: Cypress run
+      uses: cypress-io/github-action@v5
+      with:
+        working-directory: client # Set this to point to the correct subdirectory
+        start: npm run start --prefix ../
+        wait-on: 'http://localhost:3000,http://localhost:8000'
+        browser: chrome    
+        component: true
+
+  cypress-e2e-tests:
+    needs: cypress-component-tests
     runs-on: self-hosted  # This job uses the self-hosted runner
     steps:
     - name: Checkout code
@@ -38,11 +70,10 @@ jobs:
         browser: chrome
 
         
-        
    
 
   jest-tests:
-    needs: cypress-tests  # Jest tests will wait for Cypress tests to complete
+    needs: cypress-e2e-tests  # Jest tests will wait for Cypress tests to complete
     runs-on: self-hosted  # Using your own self-hosted runner
     steps:
     - name: Checkout code
@@ -64,4 +95,6 @@ jobs:
         cd server
         npm run test
       shell: powershell
+
+
 
