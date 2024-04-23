@@ -1,7 +1,9 @@
 import Header from '../../src/components/main/answerPage/header';
 import QuestionBody from '../../src/components/main/answerPage/questionBody'
 import Answer from '../../src/components/main/answerPage/answer';
-import AnswerPage from '../../src/components/main/answerPage'
+import AnswerPage from '../../src/components/main/answerPage';
+import * as questionService from '../../src/services/questionService';
+import { UserProvider } from '../../src/components/context/UserContext';
 
 // Answer Page - Header Tests
 it('Answer Header component shows question title, answer count and onclick function', () => {
@@ -13,6 +15,7 @@ it('Answer Header component shows question title, answer count and onclick funct
         ansCount={answerCount}
         title={title}
         handleNewQuestion={handleNewQuestion}/>);
+
     cy.get('.bold_title').contains(answerCount + " answers");
     cy.get('.answer_question_title').contains(title);
     cy.get('.bluebtn').click();
@@ -20,94 +23,111 @@ it('Answer Header component shows question title, answer count and onclick funct
 })
 
 // Answer Page - Question Body
-it('Component should have a question body which shows question text, views, asked by and asked', () => {
-    const questionBody = 'Sample Question Body'
-    const views = '150'
-    const askedBy = 'vanshitatilwani'
-    const date = new Date().toLocaleString()
-    cy.mount(<QuestionBody
-        text={questionBody}
-        views={views}
-        askby={askedBy}
-        meta={date}
-    />)
+it('Component should have a question body which shows question text, views, asked by, asked, and onclick function', () => {
+    const questionBody = 'Sample Question Body';
+    const views = '150';
+    const user = { username: 'vanshitatilwani' };
+    const askedBy = 'vanshitatilwani';
+    const date = new Date().toLocaleString();
 
-    cy.get('.answer_question_text > div').contains(questionBody)
-    cy.get('.answer_question_view').contains(views + ' views')
-    cy.get('.answer_question_right > .question_author').contains(askedBy)
-    cy.get('.answer_question_right > .answer_question_meta').contains('asked ' + date)
+    const handleUsername= cy.spy().as('handleUsernameSpy');
+    const handleDeleteAnswer = cy.spy().as('handleDeleteAnswerSpy');
 
+    cy.mount(
+        <UserProvider user={user}>
+            <QuestionBody
+                views={views}
+                text={questionBody}
+                askby={user}
+                meta={date}
+                handleUsername={handleUsername}
+                onDelete={handleDeleteAnswer}
+            />
+        </UserProvider>)
+
+    cy.get('.answer_question_text').contains(questionBody);
+    cy.get('.answer_question_view').contains(views + ' views');
+    cy.get('.question_author').contains(askedBy);
+    cy.get('.answer_question_meta').contains('asked ' + date);
+    cy.get('.answer_question_right').click();
+    cy.get('@handleUsernameSpy').should('have.been.called');
 })
 
 // Answer Page - Answer component
-it('Component should have a answer text ,answered by and answered date', () => {
+it('Component should have an answer text, answered by and answered date', () => {
     const answerText = 'Sample Answer Text'
+    const user = { username: 'joydeepmitra'};
     const answeredBy = 'joydeepmitra'
     const date = new Date().toLocaleString()
-    cy.mount(<Answer
-        text={answerText}
-        ansBy={answeredBy}
-        meta={date}
-    />)
+
+
+    cy.mount(
+        <UserProvider user={user}>
+            <Answer
+                text={answerText}
+                ansBy={user}
+                meta={date}
+            />
+        </UserProvider>)
 
     cy.get('.answerText').contains(answerText)
-    cy.get('.answerAuthor > .answer_author').contains(answeredBy)
-    cy.get('.answerAuthor > .answer_question_meta').contains(date)
+    cy.get('.answer_author').contains(answeredBy)
+    cy.get('.answer_question_meta').contains(date)
 
 
 })
 
-// Anwer Page  - Main Component
+// Answer Page  - Main Component
 it('Render a Answer Page Component and verify all details', () => {
-    const handleNewQuestion = cy.spy().as('handleNewQuestionSpy')
-    const handleNewAnswer = cy.spy().as('handleNewAnswerSpy')
-    const answers = []
-    for(let index= 1; index <= 2; index++){
-        let newanswer = {
-            aid: index,
-            text: 'Sample Answer Text '+index,
-            ansBy: 'sampleanswereduser'+index,
-            ansDate: new Date(),
-        };
-        answers.push(new AnswerObj(newanswer))
-    }
+    const handleNewQuestion = cy.spy().as('handleNewQuestionSpy');
+    const handleNewAnswer = cy.spy().as('handleNewAnswerSpy');
+    const handleUsername = cy.spy().as('handleUsernameSpy');
+    const handleQuestions = cy.spy().as('handleQuestionsSpy')
+    const user = { username: 'itsachild12' };
+    const usernames = ['sampleanswereduser2', 'sampleanswereduser1'];
+    const answerText = ['Sample Answer Text 2', 'Sample Answer Text 1'];
 
     let question = {
+        _id: 1,
         title: 'Sample Question Title',
         text: 'Sample Question Text',
-        askedBy: 'vanshitatilwani',
-        askDate: new Date(),
+        asked_by: user,
+        ask_date_time: new Date(),
         views : 150,
-        ansIds : answers.map(answer => answer.aid)
     };
 
-    cy.mount(<AnswerPage
-        question={new Question(question)}
-        ans={answers}
-        handleNewQuestion={handleNewQuestion}
-        handleNewAnswer={handleNewAnswer}
-    />)
+    cy.intercept('GET', 'http://localhost:8000/question/getQuestionById/*', { fixture: 'question.json' }).as('getQuestionById');
 
-    cy.get('.bold_title').contains(answers.length + " answers")
+    cy.mount(
+        <UserProvider user={user}>
+            <AnswerPage
+                qid={question._id}
+                handleNewQuestion={handleNewQuestion}
+                handleNewAnswer={handleNewAnswer}
+                handleUsername={handleUsername}
+                handleQuestions={handleQuestions}
+            />
+        </UserProvider>
+    )
+
+    cy.wait('@getQuestionById');
+
+    cy.get('.bold_title').contains(2 + " answers")
     cy.get('.answer_question_title').contains(question.title)
     cy.get('#answersHeader > .bluebtn').click()
     cy.get('@handleNewQuestionSpy').should('have.been.called');
 
-    cy.get('.answer_question_text > div').contains(question.text)
+    cy.get('.answer_question_text').contains(question.text)
     cy.get('.answer_question_view').contains(question.views + ' views')
-    cy.get('.answer_question_right > .question_author').contains(question.askedBy)
+    cy.get('.question_author').contains(user.username)
 
-    cy.get('.answerText')
-        .eq(0)
-        .find('div')
-        .should('have.text', answers[0].text);
-    cy.get('.answerAuthor > .answer_author').eq(0).should('have.text', answers[0].ansBy)
-
-    cy.get('.answerText')
-        .eq(1)
-        .find('div')
-        .should('have.text', answers[1].text);
-    cy.get('.answerAuthor > .answer_author').eq(0).should('have.text', answers[0].ansBy)
+    cy.get('.answer').each(($answer, index) => {
+        cy.wrap($answer).within(() => {
+            cy.get('.answerText').should('contain', answerText[index]);
+            cy.get('.answer_author').should('contain', usernames[index]);
+            cy.get('.answer_question_meta').should('exist');
+        })
+    })
 
     cy.get('.ansButton').click();
     cy.get('@handleNewAnswerSpy').should('have.been.called');
