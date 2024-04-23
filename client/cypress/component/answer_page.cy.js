@@ -23,19 +23,20 @@ describe('Answer Page', () => {
         cy.get('@handleNewQuestionSpy').should('have.been.called');
     });
 
-// Answer Page - Question Body
+    // Answer Page - Question Body
     it('Component should have a question body which shows question text, views, asked by, asked, and onclick function', () => {
         const questionBody = 'Sample Question Body';
         const views = '150';
         const user = {username: 'vanshitatilwani'};
         const askedBy = 'vanshitatilwani';
         const date = new Date().toLocaleString();
+        localStorage.setItem('user', JSON.stringify({ user }));
 
         const handleUsername = cy.spy().as('handleUsernameSpy');
         const handleDeleteAnswer = cy.spy().as('handleDeleteAnswerSpy');
 
         cy.mount(
-            <UserProvider user={user}>
+            <UserProvider>
                 <QuestionBody
                     views={views}
                     text={questionBody}
@@ -54,16 +55,52 @@ describe('Answer Page', () => {
         cy.get('@handleUsernameSpy').should('have.been.called');
     });
 
-// Answer Page - Answer component
+    // Answer Page - Question Body
+    it('Component should have a question body which shows question text, views, asked by, asked, and delete shows when signed in user is moderator', () => {
+        const questionBody = 'Sample Question Body';
+        const views = '150';
+        const user = { username: 'moderator' };
+        const user2 = { username: 'vanshitatilwani' };
+        const askedBy = 'vanshitatilwani';
+        const date = new Date().toLocaleString();
+        localStorage.setItem('user', JSON.stringify({ user }));
+
+        const handleUsername = cy.spy().as('handleUsernameSpy');
+        const handleDeleteAnswer = cy.spy().as('handleDeleteAnswerSpy');
+
+        cy.mount(
+            <UserProvider>
+                <QuestionBody
+                    qid={'testQ'}
+                    views={views}
+                    text={questionBody}
+                    askby={user2}
+                    meta={date}
+                    handleUsername={handleUsername}
+                    onDelete={handleDeleteAnswer}
+                />
+            </UserProvider>)
+
+        cy.get('.answer_question_text').contains(questionBody);
+        cy.get('.answer_question_view').contains(views + ' views');
+        cy.get('.question_author').contains(askedBy);
+        cy.get('.answer_question_meta').contains('asked ' + date);
+        cy.get('.answer_question_right').click();
+        cy.get('@handleUsernameSpy').should('have.been.called');
+        cy.get('.moderator_action_button').should('exist');
+    });
+
+    // Answer Page - Answer component
     it('Component should have an answer text, answered by and answered date', () => {
         const answerText = 'Sample Answer Text'
         const user = {username: 'joydeepmitra'};
         const answeredBy = 'joydeepmitra'
         const date = new Date().toLocaleString()
+        localStorage.setItem('user', JSON.stringify({ user }));
 
 
         cy.mount(
-            <UserProvider user={user}>
+            <UserProvider>
                 <Answer
                     text={answerText}
                     ansBy={user}
@@ -86,6 +123,7 @@ describe('Answer Page', () => {
         const usernames = ['sampleanswereduser2', 'sampleanswereduser1'];
         const answerText = ['Sample Answer Text 2', 'Sample Answer Text 1'];
         const answerDate = ['Apr 25 at 06:10:00', 'Apr 25 at 06:05:00'];
+        localStorage.setItem('user', JSON.stringify({ user }));
 
         let question = {
             _id: 1,
@@ -99,7 +137,7 @@ describe('Answer Page', () => {
         cy.intercept('GET', `${REACT_APP_API_URL}/question/getQuestionById/*`, {fixture: 'question.json'}).as('getQuestionById');
 
         cy.mount(
-            <UserProvider user={user}>
+            <UserProvider>
                 <AnswerPage
                     qid={question._id}
                     handleNewQuestion={handleNewQuestion}

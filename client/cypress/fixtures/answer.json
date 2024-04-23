@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "answer1",
+    "text": "Sample Answer Text 1",
+    "ans_by": { "username": "sampleanswereduser1" },
+    "ans_date_time": "2024-04-25T10:05:00.000Z"
+  },
+  {
+    "_id": "answer2",
+    "text": "Sample Answer Text 2",
+    "ans_by": { "username": "sampleanswereduser2" },
+    "ans_date_time": "2024-04-25T10:10:00.000Z"
+  }
+]

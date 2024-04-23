@@ -28,14 +28,10 @@ describe('Header', () => {
         const setQuestionPage = cy.spy().as('setQuestionPageSpy');
         const searchQuery = '';
         const user = { username: 'woahItMe' };
-        const useUserMock = () => ({
-            user: user,
-            login: cy.stub(),
-            logout: cy.stub()
-        })
+        localStorage.setItem('user', JSON.stringify({ user }));
 
         cy.mount(
-            <UserProvider user={user}>
+            <UserProvider>
                 <Header
                     search={searchQuery}
                     setQuestionPage={setQuestionPage}
