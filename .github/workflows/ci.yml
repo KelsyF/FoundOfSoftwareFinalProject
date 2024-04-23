@@ -20,6 +20,7 @@ jobs:
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
     - name: Install dependencies for client and server
       run: |
+        npm install
         npm install concurrently --save-dev
         cd client
         npm install
