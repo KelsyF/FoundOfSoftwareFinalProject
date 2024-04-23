@@ -7,6 +7,7 @@ Login with your Northeastern credentials and read the project description [here]
 
 All the features you have implemented. 
 
+
 NOTE: All jest tests are located in the subdirectory of server\tests\
 
 | Feature                           | Description                                                                                                       | E2E Tests      | Component Tests | Jest Tests                                                                                |
@@ -19,6 +20,7 @@ NOTE: All jest tests are located in the subdirectory of server\tests\
 | Tagging Posts                     | A list of up to five simple (i.e. one word or groups of words with no spaces) tags can be added to a post.        | /path/to/test | path/to/test    | tags.test.js                                                                               |
 | Post Moderation                   | A way to filter out posts that go against community guidelines.                                                   | /path/to/test | path/to/test    | userControllertest.test.js & questionControllertest.test.js & answerControllertest.test.js |
 | Filter Posts                      | Allows users to filter the list of posts based on a chosen, existing, criteria.                                   | /path/to/test | path/to/test    | question.test.js                                                                           |
+
 
 
 ## Instructions to generate and view coverage report 
