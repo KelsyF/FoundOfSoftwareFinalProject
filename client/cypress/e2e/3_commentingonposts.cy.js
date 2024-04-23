@@ -1,6 +1,6 @@
 //Based off of soa-node-mongo cypress tests repeated from React assignment.
 
-describe('New Comment Page', () => {
+describe('3 | New Comment Page', () => {
 
     beforeEach(() => {
         // Seed the database before each test
@@ -12,7 +12,7 @@ describe('New Comment Page', () => {
         cy.exec("node ../server/remove_db.js mongodb://127.0.0.1:27017/final_fake_so");
     });
 
-    it('Created new comment should be displayed at the top of the answers page', () => {
+    it('3.1 | Created new comment should be displayed at the top of the answers page', () => {
         const comments = [
             "Test Answer 1",
             "React Router is mostly a wrapper around the history library. history handles interaction with the browser's " +
@@ -54,7 +54,7 @@ describe('New Comment Page', () => {
         cy.contains('0 seconds ago');
     });
 
-    it('Text is mandatory when creating a new comment', () => {
+    it('3.2 | Text is mandatory when creating a new comment', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -77,7 +77,7 @@ describe('New Comment Page', () => {
         cy.contains("Answer text cannot be empty");
     });
 
-    it('Checks if a6 and a7 exist in q3 answers page', () => {
+    it('3.3 | Checks if a6 and a7 exist in q3 answers page', () => {
         const answers = [
             "Using GridFS to chunk and store content.",
             "Storing content as BLOBs in databases.",
@@ -104,7 +104,7 @@ describe('New Comment Page', () => {
         });
     });
 
-    it('Checks if a8 exists in q4 answers page', () => {
+    it('3.4 | Checks if a8 exists in q4 answers page', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -125,7 +125,7 @@ describe('New Comment Page', () => {
         cy.contains("Store data in a SQLLite database.");
     });
 
-    it('Checks to make sure a newly created comment is displayed at the top of the answers page', () => {
+    it('3.5 | Checks to make sure a newly created comment is displayed at the top of the answers page', () => {
         cy.visit('http://localhost:3000');
 
         // Register new user
@@ -155,5 +155,16 @@ describe('New Comment Page', () => {
             });
         cy.contains("TestUserB");
         cy.contains("0 seconds ago");
+    });
+
+    it('3.6 | Attempt to answer a question without login, check alert box is thrown', () => {
+
+        cy.visit('http://localhost:3000');
+
+        cy.contains("Quick question about storage on android").click();
+        cy.contains("Answer Question").click();
+        cy.on('window:alert', (str) => {
+            expect(str).to.equal("Please log in to answer a question.")
+        });
     });
 });
