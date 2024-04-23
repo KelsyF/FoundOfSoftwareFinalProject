@@ -20,6 +20,7 @@ jobs:
       run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
     - name: Install dependencies for client and server
       run: |
+        npm install concurrently --save-dev
         cd client
         npm install
         cd ../server
@@ -30,8 +31,8 @@ jobs:
     - name: Cypress run
       uses: cypress-io/github-action@v5
       with:
-        working-directory: testing # Set this to point to the correct subdirectory
-        start: npm run start --prefix ../client & npm run start --prefix ../server
+        #working-directory: testing # Set this to point to the correct subdirectory
+        start: npm start
         #wait-on: 'http://localhost:3000,http://localhost:8000'
         browser: chrome
 
