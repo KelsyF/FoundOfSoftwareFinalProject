@@ -27,9 +27,6 @@ jobs:
         cd ../testing
         npm install
         npm install cypress
-    - name: Start MongoDB
-      run: |
-        mongosh
     - name: Cypress run
       uses: cypress-io/github-action@v5
       with:
