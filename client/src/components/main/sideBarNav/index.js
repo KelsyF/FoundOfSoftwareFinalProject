@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import "./index.css";
 
 const SideBarNav = ({ selected = "", handleQuestions, handleTags }) => {
@@ -27,6 +29,12 @@ const SideBarNav = ({ selected = "", handleQuestions, handleTags }) => {
             </div>
         </div>
     );
+};
+
+SideBarNav.propTypes = {
+    selected: PropTypes.string,
+    handleQuestions: PropTypes.func.isRequired,
+    handleTags: PropTypes.func.isRequired,
 };
 
 export default SideBarNav;

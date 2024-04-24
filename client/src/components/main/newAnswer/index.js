@@ -1,12 +1,10 @@
 import "./index.css";
-import { useState } from "react";
+import React, { useState } from "react";
+import PropTypes from 'prop-types';
 import Form from "../baseComponents/form";
-//import Input from "../baseComponents/input";
 import Textarea from "../baseComponents/textarea";
 import { validateHyperlink } from "../../../tool";
 import { addAnswer } from "../../../services/answerService";
-
-// Assuming `userContext` provides the current user's ID and not just their username
 import { useUser } from '../../context/UserContext'; // Correct the import path as necessary
 
 const NewAnswer = ({ qid, handleAnswer }) => {
@@ -71,6 +69,11 @@ const NewAnswer = ({ qid, handleAnswer }) => {
             </div>
         </Form>
     );
+};
+
+NewAnswer.propTypes = {
+    qid: PropTypes.string.isRequired,
+    handleAnswer: PropTypes.func.isRequired
 };
 
 export default NewAnswer;

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import "./index.css";
 import Tag from "./tag";
 import { getTagsWithQuestionNumber } from "../../../services/tagService";
@@ -40,5 +41,9 @@ const TagPage = ({ clickTag, handleNewQuestion }) => {
     );
 };
 
+TagPage.propTypes = {
+    clickTag: PropTypes.func.isRequired,
+    handleNewQuestion: PropTypes.func.isRequired,
+};
 
 export default TagPage;

@@ -1,5 +1,6 @@
-import "./index.css";
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import "./index.css";
 import { useUser } from '../../context/UserContext';  // Adjust import paths as needed
 import { fetchUserPosts, fetchUserAnswers, deleteUser } from '../../../services/userService';  // Adjust import paths as needed
 
@@ -89,6 +90,12 @@ const UserProfile = ({ username, handleAnswer, handleQuestions }) => {
             </div>
         </div>
     );
+};
+
+UserProfile.propTypes = {
+    username: PropTypes.string.isRequired,
+    handleAnswer: PropTypes.func.isRequired,
+    handleQuestions: PropTypes.func.isRequired,
 };
 
 export default UserProfile;

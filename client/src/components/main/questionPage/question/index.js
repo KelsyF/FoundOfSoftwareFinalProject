@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { getMetaData } from "../../../../tool";
 import "./index.css";
 import { useUser } from "../../../context/UserContext"
@@ -40,30 +42,37 @@ const Question = ({ q, clickTag, handleAnswer, handleUsername, refreshQuestions 
                         </button>
                     ))}
                 </div>
-            </div>
-            <div className="lastActivity" onClick={(e) => {
-                e.stopPropagation();
-                handleUsername(q.asked_by.username);
-            }}>
-                <div className="question_author">{q.asked_by.username}</div>
-                <div>&nbsp;</div>
-                <div className="question_meta">
-                    asked {getMetaData(new Date(q.ask_date_time))}
                 </div>
-            </div>
-            {user && (user.username === "moderator" || user.username === q.asked_by.username) && (
-    <div className="moderatorActionContainer">
-        <button
-            className="moderator_action_button"
-            onClick={(e) => handleDelete(q._id, e)}
-        >
-            Delete
-        </button>
-    </div>
-)}
-
+                <div className="lastActivity" onClick={(e) => {
+                    e.stopPropagation();
+                    handleUsername(q.asked_by.username);
+                }}>
+                    <div className="question_author">{q.asked_by.username}</div>
+                    <div>&nbsp;</div>
+                    <div className="question_meta">
+                        asked {getMetaData(new Date(q.ask_date_time))}
+                    </div>
+                </div>
+                {user && (user.username === "moderator" || user.username === q.asked_by.username) && (
+                    <div className="moderatorActionContainer">
+                        <button
+                            className="moderator_action_button"
+                            onClick={(e) => handleDelete(q._id, e)}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                )}
         </div>
     );
+};
+
+Question.propTypes = {
+    q: PropTypes.object.isRequired,
+    clickTag: PropTypes.func.isRequired,
+    handleAnswer: PropTypes.func.isRequired,
+    handleUsername: PropTypes.func.isRequired,
+    refreshQuestions: PropTypes.func.isRequired,
 };
 
 export default Question;

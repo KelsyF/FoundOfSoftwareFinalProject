@@ -1,9 +1,10 @@
+import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import "./index.css";
 import QuestionHeader from "./header";
 import Question from "./question";
-
 import { getQuestionsByFilter } from "../../../services/questionService";
-import { useEffect, useState } from "react";
+
 
 const QuestionPage = ({
     title_text = "All Questions",
@@ -57,6 +58,17 @@ const QuestionPage = ({
             )}
         </>
     );
+};
+
+QuestionPage.propTypes = {
+    title_text: PropTypes.string,
+    order: PropTypes.string,
+    search: PropTypes.string,
+    setQuestionOrder: PropTypes.func,
+    clickTag: PropTypes.func,
+    handleAnswer: PropTypes.func,
+    handleNewQuestion: PropTypes.func,
+    handleUsername: PropTypes.func,
 };
 
 export default QuestionPage;

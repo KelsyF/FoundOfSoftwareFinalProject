@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from "prop-types";
 import "./index.css";
 import OrderButton from "./orderButton";
 
@@ -34,6 +36,13 @@ const QuestionHeader = ({
             </div>
         </div>
     );
+};
+
+QuestionHeader.propTypes = {
+    title_text: PropTypes.string.isRequired,
+    qcnt: PropTypes.number.isRequired,
+    setQuestionOrder: PropTypes.func.isRequired,
+    handleNewQuestion: PropTypes.func.isRequired,
 };
 
 export default QuestionHeader;

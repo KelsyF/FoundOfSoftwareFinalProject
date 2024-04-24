@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from "prop-types";
 import "./index.css";
 import { useUser } from "../../../context/UserContext"
 import { deleteTag } from '../../../../services/tagService'
@@ -32,6 +34,14 @@ const Tag = ({ t, clickTag, onDelete }) => {
     );
 };
 
+Tag.propTypes = {
+    t: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        qcnt: PropTypes.number.isRequired,
+    }).isRequired,
+    clickTag: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
+};
 
 export default Tag;
 

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import PropTypes from 'prop-types';
 import Form from "../baseComponents/form";
 import Input from "../baseComponents/input";
 import Textarea from "../baseComponents/textarea";
@@ -104,6 +105,10 @@ const NewQuestion = ({ handleQuestions }) => {
             </div>
         </Form>
     );
+};
+
+NewQuestion.propTypes = {
+    handleQuestions: PropTypes.func.isRequired,
 };
 
 export default NewQuestion;
