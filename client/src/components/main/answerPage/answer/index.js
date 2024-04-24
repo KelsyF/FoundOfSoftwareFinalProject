@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { handleHyperlink } from "../../../../tool";
 import "./index.css";
 import { useUser } from "../../../context/UserContext"
@@ -45,5 +47,13 @@ const Answer = ({ text, ansBy, meta, handleUsername, answerId, onDelete }) => {
     );
 };
 
+Answer.propTypes = {
+    text: PropTypes.string.isRequired,
+    ansBy: PropTypes.object.isRequired,
+    meta: PropTypes.string.isRequired,
+    handleUsername: PropTypes.func.isRequired,
+    answerId: PropTypes.string.isRequired,
+    onDelete: PropTypes.func.isRequired,
+};
 
 export default Answer;

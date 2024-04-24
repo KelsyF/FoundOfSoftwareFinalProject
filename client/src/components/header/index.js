@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from 'prop-types';
 import "./index.css";
 import { useUser } from "../context/UserContext"; // Correct the import path as necessary
 
@@ -53,4 +54,10 @@ const Header = ({
         </div>
     );
 };
+
+//PropTypes validation
+Header.propTypes = {
+    search: PropTypes.string.isRequired,
+    setQuestionPage: PropTypes.func.isRequired,
+}
 export default Header;

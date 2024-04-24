@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import "./index.css";
 import Form from "../baseComponents/form";
 import Input from "../baseComponents/input";
@@ -72,5 +73,9 @@ const LoginPage = ({ handleLogin }) => {
         </Form>
     );
 };
+
+LoginPage.propTypes = {
+    handleLogin: PropTypes.func.isRequired,
+}
 
 export default LoginPage;

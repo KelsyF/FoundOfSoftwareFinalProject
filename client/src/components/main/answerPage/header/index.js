@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import "./index.css";
 
 // Header for the Answer page
@@ -16,6 +18,12 @@ const AnswerHeader = ({ ansCount, title, handleNewQuestion }) => {
             </button>
         </div>
     );
+};
+
+AnswerHeader.propTypes = {
+    ansCount: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    handleNewQuestion: PropTypes.func.isRequired,
 };
 
 export default AnswerHeader;

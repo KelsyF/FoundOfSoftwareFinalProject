@@ -32,6 +32,7 @@ describe('Answer Page', () => {
         const date = new Date().toLocaleString();
         localStorage.setItem('user', JSON.stringify({ user }));
 
+        const handleDeleteAnswer = cy.spy().as('handleDeleteAnswerSpy');
         const handleUsername = cy.spy().as('handleUsernameSpy');
 
         cy.mount(
@@ -64,6 +65,7 @@ describe('Answer Page', () => {
         const date = new Date().toLocaleString();
         localStorage.setItem('user', JSON.stringify({ user }));
 
+        const handleDeleteAnswer = cy.spy().as('handleDeleteAnswerSpy');
         const handleUsername = cy.spy().as('handleUsernameSpy');
 
         cy.mount(

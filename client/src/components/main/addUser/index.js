@@ -1,6 +1,7 @@
 // RegisterPage.js
 import "./index.css";
 import React, { useState } from "react";
+import PropTypes from 'prop-types';
 import Form from "../baseComponents/form";
 import Input from "../baseComponents/input";
 import { addUser } from "../../../services/userService";
@@ -73,5 +74,9 @@ const RegisterPage = ({ handleRegister }) => {
         </Form>
     );
 };
+
+RegisterPage.propTypes = {
+    handleRegister: PropTypes.func.isRequired,
+}
 
 export default RegisterPage;

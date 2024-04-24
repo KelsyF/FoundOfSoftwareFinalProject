@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import Answer from "./answer"; // Make sure this path is correct
 import AnswerHeader from "./header"; // Adjust paths as necessary
 import QuestionBody from "./questionBody";
@@ -76,5 +77,13 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, handleUsername, h
         </>
     );
 };
+
+AnswerPage.propTypes = {
+    qid: PropTypes.string.isRequired,
+    handleNewQuestion: PropTypes.func.isRequired,
+    handleNewAnswer: PropTypes.func.isRequired,
+    handleUsername: PropTypes.func.isRequired,
+    handleQuestions: PropTypes.func.isRequired,
+}
 
 export default AnswerPage;

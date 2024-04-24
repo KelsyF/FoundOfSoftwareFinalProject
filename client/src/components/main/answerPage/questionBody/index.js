@@ -1,5 +1,6 @@
 import "./index.css";
 import React from "react";
+import PropTypes from 'prop-types';
 import { handleHyperlink } from "../../../../tool";
 import { useUser } from "../../../context/UserContext"
 // Import the deleteQuestion function at the top of your QuestionBody file
@@ -49,6 +50,16 @@ const QuestionBody = ({ qid, views, text, askby, meta, handleUsername, onDeletio
     );
 };
 
-
+QuestionBody.propTypes = {
+    qid: PropTypes.string.isRequired,
+    views: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+    askby: PropTypes.shape({
+        username: PropTypes.string.isRequired,
+    }),
+    meta: PropTypes.string.isRequired,
+    handleUsername: PropTypes.func.isRequired,
+    onDeletionSuccess: PropTypes.func.isRequired,
+};
 
 export default QuestionBody;

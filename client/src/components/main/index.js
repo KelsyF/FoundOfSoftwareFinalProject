@@ -1,5 +1,6 @@
 import "./index.css";
-import { useState } from "react";
+import React, { useState } from "react";
+import PropTypes from 'prop-types';
 import SideBarNav from "./sideBarNav";
 import QuestionPage from "./questionPage";
 import TagPage from "./tagPage";
@@ -155,6 +156,14 @@ const Main = ({ search = "", title, setQuestionPage, initialPage, user }) => {
             </div>
         </div>
     );
+};
+
+Main.propTypes = {
+    search: PropTypes.string,
+    title: PropTypes.string,
+    setQuestionPage: PropTypes.func,
+    initialPage: PropTypes.string,
+    user: PropTypes.object,
 };
 
 export default Main;
