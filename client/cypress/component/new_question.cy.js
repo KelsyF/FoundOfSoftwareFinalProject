@@ -1,7 +1,5 @@
 import {UserProvider} from "../../src/components/context/UserContext";
 import NewQuestion from "../../src/components/main/newQuestion";
-import {REACT_APP_API_URL} from "../../src/services/config";
-import { addQuestion } from "../../src/services/questionService";
 
 describe('New Question Page', () => {
 

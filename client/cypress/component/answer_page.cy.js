@@ -33,7 +33,6 @@ describe('Answer Page', () => {
         localStorage.setItem('user', JSON.stringify({ user }));
 
         const handleUsername = cy.spy().as('handleUsernameSpy');
-        const handleDeleteAnswer = cy.spy().as('handleDeleteAnswerSpy');
 
         cy.mount(
             <UserProvider>
@@ -55,7 +54,7 @@ describe('Answer Page', () => {
         cy.get('@handleUsernameSpy').should('have.been.called');
     });
 
-    // Answer Page - Question Body
+    // Answer Page - Question Body while Moderator
     it('Component should have a question body which shows question text, views, asked by, asked, and delete shows when signed in user is moderator', () => {
         const questionBody = 'Sample Question Body';
         const views = '150';
@@ -66,7 +65,6 @@ describe('Answer Page', () => {
         localStorage.setItem('user', JSON.stringify({ user }));
 
         const handleUsername = cy.spy().as('handleUsernameSpy');
-        const handleDeleteAnswer = cy.spy().as('handleDeleteAnswerSpy');
 
         cy.mount(
             <UserProvider>
