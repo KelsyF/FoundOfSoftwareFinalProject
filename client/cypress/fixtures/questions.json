@@ -1,0 +1,61 @@
+{ "success": true,
+  "posts":
+  [
+    {
+      "_id": "1",
+      "title": "Sample Question Title",
+      "text": "Sample Question Text",
+      "asked_by": {
+        "username": "itsachild12"
+      },
+      "ask_date_time": "2024-04-25T10:00:00.000Z",
+      "views": 150,
+      "answers": [
+        {
+          "_id": "answer1",
+          "text": "Sample Answer Text 1",
+          "ans_by": { "username": "sampleanswereduser1" },
+          "ans_date_time": "2024-04-25T10:05:00.000Z"
+        },
+        {
+          "_id": "answer2",
+          "text": "Sample Answer Text 2",
+          "ans_by": { "username": "sampleanswereduser2" },
+          "ans_date_time": "2024-04-25T10:10:00.000Z"
+        }
+      ],
+      "tags": [
+        {"name":  "sample"},
+        {"name":  "sample2"}
+      ]
+    },
+    {
+      "_id": "2",
+      "title": "Sample Question Title2",
+      "text": "Sample Question Text2",
+      "asked_by": {
+        "username": "itsachild12"
+      },
+      "ask_date_time": "2024-04-25T10:00:00.000Z",
+      "views": 170,
+      "answers": [
+        {
+          "_id": "answer1",
+          "text": "Sample Answer Text 2.1",
+          "ans_by": { "username": "sampleanswereduser3" },
+          "ans_date_time": "2024-04-25T10:05:00.000Z"
+        },
+        {
+          "_id": "answer2",
+          "text": "Sample Answer Text 2.2",
+          "ans_by": { "username": "sampleanswereduser4" },
+          "ans_date_time": "2024-04-25T10:10:00.000Z"
+        }
+      ],
+      "tags": [
+        {"name":  "sample"},
+        {"name":  "sample2"}
+      ]
+    }
+  ]
+}
