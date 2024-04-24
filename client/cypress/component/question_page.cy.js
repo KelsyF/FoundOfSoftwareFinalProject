@@ -3,7 +3,7 @@ import QuestionPage from "../../src/components/main/questionPage";
 import QuestionHeader from "../../src/components/main/questionPage/header";
 import OrderButton from "../../src/components/main/questionPage/header/orderButton";
 import Question from "../../src/components/main/questionPage/question";
-import {REACT_APP_API_URL} from "../../src/services/config";
+
 
 describe('Question Home Page', () => {
 

@@ -112,7 +112,7 @@ describe('Answer Page', () => {
     });
 
 // Answer Page  - Main Component
-    it('Render a Answer Page Component and verify all details', () => {
+    it('Render an Answer Page Component and verify all details', () => {
         const handleNewQuestion = cy.spy().as('handleNewQuestionSpy');
         const handleNewAnswer = cy.spy().as('handleNewAnswerSpy');
         const handleUsername = cy.spy().as('handleUsernameSpy');
