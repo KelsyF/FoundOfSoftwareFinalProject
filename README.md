@@ -1,7 +1,7 @@
 
 # Final Team Project for CS5500
 
-Login with your Northeastern credentials and read the project description [here](https://northeastern-my.sharepoint.com/:w:/g/personal/j_mitra_northeastern_edu/ETUqq9jqZolOr0U4v-gexHkBbCTAoYgTx7cUc34ds2wrTA?e=URQpeI).
+Login with your Northeastern credentials and read the project description [here](https://drive.google.com/file/d/1dYVK6U2OV5zou45EL_9B8v2hQgrX-Kce/view?usp=sharing).
 
 ## List of features
 
